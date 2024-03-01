@@ -1,0 +1,135 @@
+name: Lint & PyTest on action
+permissions:
+  issues: read
+  contents: write
+  checks: write
+  pull-requests: write
+  actions: read
+
+on: 
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+  push:  
+    branches:
+      - ML_dev
+      - dev
+      - dev_ops
+      - Data-Fenix-patch-1
+
+      # This workflow automatically triggers under two conditions:
+      #  Whenever the developer opens a PR for any branch.
+      #  Whenever the developer directly pushes code to the above-mentioned branch 
+      # (in case some team members directly push code to the default/dev branch, we can apply this method.)
+
+env:
+  MIN_COV: 60
+
+jobs:
+  run:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ["3.11"]
+
+    steps:
+      # Checkout codebase = clone the repository to the runner
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ github.token }}
+
+      # Setup python environment
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      # Install Company dependencies
+      - name: Install Company dependencies
+        run: |
+          pip install --upgrade pip ".[ci]"
+          pip install sphinx
+          pip install sphinx-press-theme
+          pip list
+
+      # Huggingface Login
+      - name: Huggingface Login
+        run: |  
+          huggingface-cli login --token ${{ secrets.HF_TOKEN_JS }} --add-to-git-credential
+          git config --global user.email ${{ secrets.EMAIL_JS }}
+          git config --global user.name ${{ secrets.USERNAME_JS }}
+
+          
+          echo "Current Git Configuration:"
+          git config --global --list
+    
+      # Black formatter execution
+      # - name: Check files using the black formatter
+      #   id: action_black
+      #   uses: psf/black@stable
+      #   with:
+      #     options: "--pyi --safe --verbose"
+      #     jupyter: true
+          
+      # Ruff linter execution
+      - name: Check files using the Ruff linter
+        uses: chartboost/ruff-action@v1
+        with:
+          args: "--fix --no-unsafe-fixes --no-cache"
+
+      # PyTest and coverage
+      - name: Run PyTest & Generate Coverage Report
+        run: |
+          coverage run -m pytest -v -s --junitxml=test-results.xml
+          coverage report -m --fail-under=$MIN_COV
+
+      # Comment test result on commmit
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: test-results.xml
+
+      # Commit & push changes
+      - name: Check for modified files
+        id: git-check
+        run: echo "modified=$(if git diff-index --quiet HEAD --; then echo "false"; else echo "true"; fi)" >> $GITHUB_OUTPUT
+      - name: Commit changes
+        if: steps.git-check.outputs.modified == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -a -m "Add changes"
+      - name: Get branch names
+        uses: tj-actions/branch-names@v8
+        id: branch-names
+      - name: Push changes
+        continue-on-error: true
+        if: steps.git-check.outputs.modified == 'true'
+        uses: ad-m/github-push-action@master
+        with:
+          branch: ${{ steps.branch-names.outputs.current_branch }}
+          github_token: ${{ github.token }}
+          force: true
+      - name: Generate API documentation
+        run: |
+          PACKAGE_PATH=src/pedata 
+          sphinx-apidoc -f -o $PACKAGE_PATH/docs/source $PACKAGE_PATH
+  
+      - name: Build Docs
+        run: |
+          PACKAGE_PATH=src/pedata 
+          sphinx-build -M html $PACKAGE_PATH/docs/source $PACKAGE_PATH/docs/build
+          
+      - name: Debug
+        run: |
+          ls -R src/pedata/docs/build/html
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: src/pedata/docs/build/html
