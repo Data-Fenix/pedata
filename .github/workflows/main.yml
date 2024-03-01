@@ -54,64 +54,64 @@ jobs:
           pip install sphinx-press-theme
           pip list
 
-      # Huggingface Login
-      - name: Huggingface Login
-        run: |  
-          huggingface-cli login --token ${{ secrets.HF_TOKEN_JS }} --add-to-git-credential
-          git config --global user.email ${{ secrets.EMAIL_JS }}
-          git config --global user.name ${{ secrets.USERNAME_JS }}
+      # # Huggingface Login
+      # - name: Huggingface Login
+      #   run: |  
+      #     huggingface-cli login --token ${{ secrets.HF_TOKEN_JS }} --add-to-git-credential
+      #     git config --global user.email ${{ secrets.EMAIL_JS }}
+      #     git config --global user.name ${{ secrets.USERNAME_JS }}
 
           
-          echo "Current Git Configuration:"
-          git config --global --list
+      #     echo "Current Git Configuration:"
+      #     git config --global --list
     
-      # Black formatter execution
-      # - name: Check files using the black formatter
-      #   id: action_black
-      #   uses: psf/black@stable
-      #   with:
-      #     options: "--pyi --safe --verbose"
-      #     jupyter: true
+      # # Black formatter execution
+      # # - name: Check files using the black formatter
+      # #   id: action_black
+      # #   uses: psf/black@stable
+      # #   with:
+      # #     options: "--pyi --safe --verbose"
+      # #     jupyter: true
           
-      # Ruff linter execution
-      - name: Check files using the Ruff linter
-        uses: chartboost/ruff-action@v1
-        with:
-          args: "--fix --no-unsafe-fixes --no-cache"
+      # # Ruff linter execution
+      # - name: Check files using the Ruff linter
+      #   uses: chartboost/ruff-action@v1
+      #   with:
+      #     args: "--fix --no-unsafe-fixes --no-cache"
 
-      # PyTest and coverage
-      - name: Run PyTest & Generate Coverage Report
-        run: |
-          coverage run -m pytest -v -s --junitxml=test-results.xml
-          coverage report -m --fail-under=$MIN_COV
+      # # PyTest and coverage
+      # - name: Run PyTest & Generate Coverage Report
+      #   run: |
+      #     coverage run -m pytest -v -s --junitxml=test-results.xml
+      #     coverage report -m --fail-under=$MIN_COV
 
-      # Comment test result on commmit
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        with:
-          files: test-results.xml
+      # # Comment test result on commmit
+      # - name: Publish Test Results
+      #   uses: EnricoMi/publish-unit-test-result-action@v2
+      #   with:
+      #     files: test-results.xml
 
-      # Commit & push changes
-      - name: Check for modified files
-        id: git-check
-        run: echo "modified=$(if git diff-index --quiet HEAD --; then echo "false"; else echo "true"; fi)" >> $GITHUB_OUTPUT
-      - name: Commit changes
-        if: steps.git-check.outputs.modified == 'true'
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git commit -a -m "Add changes"
-      - name: Get branch names
-        uses: tj-actions/branch-names@v8
-        id: branch-names
-      - name: Push changes
-        continue-on-error: true
-        if: steps.git-check.outputs.modified == 'true'
-        uses: ad-m/github-push-action@master
-        with:
-          branch: ${{ steps.branch-names.outputs.current_branch }}
-          github_token: ${{ github.token }}
-          force: true
+      # # Commit & push changes
+      # - name: Check for modified files
+      #   id: git-check
+      #   run: echo "modified=$(if git diff-index --quiet HEAD --; then echo "false"; else echo "true"; fi)" >> $GITHUB_OUTPUT
+      # - name: Commit changes
+      #   if: steps.git-check.outputs.modified == 'true'
+      #   run: |
+      #     git config --local user.email "github-actions[bot]@users.noreply.github.com"
+      #     git config --local user.name "github-actions[bot]"
+      #     git commit -a -m "Add changes"
+      # - name: Get branch names
+      #   uses: tj-actions/branch-names@v8
+      #   id: branch-names
+      # - name: Push changes
+      #   continue-on-error: true
+      #   if: steps.git-check.outputs.modified == 'true'
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     branch: ${{ steps.branch-names.outputs.current_branch }}
+      #     github_token: ${{ github.token }}
+      #     force: true
       - name: Generate API documentation
         run: |
           PACKAGE_PATH=src/pedata 
