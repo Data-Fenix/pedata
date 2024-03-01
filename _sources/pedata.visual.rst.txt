@@ -1,0 +1,21 @@
+pedata.visual package
+=====================
+
+Submodules
+----------
+
+pedata.visual.visual module
+---------------------------
+
+.. automodule:: pedata.visual.visual
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: pedata.visual
+   :members:
+   :undoc-members:
+   :show-inheritance:

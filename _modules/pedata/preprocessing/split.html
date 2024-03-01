@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>pedata.preprocessing.split</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../_static/documentation_options.js?v=a5b3107c"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">pedata documentation</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../index.html#pedata-documentation">pedata documentation!</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.html" class="reference internal ">pedata package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.encoding.html" class="reference internal ">pedata.encoding package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.mutation.html" class="reference internal ">pedata.mutation package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../modules.html" class="reference internal ">pedata</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../index.html">Module code</a> &raquo;</li>
+    
+    <li>pedata.preprocessing.split</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for pedata.preprocessing.split</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This file contains the abstract base class for splitters.</span>
+<span class="sd">DatasetSplitter</span>
+
+<span class="sd">it contains the following splitter classes:</span>
+<span class="sd">- DatasetSplitterRandomTrainTest class for random train test split</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">DatasetDict</span><span class="p">,</span> <span class="n">concatenate_datasets</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">combinations</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="get_split_col_names">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.split.get_split_col_names">[docs]</a>
+<span class="k">def</span> <span class="nf">get_split_col_names</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">Dataset</span><span class="o">|</span><span class="n">DatasetDict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the split column names of a dataset</span>
+<span class="sd">    Args:</span>
+<span class="sd">        dataset: The dataset to process</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        The split column names</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; import datasets</span>
+<span class="sd">        &gt;&gt;&gt; from pedata.preprocessing.split import get_split_col_names</span>
+<span class="sd">        &gt;&gt;&gt; toy_dataset = datasets.Dataset.from_dict(</span>
+<span class="sd">        ...    {</span>
+<span class="sd">        ...         &quot;aa_seq&quot;: [&quot;MLGLYITR&quot;, &quot;MAGLYITR&quot;, &quot;MLYLYITR&quot;, &quot;RAGLYITR&quot;, &quot;MLRLYITR&quot;],</span>
+<span class="sd">        ...         &quot;target a&quot;: [1, 2, 3, 5, 4],</span>
+<span class="sd">        ...         &quot;aa_mut&quot;: [&quot;A2L&quot;, &quot;wildtype&quot;, &quot;A2L_G3Y&quot;, &quot;M1R&quot;, &quot;A2L_G3R&quot;],</span>
+<span class="sd">        ...         &quot;split_random&quot;: [&#39;train&#39;, &#39;train&#39;, &#39;train&#39;, &#39;test&#39;, &#39;test&#39;],</span>
+<span class="sd">        ...         &quot;splittraintest&quot;: [&#39;train&#39;, &#39;train&#39;, &#39;test&#39;, &#39;test&#39;, &#39;test&#39;],</span>
+<span class="sd">        ...         &quot;RandomSplit&quot;: [&#39;train&#39;, &#39;train&#39;, &#39;test&#39;, &#39;test&#39;, &#39;test&#39;],</span>
+<span class="sd">        ...         &quot;source split&quot;: [&#39;train&#39;, &#39;train&#39;, &#39;test&#39;, &#39;test&#39;, &#39;test&#39;],</span>
+<span class="sd">        ...         &quot;split_k_fold&quot;: [&#39;train&#39;, &#39;train&#39;, &#39;test&#39;, &#39;test&#39;, &#39;test&#39;],</span>
+<span class="sd">        ...         &quot;split-k-fold&quot;: [&#39;train&#39;, &#39;train&#39;, &#39;test&#39;, &#39;test&#39;, &#39;test&#39;],</span>
+<span class="sd">        ...     }</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; get_split_col_names(toy_dataset)</span>
+<span class="sd">        [&#39;split_random&#39;, &#39;splittraintest&#39;, &#39;RandomSplit&#39;, &#39;source split&#39;, &#39;split_k_fold&#39;, &#39;split-k-fold&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">DatasetDict</span><span class="p">):</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">DatasetSplitter</span><span class="o">.</span><span class="n">concatenated_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+    <span class="n">col_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span>
+    <span class="n">split_col_names</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">col_name</span> <span class="ow">in</span> <span class="n">col_names</span><span class="p">:</span>
+        <span class="n">tokens_0</span> <span class="o">=</span> <span class="n">col_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
+        <span class="n">tokens_1</span> <span class="o">=</span> <span class="n">col_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
+        <span class="n">tokens_2</span> <span class="o">=</span> <span class="n">col_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;split&#39;</span> <span class="ow">in</span> <span class="n">tokens_0</span> <span class="ow">or</span> <span class="s1">&#39;split&#39;</span> <span class="ow">in</span> <span class="n">tokens_1</span> <span class="ow">or</span> <span class="s1">&#39;split&#39;</span> <span class="ow">in</span> <span class="n">tokens_2</span><span class="p">:</span>
+            <span class="n">split_col_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col_name</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">col_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;split&#39;</span><span class="p">):</span>
+            <span class="n">split_col_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col_name</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s1">&#39;Split&#39;</span> <span class="ow">in</span> <span class="n">col_name</span><span class="p">:</span>
+            <span class="n">split_col_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col_name</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">split_col_names</span></div>
+
+
+<div class="viewcode-block" id="get_split_map">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.split.get_split_map">[docs]</a>
+<span class="k">def</span> <span class="nf">get_split_map</span><span class="p">(</span><span class="n">splits</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">split_name_map</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the split map</span>
+<span class="sd">    Args:</span>
+<span class="sd">        splits: The splits</span>
+<span class="sd">        split_name_map: The split name map</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        The split map</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sub_split_name_map</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">split</span> <span class="ow">in</span> <span class="n">splits</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">split</span> <span class="ow">in</span> <span class="n">split_name_map</span><span class="p">:</span>
+            <span class="n">sub_split_name_map</span><span class="p">[</span><span class="n">split</span><span class="p">]</span> <span class="o">=</span> <span class="n">split_name_map</span><span class="p">[</span><span class="n">split</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="s1">&#39;train&#39;</span> <span class="ow">in</span> <span class="n">split</span> <span class="ow">and</span> <span class="s1">&#39;train&#39;</span><span class="o">!=</span><span class="n">split</span><span class="p">:</span>
+            <span class="n">sub_split_name_map</span><span class="p">[</span><span class="n">split</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;train&#39;</span>
+        <span class="k">elif</span> <span class="s1">&#39;test&#39;</span> <span class="ow">in</span> <span class="n">split</span> <span class="ow">and</span> <span class="s1">&#39;test&#39;</span><span class="o">!=</span><span class="n">split</span><span class="p">:</span>
+            <span class="n">sub_split_name_map</span><span class="p">[</span><span class="n">split</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;test&#39;</span>
+        <span class="k">elif</span> <span class="s1">&#39;val&#39;</span> <span class="ow">in</span> <span class="n">split</span> <span class="ow">and</span> <span class="s1">&#39;validation&#39;</span><span class="o">!=</span><span class="n">split</span><span class="p">:</span>
+            <span class="n">sub_split_name_map</span><span class="p">[</span><span class="n">split</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;validation&#39;</span>
+    <span class="k">return</span> <span class="n">sub_split_name_map</span></div>
+
+
+<div class="viewcode-block" id="rename_splits">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.split.rename_splits">[docs]</a>
+<span class="k">def</span> <span class="nf">rename_splits</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">Dataset</span><span class="o">|</span><span class="n">DatasetDict</span><span class="p">,</span> <span class="n">split_name_map</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dataset</span><span class="o">|</span><span class="n">DatasetDict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Rename the splits of a dataset</span>
+<span class="sd">    Args:</span>
+<span class="sd">        dataset: The dataset to process</span>
+<span class="sd">        split_name_map: The split name map</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        The modified dataset</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; import datasets</span>
+<span class="sd">        &gt;&gt;&gt; from pedata.preprocessing.split import rename_splits</span>
+<span class="sd">        &gt;&gt;&gt; toy_dataset = datasets.Dataset.from_dict(</span>
+<span class="sd">        ...    {</span>
+<span class="sd">        ...         &quot;aa_seq&quot;: [&quot;MLGLYITR&quot;, &quot;MAGLYITR&quot;, &quot;MLYLYITR&quot;, &quot;RAGLYITR&quot;, &quot;MLRLYITR&quot;],</span>
+<span class="sd">        ...         &quot;target a&quot;: [1, 2, 3, 5, 4],</span>
+<span class="sd">        ...         &quot;aa_mut&quot;: [&quot;A2L&quot;, &quot;wildtype&quot;, &quot;A2L_G3Y&quot;, &quot;M1R&quot;, &quot;A2L_G3R&quot;],</span>
+<span class="sd">        ...         &quot;split_random&quot;: [&#39;training&#39;, &#39;training&#39;, &#39;training&#39;, &#39;testing&#39;, &#39;testing&#39;],</span>
+<span class="sd">        ...     }</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; rename_splits(toy_dataset)[&#39;split_random&#39;]</span>
+<span class="sd">        [&#39;train&#39;, &#39;train&#39;, &#39;train&#39;, &#39;test&#39;, &#39;test&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">split_name_map</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">split_name_map</span> <span class="o">=</span> <span class="p">{}</span>
+        
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">DatasetDict</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">split_name</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">dataset</span><span class="p">[</span><span class="n">split_name</span><span class="p">],</span> <span class="n">split_name_map</span> <span class="o">=</span> <span class="n">rename_splits</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="n">split_name</span><span class="p">],</span> <span class="n">split_name_map</span><span class="p">)</span>
+        <span class="n">splits</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="n">sub_split_name_map</span> <span class="o">=</span> <span class="n">get_split_map</span><span class="p">(</span><span class="n">splits</span><span class="p">,</span> <span class="n">split_name_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;DatasetDict&quot;</span><span class="p">,</span> <span class="p">{}))</span>
+        <span class="n">renamed_dataset_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">split</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">:</span>
+            <span class="n">renamed_dataset_dict</span><span class="p">[</span><span class="n">sub_split_name_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">split</span><span class="p">,</span> <span class="n">split</span><span class="p">)]</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">split</span><span class="p">]</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">DatasetDict</span><span class="p">(</span><span class="n">renamed_dataset_dict</span><span class="p">)</span>
+        <span class="n">split_name_map</span><span class="p">[</span><span class="s2">&quot;DatasetDict&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sub_split_name_map</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">split_col_names</span> <span class="o">=</span> <span class="n">get_split_col_names</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">split_col_name</span> <span class="ow">in</span> <span class="n">split_col_names</span><span class="p">:</span>
+            <span class="n">splits</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="n">split_col_name</span><span class="p">])</span>
+            <span class="n">sub_split_name_map</span> <span class="o">=</span> <span class="n">get_split_map</span><span class="p">(</span><span class="n">splits</span><span class="p">,</span> <span class="n">split_name_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">split_col_name</span><span class="p">,</span> <span class="p">{}))</span>
+            <span class="k">def</span> <span class="nf">mapper</span><span class="p">(</span><span class="n">sample</span><span class="p">):</span>
+                <span class="n">new_split_name</span> <span class="o">=</span> <span class="n">sub_split_name_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="n">split_col_name</span><span class="p">],</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">new_split_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">sample</span><span class="p">[</span><span class="n">split_col_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_split_name</span>
+                <span class="k">return</span> <span class="n">sample</span>
+            <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">mapper</span><span class="p">)</span>
+            <span class="n">split_name_map</span><span class="p">[</span><span class="n">split_col_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">sub_split_name_map</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;split name mapping during the preprocessing&quot;</span><span class="p">,</span> <span class="n">split_name_map</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">split_name_map</span></div>
+
+
+<div class="viewcode-block" id="split_col_histogram">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.split.split_col_histogram">[docs]</a>
+<span class="k">def</span> <span class="nf">split_col_histogram</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">Dataset</span><span class="o">|</span><span class="n">DatasetDict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the split column histogram of a dataset</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        dataset: The dataset to process</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The split column histogram</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">histogram</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">DatasetDict</span><span class="p">):</span>
+        <span class="n">histogram</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;DatasetDict&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">split</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="n">split</span><span class="p">])</span> <span class="k">for</span> <span class="n">split</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">}}</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">DatasetSplitter</span><span class="o">.</span><span class="n">concatenated_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+    <span class="n">split_col_names</span> <span class="o">=</span> <span class="n">get_split_col_names</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">split_col_name</span> <span class="ow">in</span> <span class="n">split_col_names</span><span class="p">:</span>
+        <span class="n">histogram</span><span class="p">[</span><span class="n">split_col_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">split</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="n">split_col_name</span><span class="p">]</span><span class="o">==</span><span class="n">split</span><span class="p">))</span> <span class="k">for</span> <span class="n">split</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="n">split_col_name</span><span class="p">])}</span>
+    <span class="k">return</span> <span class="n">histogram</span></div>
+
+
+<div class="viewcode-block" id="DatasetSplitter">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.split.DatasetSplitter">[docs]</a>
+<span class="k">class</span> <span class="nc">DatasetSplitter</span><span class="p">(</span>
+    <span class="n">ABC</span>
+<span class="p">):</span>  <span class="c1"># FIXME add a method to check and reorder the dataset in the exact same way it was before splitting</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dataset Splitter for random Train Test Split.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DatasetSplitter.__init__">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.split.DatasetSplitter.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">append_split_col</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the DatasetSplitter class.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            dataset: The dataset to split</span>
+<span class="sd">            seed: The seed to use for the split</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            Type: If the dataset is not a Dataset or a DatasetDict</span>
+<span class="sd">            Exception: If the dataset is a DatasetDict and contains more than one column</span>
+<span class="sd">        Note:</span>
+<span class="sd">            The Dataset can be a DatasetDict or a Dataset.</span>
+<span class="sd">            If it is a DatasetDict, it should contain only one column, and it will be converted as Dataset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">append_split_col</span> <span class="o">=</span> <span class="n">append_split_col</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">split_col_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Abstract method returning the name of the column containing the split name</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            The name of the column containing the split name&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+        <span class="k">return</span> <span class="s2">&quot;awesome_split&quot;</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rng_seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatasetDict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Implementing the dataset split method</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            rng_seed: The seed to use for the random generator used in the method (if any)</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            The split dataset&quot;&quot;&quot;</span>
+
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<div class="viewcode-block" id="DatasetSplitter.split">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.split.DatasetSplitter.split">[docs]</a>
+    <span class="k">def</span> <span class="nf">split</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">dataset</span><span class="p">:</span> <span class="n">DatasetDict</span> <span class="o">|</span> <span class="n">Dataset</span><span class="p">,</span>
+        <span class="n">rng_seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">return_dataset_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatasetDict</span> <span class="o">|</span> <span class="n">Dataset</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Split the dataset and return it.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            dataset: The dataset to split -</span>
+<span class="sd">                if it is a DatasetDict, it should contain only one split</span>
+<span class="sd">            return_dataset_dict: Whether to return a concatenated dataset or a DatasetDict</span>
+<span class="sd">                If True -&gt; return concatenated dataset -&gt; Dataset</span>
+<span class="sd">                If False, return a DatasetDict with the split name as key (Default)</span>
+<span class="sd">        Return:</span>
+<span class="sd">            The split dataset as a DatasetDict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># defines the rng</span>
+
+        <span class="c1"># sets the return_dataset_dict attribute</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_return_dataset_dict</span> <span class="o">=</span> <span class="n">return_dataset_dict</span>
+
+        <span class="c1"># Checking if the dataset is a Dataset or a DatasetDict of only one split</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dataset_check</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+        <span class="c1"># Makes sure that ._dataset is of type Dataset&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dataset_preprocessing</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_col_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="o">.</span><span class="n">column_names</span><span class="p">:</span>
+            <span class="c1"># if the split column is not in the dataset, create the split</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_split_dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_split</span><span class="p">(</span><span class="n">rng_seed</span><span class="p">)</span>  <span class="c1"># split the dataset</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">append_split_col</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="c1"># if the split column is in the dataset, use it to split the dataset</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_split_dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_dataset_using_split_column</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_col_name</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">append_split_col</span><span class="p">:</span>
+            <span class="c1"># append the split column to the _split_dataset</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_split_dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">append_split_column</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_split_dataset</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_col_name</span>
+            <span class="p">)</span>
+            <span class="c1"># update _dataset with the split column</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">concatenated_dataset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_split_dataset</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_dataset_check</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">DatasetDict</span> <span class="o">|</span> <span class="n">Dataset</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Checking if the dataset is a Dataset or a DatasetDict of only one split</span>
+<span class="sd">        Args:</span>
+<span class="sd">            dataset: The dataset to check</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            TypeError: If the dataset is not a Dataset or a DatasetDict</span>
+<span class="sd">            ValueError: If the dataset is a DatasetDict and contains more than one column</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">DatasetDict</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;dataset must be a DatasetDict or a Dataset, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># if the dataset is a DatasetDict, convert it to a Dataset</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">DatasetDict</span><span class="p">):</span>
+            <span class="c1"># The input DatasetDict Should have only one split</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;A DatasetDict can be provided as an input, however it should contain only one split. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Here the dataset contains </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span><span class="si">}</span><span class="s2"> splits: &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="p">[</span><span class="n">split</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">split</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">dataset</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_dataset_preprocessing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">Dataset</span> <span class="o">|</span> <span class="n">DatasetDict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Makes sure that ._dataset is a Dataset&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">DatasetDict</span><span class="p">):</span>
+            <span class="c1"># concatenate the dataset as a Dataset</span>
+            <span class="n">dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">concatenated_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span> <span class="o">=</span> <span class="n">dataset</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dataset</span> <span class="o">|</span> <span class="n">DatasetDict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the dataset.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            The dataset as a DatasetDict or Dataset</span>
+<span class="sd">        Note:</span>
+<span class="sd">            If self.return_dataset_dict is True, return a DatasetDict</span>
+<span class="sd">            If self.return_dataset_dict is False, return a Dataset</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_return_dataset_dict</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_split_dataset</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span>
+
+<div class="viewcode-block" id="DatasetSplitter.split_dataset_using_split_column">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.split.DatasetSplitter.split_dataset_using_split_column">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">split_dataset_using_split_column</span><span class="p">(</span>
+        <span class="n">dataset</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">split_col_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatasetDict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Split the dataset using a column containing the split name.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            dataset: The dataset to split</span>
+<span class="sd">            split_col_name: The name of the column containing the split name</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            DatasetDict containing the split dataset</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            TypeError: If the dataset is not a Dataset</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;dataset must be a Dataset, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span><span class="p">)</span>
+
+        <span class="n">split_dataset</span> <span class="o">=</span> <span class="n">DatasetDict</span><span class="p">()</span>
+        <span class="n">splits</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="n">split_col_name</span><span class="p">])))</span>
+        <span class="k">for</span> <span class="n">split</span> <span class="ow">in</span> <span class="n">splits</span><span class="p">:</span>
+            <span class="n">split_dataset</span><span class="p">[</span><span class="n">split</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="n">split_col_name</span><span class="p">]</span> <span class="o">==</span> <span class="n">split</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">split_dataset</span></div>
+
+
+<div class="viewcode-block" id="DatasetSplitter.concatenated_dataset">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.split.DatasetSplitter.concatenated_dataset">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">concatenated_dataset</span><span class="p">(</span>
+        <span class="n">dataset</span><span class="p">:</span> <span class="n">DatasetDict</span><span class="p">,</span> <span class="n">split_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dataset</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the concatenated dataset.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            dataset: The dataset to concatenate.</span>
+<span class="sd">            split_list: The list of splits to concatenate</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            The concatenated dataset</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">DatasetDict</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;dataset must be a DatasetDict, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">split_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">split_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="n">concatenate_datasets</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">dataset</span><span class="p">[</span><span class="n">split</span><span class="p">]</span> <span class="k">for</span> <span class="n">split</span> <span class="ow">in</span> <span class="n">dataset</span> <span class="k">if</span> <span class="n">split</span> <span class="ow">in</span> <span class="n">split_list</span><span class="p">]</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DatasetSplitter.append_split_column">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.split.DatasetSplitter.append_split_column">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">append_split_column</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">DatasetDict</span><span class="p">,</span> <span class="n">split_col_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatasetDict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a column to the dataset with the name of the split.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            dataset: The dataset to modify</span>
+<span class="sd">            split_col_name: The name of the column containing the split name</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            The modified dataset</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            Exception: If the split column was not added correctly - this should never happen but as quite critical, we check it anyway</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">split_name</span><span class="p">,</span> <span class="n">dataset_split</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># if the split column is already in the dataset, no need to add it again</span>
+            <span class="k">if</span> <span class="n">split_col_name</span> <span class="ow">in</span> <span class="n">dataset_split</span><span class="o">.</span><span class="n">column_names</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">split_col</span> <span class="o">=</span> <span class="p">[</span><span class="n">split_name</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dataset_split</span><span class="o">.</span><span class="n">num_rows</span><span class="p">)]</span>
+            <span class="n">dataset</span><span class="p">[</span><span class="n">split_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset_split</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="n">split_col_name</span><span class="p">,</span> <span class="n">split_col</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">split_name</span><span class="p">,</span> <span class="n">dataset_split</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="n">split_col_name</span> <span class="ow">in</span> <span class="n">dataset_split</span><span class="o">.</span><span class="n">column_names</span>
+            <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;The split column </span><span class="si">{</span><span class="n">split_col_name</span><span class="si">}</span><span class="s2"> was not added correctly to the dataset </span><span class="si">{</span><span class="n">split_name</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="k">return</span> <span class="n">dataset</span></div>
+
+
+<div class="viewcode-block" id="DatasetSplitter.yield_all_train_test_sets">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.split.DatasetSplitter.yield_all_train_test_sets">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">yield_all_train_test_sets</span><span class="p">(</span>
+        <span class="n">dataset</span><span class="p">:</span> <span class="n">DatasetDict</span><span class="p">,</span> <span class="n">combined_n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatasetDict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Yield all train test splits from a k-fold dataset</span>
+<span class="sd">        Args:</span>
+<span class="sd">            dataset: The dataset dictionnary to process</span>
+<span class="sd">                It must contain items with keys such as &quot;split_1&quot;, &quot;split_2&quot;, ..., &quot;split_k&quot;</span>
+<span class="sd">            combine_n: The number of splits to combine for the TEST set</span>
+<span class="sd">        Yields:</span>
+<span class="sd">            The train test splits</span>
+<span class="sd">        Note:</span>
+<span class="sd">            If the dataset is already a train test split, the train and test sets will simply be yielded</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; import datasets</span>
+<span class="sd">            &gt;&gt;&gt; from pedata.preprocessing.split import DatasetSplitterRandomKFold</span>
+<span class="sd">            &gt;&gt;&gt; toy_dataset = datasets.Dataset.from_dict(</span>
+<span class="sd">            ...    {</span>
+<span class="sd">            ...         &quot;aa_seq&quot;: [&quot;MLGLYITR&quot;, &quot;MAGLYITR&quot;, &quot;MLYLYITR&quot;, &quot;RAGLYITR&quot;, &quot;MLRLYITR&quot;, &quot;RLGLYITR&quot;],</span>
+<span class="sd">            ...         &quot;target a&quot;: [1, 2, 3, 5, 4, 6],</span>
+<span class="sd">            ...         &quot;aa_mut&quot;: [&quot;A2L&quot;, &quot;wildtype&quot;, &quot;A2L_G3Y&quot;, &quot;M1R&quot;, &quot;A2L_G3R&quot;, &quot;A2L_M1R&quot;],</span>
+<span class="sd">            ...     }</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; splitter = DatasetSplitterRandomKFold(toy_dataset, k=3)</span>
+<span class="sd">            &gt;&gt;&gt; dataset = splitter.split()</span>
+<span class="sd">            &gt;&gt;&gt; k = 0</span>
+<span class="sd">            &gt;&gt;&gt; for train_test_set in splitter.yield_all_train_test_sets(dataset, combined_n=1):</span>
+<span class="sd">            ...     k += 1</span>
+<span class="sd">            ...     print(&quot;________________&quot;)</span>
+<span class="sd">            ...     print(f&quot;- train_test_{k} -&quot;)</span>
+<span class="sd">            ...     print(train_test_set)</span>
+<span class="sd">            ________________</span>
+<span class="sd">            - train_test_1 -</span>
+<span class="sd">            DatasetDict({</span>
+<span class="sd">                train: Dataset({</span>
+<span class="sd">                    features: [&#39;aa_seq&#39;, &#39;target a&#39;, &#39;aa_mut&#39;, &#39;random_split_3_fold&#39;],</span>
+<span class="sd">                    num_rows: 4</span>
+<span class="sd">                })</span>
+<span class="sd">                test: Dataset({</span>
+<span class="sd">                    features: [&#39;aa_seq&#39;, &#39;target a&#39;, &#39;aa_mut&#39;, &#39;random_split_3_fold&#39;],</span>
+<span class="sd">                    num_rows: 2</span>
+<span class="sd">                })</span>
+<span class="sd">            })</span>
+<span class="sd">            ________________</span>
+<span class="sd">            - train_test_2 -</span>
+<span class="sd">            DatasetDict({</span>
+<span class="sd">                train: Dataset({</span>
+<span class="sd">                    features: [&#39;aa_seq&#39;, &#39;target a&#39;, &#39;aa_mut&#39;, &#39;random_split_3_fold&#39;],</span>
+<span class="sd">                    num_rows: 4</span>
+<span class="sd">                })</span>
+<span class="sd">                test: Dataset({</span>
+<span class="sd">                    features: [&#39;aa_seq&#39;, &#39;target a&#39;, &#39;aa_mut&#39;, &#39;random_split_3_fold&#39;],</span>
+<span class="sd">                    num_rows: 2</span>
+<span class="sd">                })</span>
+<span class="sd">            })</span>
+<span class="sd">            ________________</span>
+<span class="sd">            - train_test_3 -</span>
+<span class="sd">            DatasetDict({</span>
+<span class="sd">                train: Dataset({</span>
+<span class="sd">                    features: [&#39;aa_seq&#39;, &#39;target a&#39;, &#39;aa_mut&#39;, &#39;random_split_3_fold&#39;],</span>
+<span class="sd">                    num_rows: 4</span>
+<span class="sd">                })</span>
+<span class="sd">                test: Dataset({</span>
+<span class="sd">                    features: [&#39;aa_seq&#39;, &#39;target a&#39;, &#39;aa_mut&#39;, &#39;random_split_3_fold&#39;],</span>
+<span class="sd">                    num_rows: 2</span>
+<span class="sd">                })</span>
+<span class="sd">            })</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Generate all combinations of combined_n elements from the list of splits</span>
+        <span class="n">dataset_splits</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+        <span class="k">if</span> <span class="n">dataset_splits</span> <span class="o">!=</span> <span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;train&quot;</span><span class="p">]:</span>
+            <span class="n">combinations_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">combinations</span><span class="p">(</span><span class="n">dataset_splits</span><span class="p">,</span> <span class="n">combined_n</span><span class="p">))</span>
+            <span class="c1"># Yield all combinations as train test splits</span>
+            <span class="k">for</span> <span class="n">combination</span> <span class="ow">in</span> <span class="n">combinations_list</span><span class="p">:</span>
+                <span class="n">test</span> <span class="o">=</span> <span class="n">concatenate_datasets</span><span class="p">([</span><span class="n">dataset</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">combination</span><span class="p">])</span>
+                <span class="n">train</span> <span class="o">=</span> <span class="n">concatenate_datasets</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">dataset</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">dataset_splits</span> <span class="k">if</span> <span class="n">j</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">combination</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="k">yield</span> <span class="n">DatasetDict</span><span class="p">({</span><span class="s2">&quot;train&quot;</span><span class="p">:</span> <span class="n">train</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="n">test</span><span class="p">})</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># if the dataset is already a train test split, yield it</span>
+            <span class="k">yield</span> <span class="n">dataset</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="DatasetSplitterRandomTrainTest">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.split.DatasetSplitterRandomTrainTest">[docs]</a>
+<span class="k">class</span> <span class="nc">DatasetSplitterRandomTrainTest</span><span class="p">(</span><span class="n">DatasetSplitter</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dataset Splitter for random Train Test Split.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">split_col_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Abstract method returning the name of the column containing the split name</span>
+<span class="sd">        Retunrs:</span>
+<span class="sd">            The name of the column containing the split name&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;random_split_train_0_8_test_0_2&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rng_seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatasetDict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Split the dataset into train and test sets.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            The split dataset as a DatasetDict</span>
+<span class="sd">        Example:#FIXME: fix the example rng</span>
+<span class="sd">        &gt;&gt;&gt; import datasets</span>
+<span class="sd">        &gt;&gt;&gt; toy_dataset = datasets.Dataset.from_dict(</span>
+<span class="sd">        ...    {</span>
+<span class="sd">        ...         &quot;aa_seq&quot;: [&quot;MLGLYITR&quot;, &quot;MAGLYITR&quot;, &quot;MLYLYITR&quot;, &quot;RAGLYITR&quot;, &quot;MLRLYITR&quot;],</span>
+<span class="sd">        ...         &quot;target a&quot;: [1, 2, 3, 5, 4],</span>
+<span class="sd">        ...         &quot;aa_mut&quot;: [&quot;A2L&quot;, &quot;wildtype&quot;, &quot;A2L_G3Y&quot;, &quot;M1R&quot;, &quot;A2L_G3R&quot;],</span>
+<span class="sd">        ...     }</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; splitter = DatasetSplitterRandomTrainTest(toy_dataset)</span>
+<span class="sd">        &gt;&gt;&gt; dataset = splitter.split()</span>
+<span class="sd">        &gt;&gt;&gt; print(dataset)</span>
+<span class="sd">        DatasetDict({</span>
+<span class="sd">            train: Dataset({</span>
+<span class="sd">                features: [&#39;aa_seq&#39;, &#39;target a&#39;, &#39;aa_mut&#39;, &#39;random_split_train_0_8_test_0_2&#39;],</span>
+<span class="sd">                num_rows: 4</span>
+<span class="sd">            })</span>
+<span class="sd">            test: Dataset({</span>
+<span class="sd">                features: [&#39;aa_seq&#39;, &#39;target a&#39;, &#39;aa_mut&#39;, &#39;random_split_train_0_8_test_0_2&#39;],</span>
+<span class="sd">                num_rows: 1</span>
+<span class="sd">            })</span>
+<span class="sd">        })</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span>
+            <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">generator</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">rng_seed</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="DatasetSplitterRandomKFold">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.split.DatasetSplitterRandomKFold">[docs]</a>
+<span class="k">class</span> <span class="nc">DatasetSplitterRandomKFold</span><span class="p">(</span><span class="n">DatasetSplitter</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dataset Splitter for random Train Test Split.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">split_col_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Abstract method returning the name of the column containing the split name</span>
+<span class="sd">        Retunrs:</span>
+<span class="sd">            The name of the column containing the split name&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;random_split_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="si">}</span><span class="s2">_fold&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rng_seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatasetDict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Split the dataset into K folds. #FIXME: fix the example rng</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            The split dataset as a DatasetDict</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If k is larger than the number of datapoints in the dataset</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">        &gt;&gt;&gt; import datasets</span>
+<span class="sd">        &gt;&gt;&gt; from pedata.preprocessing import DatasetSplitterRandomKFold</span>
+<span class="sd">        &gt;&gt;&gt; toy_dataset = datasets.Dataset.from_dict(</span>
+<span class="sd">        ...    {</span>
+<span class="sd">        ...         &quot;aa_seq&quot;: [&quot;MLGLYITR&quot;, &quot;MAGLYITR&quot;, &quot;MLYLYITR&quot;, &quot;RAGLYITR&quot;, &quot;MLRLYITR&quot;, &quot;RLGLYITR&quot;],</span>
+<span class="sd">        ...         &quot;target a&quot;: [1, 2, 3, 5, 4, 6],</span>
+<span class="sd">        ...         &quot;aa_mut&quot;: [&quot;A2L&quot;, &quot;wildtype&quot;, &quot;A2L_G3Y&quot;, &quot;M1R&quot;, &quot;A2L_G3R&quot;, &quot;A2L_M1R&quot;],</span>
+<span class="sd">        ...     }</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; splitter = DatasetSplitterRandomKFold(toy_dataset, k=3)</span>
+<span class="sd">        &gt;&gt;&gt; dataset = splitter.split()</span>
+<span class="sd">        &gt;&gt;&gt; print(dataset)</span>
+<span class="sd">        DatasetDict({</span>
+<span class="sd">            split_0: Dataset({</span>
+<span class="sd">                features: [&#39;aa_seq&#39;, &#39;target a&#39;, &#39;aa_mut&#39;, &#39;random_split_3_fold&#39;],</span>
+<span class="sd">                num_rows: 2</span>
+<span class="sd">            })</span>
+<span class="sd">            split_1: Dataset({</span>
+<span class="sd">                features: [&#39;aa_seq&#39;, &#39;target a&#39;, &#39;aa_mut&#39;, &#39;random_split_3_fold&#39;],</span>
+<span class="sd">                num_rows: 2</span>
+<span class="sd">            })</span>
+<span class="sd">            split_2: Dataset({</span>
+<span class="sd">                features: [&#39;aa_seq&#39;, &#39;target a&#39;, &#39;aa_mut&#39;, &#39;random_split_3_fold&#39;],</span>
+<span class="sd">                num_rows: 2</span>
+<span class="sd">            })</span>
+<span class="sd">        })</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># check if k is compatible with the dataset</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;k must be smaller than or equal to the number of datapoints in the dataset, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Here, we got k = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="p">)</span><span class="si">}</span><span class="s2"> datapoints respectively.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># shuffle the dataset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">generator</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">rng_seed</span><span class="p">))</span>
+
+        <span class="c1"># calculate fold size</span>
+        <span class="n">fold_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="p">)</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span>  <span class="c1"># determine the fold size</span>
+
+        <span class="c1"># Create k folds</span>
+        <span class="n">split_dataset</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">):</span>
+            <span class="c1"># Determine the start and end index for the validation set</span>
+            <span class="n">start_index</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="n">fold_size</span>
+            <span class="n">end_index</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">fold_size</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">else</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="p">)</span>
+            <span class="n">split_dataset</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;split_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="p">[</span><span class="n">start_index</span><span class="p">:</span><span class="n">end_index</span><span class="p">]</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">DatasetDict</span><span class="p">(</span><span class="n">split_dataset</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ZeroShotSpliter">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.split.ZeroShotSpliter">[docs]</a>
+<span class="k">class</span> <span class="nc">ZeroShotSpliter</span><span class="p">(</span><span class="n">DatasetSplitter</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dataset Splitter for zero shot datasets.</span>
+<span class="sd">    Zero Shot datasets have manually defined splits instead of random splits.</span>
+<span class="sd">    This splitter splits the datasets using a defined split column or using the existing</span>
+<span class="sd">    hugging face splits</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">split_col_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_split_col_name</span> <span class="o">=</span> <span class="n">split_col_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">split_col_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_split_col_name</span>
+
+    <span class="k">def</span> <span class="nf">_split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rng_seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatasetDict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Notes:</span>
+<span class="sd">            This method should not be called for zero shot datasets.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Zero shot datasets should not be split using this splitter. It should contain the split column&quot;</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="append_split_columns_to_dataset">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.split.append_split_columns_to_dataset">[docs]</a>
+<span class="k">def</span> <span class="nf">append_split_columns_to_dataset</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dataset</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Append all split columns to a dataset</span>
+<span class="sd">    Args:</span>
+<span class="sd">        dataset: The dataset to modify</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        The modified dataset</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Split the dataset into train and test sets</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">DatasetSplitterRandomTrainTest</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
+        <span class="n">dataset</span><span class="p">,</span> <span class="n">rng_seed</span><span class="o">=</span><span class="mi">12053</span><span class="p">,</span> <span class="n">return_dataset_dict</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
+    <span class="c1"># Split the dataset into k folds</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mi">10</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">10</span> <span class="k">else</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+    <span class="p">)</span>  <span class="c1"># hack for very small dataset (testing purposes)</span>
+
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">DatasetSplitterRandomKFold</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
+        <span class="n">dataset</span><span class="p">,</span> <span class="n">rng_seed</span><span class="o">=</span><span class="mi">12053</span><span class="p">,</span> <span class="n">return_dataset_dict</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">dataset</span></div>
+
+
+
+<div class="viewcode-block" id="add_source_split_column">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.split.add_source_split_column">[docs]</a>
+<span class="k">def</span> <span class="nf">add_source_split_column</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">:</span> <span class="n">DatasetDict</span><span class="p">,</span> <span class="n">merge_split</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DatasetDict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add a column to the dataset with the name of the splits used by the source of the dataset.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        dataset: The dataset to modify</span>
+<span class="sd">        merge_split: Whether to merge the split columns into one column</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        The modified dataset</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># instantiate a splitter - won&#39;t be used to split but</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">DatasetSplitter</span><span class="o">.</span><span class="n">append_split_column</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="s2">&quot;source_split&quot;</span><span class="p">)</span>
+
+    <span class="c1"># merge the splits into one column if merge_split is True</span>
+    <span class="k">if</span> <span class="n">merge_split</span><span class="p">:</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">DatasetDict</span><span class="p">(</span>
+            <span class="p">{</span><span class="s2">&quot;whole_dataset&quot;</span><span class="p">:</span> <span class="n">DatasetSplitter</span><span class="o">.</span><span class="n">concatenated_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">)}</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">dataset</span></div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, Exazyme.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

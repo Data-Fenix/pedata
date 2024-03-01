@@ -1,0 +1,29 @@
+pedata.data\_io package
+=======================
+
+Submodules
+----------
+
+pedata.data\_io.load module
+---------------------------
+
+.. automodule:: pedata.data_io.load
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pedata.data\_io.save module
+---------------------------
+
+.. automodule:: pedata.data_io.save
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: pedata.data_io
+   :members:
+   :undoc-members:
+   :show-inheritance:

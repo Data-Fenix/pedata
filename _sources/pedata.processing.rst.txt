@@ -1,0 +1,18 @@
+pedata.processing package
+=========================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   pedata.processing.hfhub
+
+Module contents
+---------------
+
+.. automodule:: pedata.processing
+   :members:
+   :undoc-members:
+   :show-inheritance:

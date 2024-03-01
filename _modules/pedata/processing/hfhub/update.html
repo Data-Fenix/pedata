@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>pedata.processing.hfhub.update</title>
+    
+          <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../_static/documentation_options.js?v=a5b3107c"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../index.html" class="home-link">
+    
+      <span class="site-name">pedata documentation</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../index.html#pedata-documentation">pedata documentation!</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../pedata.html" class="reference internal ">pedata package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../pedata.encoding.html" class="reference internal ">pedata.encoding package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../pedata.mutation.html" class="reference internal ">pedata.mutation package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../modules.html" class="reference internal ">pedata</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>pedata.processing.hfhub.update</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for pedata.processing.hfhub.update</h1><div class="highlight"><pre>
+<span></span><span class="c1"># setting setting the __package__ attribute to solve the relative import proplem when runningn the scripts in the command line</span>
+<span class="n">__package__</span> <span class="o">=</span> <span class="s2">&quot;pedata.processing.hfhub&quot;</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span><span class="p">,</span> <span class="n">concatenate_datasets</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">DatasetHubHandler</span>
+<span class="kn">from</span> <span class="nn">...hfhub_tools.utils</span> <span class="kn">import</span> <span class="n">clear_hub_ds_files_and_metadata</span>
+
+
+<div class="viewcode-block" id="DatasetUpdate">
+<a class="viewcode-back" href="../../../../pedata.processing.hfhub.html#pedata.processing.hfhub.update.DatasetUpdate">[docs]</a>
+<span class="k">class</span> <span class="nc">DatasetUpdate</span><span class="p">(</span><span class="n">DatasetHubHandler</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class to handle dataset update and on HuggingFace Hub.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DatasetUpdate.__init__">
+<a class="viewcode-back" href="../../../../pedata.processing.hfhub.html#pedata.processing.hfhub.update.DatasetUpdate.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">repo</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">commit_hash</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">local_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">=</span> <span class="s2">&quot;./local_datasets&quot;</span><span class="p">,</span>
+        <span class="n">cache_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">=</span> <span class="s2">&quot;./cache&quot;</span><span class="p">,</span>
+        <span class="n">save_locally</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">splits_to_combine_as_whole_ds</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">needed_encodings</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the class and run the creation, update and upload pipeline.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            repo (str): Hugging Face Hub repository name (format: &#39;Exazyme/dataset-name&#39;).</span>
+<span class="sd">            commit_hash: Commit hash of the dataset to pull from Hugging Face. - default: None</span>
+<span class="sd">            local_dir (str): Local directory to save the dataset to.</span>
+<span class="sd">            cache_dir (str): cache directory</span>
+<span class="sd">            save_locally (bool): Whether to save the dataset to a local directory. - default: True</span>
+<span class="sd">            splits_to_combine_as_whole_ds: The name of the splits to combine as the whole dataset</span>
+<span class="sd">                - when updating a dataset which is already on the hub. - default: []</span>
+<span class="sd">            needed_encodings (list): list of encodings for the dataset; default: []</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">repo</span><span class="p">,</span>
+            <span class="n">commit_hash</span><span class="p">,</span>
+            <span class="n">local_dir</span><span class="p">,</span>
+            <span class="n">cache_dir</span><span class="p">,</span>
+            <span class="n">save_locally</span><span class="p">,</span>
+            <span class="n">splits_to_combine_as_whole_ds</span><span class="p">,</span>
+            <span class="n">needed_encodings</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_dataset</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="DatasetUpdate.update_dataset">
+<a class="viewcode-back" href="../../../../pedata.processing.hfhub.html#pedata.processing.hfhub.update.DatasetUpdate.update_dataset">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;run the update pipeline&quot;&quot;&quot;</span>
+
+        <span class="c1"># get the dataset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pull_and_select</span><span class="p">()</span>
+
+        <span class="c1"># preprocess propcess the dataset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prepare_data</span><span class="p">()</span>
+
+        <span class="c1"># clear data and metadata on the remote repository</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prepare_repo</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># clear the cache before pushing</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cache_dir</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># push</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">push</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())</span>
+
+        <span class="c1"># clear the cache again</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cache_dir</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DatasetUpdate.pull_and_select">
+<a class="viewcode-back" href="../../../../pedata.processing.hfhub.html#pedata.processing.hfhub.update.DatasetUpdate.pull_and_select">[docs]</a>
+    <span class="k">def</span> <span class="nf">pull_and_select</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Pulls the dataset from Hugging Face, update it.&quot;&quot;&quot;</span>
+        <span class="n">dataset_dict</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_repo</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">download_mode</span><span class="o">=</span><span class="s2">&quot;force_redownload&quot;</span><span class="p">,</span>
+            <span class="n">cache_dir</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cache_dir</span><span class="p">),</span>
+            <span class="n">revision</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_commit_hash</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">splits_already_in_dataset</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dataset_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">dataset_dict</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_whole_split_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">splits_already_in_dataset</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;DatasetDict has more than one split and does not have a split named </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_whole_split_name</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="s2">&quot;Use splits_to_combine_as_whole_ds as argument to specify which splits to combine.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># if splits_to_combine_as_whole_ds and there is only one split in the dataset</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_splits_to_combine_as_whole_ds</span> <span class="o">==</span> <span class="p">[]</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset_dict</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_splits_to_combine_as_whole_ds</span> <span class="o">=</span> <span class="n">splits_already_in_dataset</span>
+
+        <span class="c1"># convert the DatasetDict to a Dataset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span> <span class="o">=</span> <span class="n">concatenate_datasets</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">dataset_dict</span><span class="p">[</span><span class="n">ds</span><span class="p">]</span> <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_splits_to_combine_as_whole_ds</span><span class="p">]</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DatasetUpdate.prepare_repo">
+<a class="viewcode-back" href="../../../../pedata.processing.hfhub.html#pedata.processing.hfhub.update.DatasetUpdate.prepare_repo">[docs]</a>
+    <span class="k">def</span> <span class="nf">prepare_repo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;prepare the repo for pushing the dataset to Hugging Face.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())</span>
+
+        <span class="c1"># create local directory</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">local_path</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">local_path</span><span class="p">)</span>
+
+        <span class="c1"># save</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_save_locally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="o">.</span><span class="n">save_to_disk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_local_dir</span><span class="p">)</span>
+
+        <span class="c1"># clear the hub dataset files and metadata</span>
+        <span class="n">clear_hub_ds_files_and_metadata</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_repo</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Print the processing to be done or the processing done.&quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">print_list</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot; - </span><span class="si">{</span><span class="n">item</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">l</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="s2">&quot;_dataset&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">------------------------------------</span>
+<span class="s2">DatasetUpdate - Processing to be done</span>
+<span class="s2">------------------------------------</span>
+<span class="s2">- repo=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_repo</span><span class="si">}</span><span class="s2"> </span>
+<span class="s2">- local_dir=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_local_dir</span><span class="si">}</span>
+<span class="s2">- save_locally=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_save_locally</span><span class="si">}</span>
+<span class="s2">            &quot;&quot;&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">-------------------------------</span>
+<span class="s2">DatasetUpdate - Processing done</span>
+<span class="s2">-------------------------------</span>
+<span class="s2">Saved locally: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">local_path</span><span class="si">}</span>
+<span class="s2">Pushed to the huggingface repository: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_repo</span><span class="si">}</span>
+<span class="s2">Available features:</span>
+<span class="si">{</span><span class="n">print_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feature_names</span><span class="p">)</span><span class="si">}</span>
+<span class="s2">Available targets: </span>
+<span class="si">{</span><span class="n">print_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_names</span><span class="p">)</span><span class="si">}</span>
+<span class="s2">Available splits:</span>
+<span class="si">{</span><span class="n">print_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">available_splits</span><span class="p">)</span><span class="si">}</span>
+<span class="s2">            &quot;&quot;&quot;</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># parse arguments</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Create and push a dataset to Hugging Face.&quot;</span>
+    <span class="p">)</span>
+    <span class="c1"># required arguments</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--repo&quot;</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Name of the repository to pull from on Hugging Face.&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># optional arguments</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--commit_hash&quot;</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;str:The commit hash of the dataset to pull from Hugging Face.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--local_dir&quot;</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Name of the local directory to save the dataset to.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;./local_datasets&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--cache_dir&quot;</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;cache directory&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;./cache&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--save_locally&quot;</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Name of the local directory to save the dataset to.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--splits_to_combine_as_whole_ds&quot;</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;list: names of the split to combine as &#39;whole_dataset&#39;&quot;</span><span class="p">,</span>
+        <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;+&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="p">[],</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--needed_encodings&quot;</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;list: list of encodings for the dataset; default: []&quot;</span><span class="p">,</span>
+        <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;+&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="p">[],</span>
+    <span class="p">)</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="c1"># create dataset upload object</span>
+    <span class="n">DatasetUpdate</span><span class="p">(</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">repo</span><span class="p">,</span>
+        <span class="n">commit_hash</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">commit_hash</span><span class="p">,</span>
+        <span class="n">local_dir</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">local_dir</span><span class="p">,</span>
+        <span class="n">cache_dir</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">cache_dir</span><span class="p">,</span>
+        <span class="n">save_locally</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">save_locally</span><span class="p">,</span>
+        <span class="n">splits_to_combine_as_whole_ds</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">splits_to_combine_as_whole_ds</span><span class="p">,</span>
+        <span class="n">needed_encodings</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">needed_encodings</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># example usage:</span>
+    <span class="c1"># python examples/dataset_upload.py --repo Exazyme/test_example_dataset_ha1 --filename examples/datasets/test_example_dataset_ha1.csv</span>
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, Exazyme.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

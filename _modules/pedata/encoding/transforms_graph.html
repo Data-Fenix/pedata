@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>pedata.encoding.transforms_graph</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../_static/documentation_options.js?v=a5b3107c"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">pedata documentation</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../index.html#pedata-documentation">pedata documentation!</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.html" class="reference internal ">pedata package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.encoding.html" class="reference internal ">pedata.encoding package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.mutation.html" class="reference internal ">pedata.mutation package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../modules.html" class="reference internal ">pedata</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../index.html">Module code</a> &raquo;</li>
+    
+    <li>pedata.encoding.transforms_graph</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for pedata.encoding.transforms_graph</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Iterable</span>
+<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">datasets</span> <span class="k">as</span> <span class="nn">ds</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># from rdkit import Chem</span>
+
+<span class="c1"># FIXME: write more tests for this module</span>
+
+
+<div class="viewcode-block" id="get_num_nodes_edges">
+<a class="viewcode-back" href="../../../pedata.encoding.html#pedata.encoding.transforms_graph.get_num_nodes_edges">[docs]</a>
+<span class="k">def</span> <span class="nf">get_num_nodes_edges</span><span class="p">(</span><span class="n">adjacency_lists</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the number of nodes and edges for each graph.</span>
+<span class="sd">        This function takes a list of adjacency lists and calculates the number of nodes and edges for each graph, as well as the maximum number of edges among all graphs.</span>
+<span class="sd">        Each element l[i] is a tuple of two lists:</span>
+<span class="sd">        - l[i][0] represents a list of source nodes.</span>
+<span class="sd">        - l[i][1] represents a list of target nodes.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        adjacency_lists (list): A list of adjacency lists.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: A tuple of three arrays: num_nodes, num_edges, max_edges.</span>
+<span class="sd">        - num_nodes[i] represents the number of nodes in the i-th graph.</span>
+<span class="sd">        - num_edges[i] represents the number of edges in the i-th graph.</span>
+<span class="sd">        - max_edges represents the maximum number of edges among all graphs.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; adj_list = [</span>
+<span class="sd">        ...     jnp.array(([0, 1, 0], [2, 1, 3])),</span>
+<span class="sd">        ...     jnp.array(([0, 1], [0, 1])),</span>
+<span class="sd">        ...     jnp.array(([0], [1]))]</span>
+<span class="sd">        &gt;&gt;&gt; num_nodes, num_edges, max_edges = get_num_nodes_edges(adj_list)</span>
+<span class="sd">        &gt;&gt;&gt; print(num_nodes)</span>
+<span class="sd">        [4 2 2]</span>
+<span class="sd">        &gt;&gt;&gt; print(num_edges)</span>
+<span class="sd">        [3 2 1]</span>
+<span class="sd">        &gt;&gt;&gt; print(max_edges)</span>
+<span class="sd">        3</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">adjacency_lists</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;Invalid input: Input a should be a list of adjacency lists, not a string&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Verify adjacency lists</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">adjacency_lists</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">adjacency_lists</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Invalid input: Input a non-empty list of adjacency lists&quot;</span><span class="p">)</span>
+
+    <span class="n">num_nodes</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Stores the number of nodes for each graph</span>
+    <span class="n">num_edges</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Stores the number of edges for each graph</span>
+
+    <span class="k">for</span> <span class="n">adj_list</span> <span class="ow">in</span> <span class="n">adjacency_lists</span><span class="p">:</span>
+        <span class="c1"># Verify shape of an adjacency list</span>
+        <span class="k">if</span> <span class="n">adj_list</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Expected adjacency list to be of shape (2, num_edges), but got </span><span class="si">{</span><span class="n">adj_list</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Get number of nodes and edges for each graph</span>
+        <span class="n">num_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">adj_list</span><span class="p">))))</span>
+        <span class="n">num_edges</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">adj_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+    <span class="c1"># Convert lists to NumPy arrays</span>
+    <span class="n">num_nodes</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+    <span class="n">num_edges</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">num_edges</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+
+    <span class="c1"># Find maximum number of edges</span>
+    <span class="n">max_edges</span> <span class="o">=</span> <span class="n">num_edges</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">num_nodes</span><span class="p">,</span> <span class="n">num_edges</span><span class="p">,</span> <span class="n">max_edges</span></div>
+
+
+
+<div class="viewcode-block" id="filter_adj_list_by_edge_type">
+<a class="viewcode-back" href="../../../pedata.encoding.html#pedata.encoding.transforms_graph.filter_adj_list_by_edge_type">[docs]</a>
+<span class="k">def</span> <span class="nf">filter_adj_list_by_edge_type</span><span class="p">(</span>
+    <span class="n">adj_list</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">edge_type</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">unique_edge_types</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter the adjacency list by edge type.</span>
+
+<span class="sd">    This function takes an adjacency list, along with the corresponding edge types and unique edge types.</span>
+<span class="sd">    It filters the adjacency list based on the edge types and returns a list of adjacency lists, where each element l[i]</span>
+<span class="sd">    contains the edges of type unique_edge_types[i].</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        adj_list (jnp.ndarray): The adjacency list.</span>
+<span class="sd">        edge_type (jnp.ndarray): The edge types.</span>
+<span class="sd">        unique_edge_types (jnp.ndarray): Unique edge types. This is used to filter the adjacency list with a fixed order of edge types.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: A list of adjacency lists, where each element l[i] is a list of edges of type unique_edge_types[i].</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; adj_list = [[0, 1], [1, 2], [2, 0]]</span>
+<span class="sd">        &gt;&gt;&gt; edge_types = [0, 1, 2]</span>
+<span class="sd">        &gt;&gt;&gt; unique_edge_types = [0, 1, 2]</span>
+<span class="sd">        &gt;&gt;&gt; result = filter_adj_list_by_edge_type(</span>
+<span class="sd">        ...     jnp.array(adj_list), jnp.array(edge_types), jnp.array(unique_edge_types)</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; print(result) #doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        [Array([[0, 1]], dtype=int32), Array([[1, 2]], dtype=int32), Array([[2, 0]], dtype=int32)]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Verify adjacency list</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">adj_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid input: Input a non-empty adjacency list&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Verify list of edge types</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">edge_type</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid input: Input a non-empty list of edge types&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Verify shape of an adjacency list</span>
+    <span class="k">if</span> <span class="n">adj_list</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Expected adjacency list to have shape (num_edges, 2), but got </span><span class="si">{</span><span class="n">adj_list</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Get the number of edges in an adjacency list</span>
+    <span class="n">num_edges</span> <span class="o">=</span> <span class="n">adj_list</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># filter the adjacency list based on edge types</span>
+    <span class="n">edge_type_filtered_adj_list</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">adj_list</span><span class="p">[</span><span class="n">edge_type</span><span class="p">[:</span><span class="n">num_edges</span><span class="p">]</span> <span class="o">==</span> <span class="n">et</span><span class="p">]</span> <span class="k">for</span> <span class="n">et</span> <span class="ow">in</span> <span class="n">unique_edge_types</span>
+    <span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">edge_type_filtered_adj_list</span></div>
+
+
+
+<div class="viewcode-block" id="adj_list_to_adjmatr">
+<a class="viewcode-back" href="../../../pedata.encoding.html#pedata.encoding.transforms_graph.adj_list_to_adjmatr">[docs]</a>
+<span class="k">def</span> <span class="nf">adj_list_to_adjmatr</span><span class="p">(</span>
+    <span class="n">adj</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">num_nodes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">num_edges</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">fill_values</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">pad_num_nodes</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">pad_num_edges</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">pad_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a single adjacency list to an adjacency matrix.</span>
+
+<span class="sd">    This function takes a single adjacency list and converts it into an adjacency matrix representation. The adjacency list should be a 2D array where the first row contains the source nodes and the second row contains the destination nodes. The resulting adjacency matrix is a 2D square array with dimensions based on the number of nodes in the graph.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        adj (jnp.ndarray): The adjacency list, where the first row contains the source nodes and the second row contains the destination nodes.</span>
+<span class="sd">        num_nodes (int): Number of nodes in the graph.</span>
+<span class="sd">        num_edges (int): Number of edges in the graph. Additional entries in `adj` are assumed to be padding and ignored.</span>
+<span class="sd">        fill_values (Union[int, float, jnp.ndarray], optional): Fill values for the adjacency matrix. If a scalar, the same value is used for all edges. If a vector, the values are used for the edges in the order they appear in `adj`. Defaults to 1.</span>
+<span class="sd">        pad_num_nodes (int, optional): Size to pad the adjacency matrix to. Defaults to None, which means no padding.</span>
+<span class="sd">        pad_num_edges (int, optional): Ignored.</span>
+<span class="sd">        pad_value (Union[int, float], optional): Value to use for padding in the adjacency matrix. Defaults to 0.</span>
+<span class="sd">        directed (bool, optional): Whether the graph is directed. Defaults to False.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If `adj` does not have the shape (2, num_edges).</span>
+<span class="sd">        ValueError: If `fill_values` is a vector and its length does not match `num_edges`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        jnp.ndarray: The adjacency matrix representing the graph.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; adj_list = jnp.array([[0, 1, 2], [1, 2, 0]])</span>
+<span class="sd">        &gt;&gt;&gt; result = adj_list_to_adjmatr(</span>
+<span class="sd">        ...     adj_list,</span>
+<span class="sd">        ...     3, # num_nodes</span>
+<span class="sd">        ...     3, # num_edges</span>
+<span class="sd">        ...     1, # fill_values</span>
+<span class="sd">        ...     None, # pad_num_nodes</span>
+<span class="sd">        ...     None, # pad_num_edges</span>
+<span class="sd">        ...     0, # pad_value</span>
+<span class="sd">        ...     False, # directed</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; print(result) # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        [[0. 1. 1.]</span>
+<span class="sd">            [1. 0. 1.]</span>
+<span class="sd">            [1. 1. 0.]]</span>
+
+<span class="sd">        &gt;&gt;&gt; adj_list = jnp.array([[0, 1], [1, 2]])</span>
+<span class="sd">        &gt;&gt;&gt; result = adj_list_to_adjmatr(adj_list, 4, 2, jnp.array([2, 3]), 5, None, 0, True)</span>
+<span class="sd">        &gt;&gt;&gt; print(result) # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        [[0. 2. 0. 0. 0.]</span>
+<span class="sd">            [0. 0. 3. 0. 0.]</span>
+<span class="sd">            [0. 0. 0. 0. 0.]</span>
+<span class="sd">            [0. 0. 0. 0. 0.]</span>
+<span class="sd">            [0. 0. 0. 0. 0.]]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Verify adjacency list</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">adj</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid input: Input a non-empty adjacency list&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Ensure the adjacency list has the expected shape</span>
+    <span class="k">if</span> <span class="n">adj</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Expected adjacency list to be of shape (2, num_edges), but got </span><span class="si">{</span><span class="n">adj</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Transpose adjacency list array to get edges in the first dimension</span>
+    <span class="c1"># this was how it was done in the original code, transposing is the easiest fix</span>
+    <span class="n">adj</span> <span class="o">=</span> <span class="n">adj</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="c1"># Initialize adjacency matrix with pad_value</span>
+    <span class="k">if</span> <span class="n">pad_num_nodes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">pad_num_nodes</span> <span class="o">=</span> <span class="n">num_nodes</span>
+    <span class="n">rval</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">pad_num_nodes</span><span class="p">,</span> <span class="n">pad_num_nodes</span><span class="p">),</span> <span class="n">pad_value</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+    <span class="c1"># Check if fill_values is not a single value (int or float)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fill_values</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+        <span class="c1"># Assign the value at index i and raise an error if the length of fill_values doesn&#39;t match the number of edges</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fill_values</span><span class="p">)</span> <span class="o">!=</span> <span class="n">num_edges</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Expected fill_values to have length </span><span class="si">{</span><span class="n">num_edges</span><span class="si">}</span><span class="s2">, but got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">fill_values</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">adj</span><span class="p">):</span>
+        <span class="c1"># Extract the source and destination nodes from the current edge</span>
+        <span class="n">src</span><span class="p">,</span> <span class="n">dest</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">values</span> <span class="o">=</span> <span class="n">fill_values</span>  <span class="c1"># temporarily stores fill_values</span>
+
+        <span class="c1"># If fill_values is iterable, select the value at index i</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fill_values</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">fill_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="c1"># Set the adjacency matrix entry for the edge between the source and destination nodes</span>
+        <span class="n">rval</span> <span class="o">=</span> <span class="n">rval</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">src</span><span class="p">,</span> <span class="n">dest</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+
+        <span class="c1"># If the graph is undirected, set the adjacency matrix value for the destination-source edge as well</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">directed</span><span class="p">:</span>
+            <span class="n">rval</span> <span class="o">=</span> <span class="n">rval</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">dest</span><span class="p">,</span> <span class="n">src</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">rval</span></div>
+
+
+
+<div class="viewcode-block" id="adj_list_to_incidence">
+<a class="viewcode-back" href="../../../pedata.encoding.html#pedata.encoding.transforms_graph.adj_list_to_incidence">[docs]</a>
+<span class="k">def</span> <span class="nf">adj_list_to_incidence</span><span class="p">(</span>
+    <span class="n">adj</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">num_nodes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">num_edges</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">fill_values</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">pad_num_nodes</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">pad_num_edges</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">pad_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a single adjacency list to an incidence matrix.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        adj (jnp.ndarray): The adjacency list, where the first row contains the source nodes and the second row contains the destination nodes.</span>
+<span class="sd">        num_nodes (int): Number of nodes.</span>
+<span class="sd">        num_edges (int): Number of edges. Additional entries in `adj` and `edge_type` are assumed to be padding and ignored.</span>
+<span class="sd">        fill_values (Union[int, float, jnp.ndarray], optional): Fill values for the incidence matrix. If a scalar, the same value is used for all edges. If a vector, the values are used for the edges in the order they appear in `adj`. Defaults to 1.</span>
+<span class="sd">        pad_num_nodes (int, optional): Size to pad node dimension to. Defaults to None, which means no padding.</span>
+<span class="sd">        pad_num_edges (int, optional): Size to pad edge dimension to. Defaults to None, which means no padding.</span>
+<span class="sd">        pad_value (Union[int, float], optional): Value to use for padding. Defaults to 0.</span>
+<span class="sd">        directed (bool, optional): Whether the graph is directed. Defaults to False, in which case the `fill_values` are used for both directions. If True, the `-fill_values` are used for the source node and `fill_values` are used for the destination node.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If `fill_values` is a vector and its length does not match `num_edges`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        jnp.ndarray: The incidence matrix.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">adj</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Expected adjacency list to be of shape (2, num_edges), but got </span><span class="si">{</span><span class="n">adj</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="c1"># Transpose adjacency list array to get edges in the first dimension</span>
+    <span class="c1"># this was how it was done in the original code, transposing is the easiest fix</span>
+    <span class="n">adj</span> <span class="o">=</span> <span class="n">adj</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="k">if</span> <span class="n">pad_num_nodes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">pad_num_nodes</span> <span class="o">=</span> <span class="n">num_nodes</span>
+    <span class="k">if</span> <span class="n">pad_num_edges</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">pad_num_edges</span> <span class="o">=</span> <span class="n">num_edges</span>
+    <span class="c1"># Initialize incidence matrix with pad_value</span>
+    <span class="n">rval</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">pad_num_nodes</span><span class="p">,</span> <span class="n">pad_num_edges</span><span class="p">),</span> <span class="n">pad_value</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">adj</span><span class="p">):</span>
+        <span class="n">rval</span> <span class="o">=</span> <span class="n">rval</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">dest</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">fill_values</span><span class="p">)</span>
+        <span class="n">rval</span> <span class="o">=</span> <span class="n">rval</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">src</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">-</span><span class="n">fill_values</span> <span class="k">if</span> <span class="n">directed</span> <span class="k">else</span> <span class="n">fill_values</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">rval</span></div>
+
+
+
+<div class="viewcode-block" id="adj_list_conversion">
+<a class="viewcode-back" href="../../../pedata.encoding.html#pedata.encoding.transforms_graph.adj_list_conversion">[docs]</a>
+<span class="k">def</span> <span class="nf">adj_list_conversion</span><span class="p">(</span>
+    <span class="n">adj_list_to_matrix_fn</span><span class="p">:</span> <span class="nb">callable</span><span class="p">,</span>
+    <span class="n">adj</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">num_nodes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">num_edges</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">fill_values</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">pad_num_nodes</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">pad_num_edges</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">pad_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">edge_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">unique_edge_types</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a single adjacency list.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        adj (jnp.ndarray): The adjacency list of shape (num_edges, 2).</span>
+<span class="sd">        num_nodes (int): Number of nodes.</span>
+<span class="sd">        num_edges (int): Number of edges. Additional entries in `adj` and `edge_type` are assumed to be padding and ignored.</span>
+<span class="sd">        fill_values (Union[int, float, jnp.ndarray], optional): Fill values for the adjacency matrix. If a scalar, the same value is used for all edges. If a vector, the values are used for the edges in the order they appear in `adj`. Defaults to 1.</span>
+<span class="sd">        pad_num_nodes (int, optional): Size to pad node dimension to. Defaults to None, which means no padding.</span>
+<span class="sd">        pad_num_edges (int, optional): Size to pad edge dimension to. Defaults to None, which means no padding.</span>
+<span class="sd">        pad_value (Union[int, float], optional): Value to use for padding. Defaults to 0.</span>
+<span class="sd">        edge_type (jnp.ndarray, optional): Types of edges. Defaults to None. If not None, the output is an adjacency matrix for each edge type. In this case, `unique_edge_types` defines the sort order of the edge types and must be provided.</span>
+<span class="sd">        unique_edge_types (jnp.ndarray, optional): Unique edge types. If edge_type is not None, this must be provided. Defaults to None.</span>
+<span class="sd">        directed (bool, optional): Whether the graph is directed. Defaults to False.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If `fill_values` is a vector and its length does not match `num_edges`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        jnp.ndarray: The adjacency matrix/matrices. If `edge_type` is not None, adjacency matrices for the different edge types are stacked along the first axis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">pad_num_nodes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">pad_num_nodes</span> <span class="o">=</span> <span class="n">num_nodes</span>
+    <span class="k">if</span> <span class="n">pad_num_edges</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">pad_num_edges</span> <span class="o">=</span> <span class="n">num_edges</span>
+    <span class="c1"># adj = jax.lax.dynamic_slice(adj, (0, 0), (num_edges, 2))</span>
+    <span class="c1"># adj = adj.at[idx].get()</span>
+
+    <span class="k">if</span> <span class="n">edge_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">unique_edge_types</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">edge_type_filtered_adj_list</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">adj</span><span class="p">[</span><span class="n">edge_type</span><span class="p">[:</span><span class="n">num_edges</span><span class="p">]</span> <span class="o">==</span> <span class="n">et</span><span class="p">]</span> <span class="k">for</span> <span class="n">et</span> <span class="ow">in</span> <span class="n">unique_edge_types</span>
+        <span class="p">]</span>
+        <span class="n">adj_matrices</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">adj_list_to_matrix_fn</span><span class="p">(</span>
+                    <span class="n">edge_type_filtered_adj_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">num_nodes</span><span class="p">,</span>
+                    <span class="nb">len</span><span class="p">(</span><span class="n">edge_type_filtered_adj_list</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span>
+                    <span class="n">fill_values</span><span class="p">,</span>
+                    <span class="n">pad_num_nodes</span><span class="p">,</span>
+                    <span class="n">pad_num_edges</span><span class="p">,</span>
+                    <span class="n">pad_value</span><span class="p">,</span>
+                    <span class="n">directed</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">et</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">unique_edge_types</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">adj_matrices</span>
+
+    <span class="k">return</span> <span class="n">adj_list_to_matrix_fn</span><span class="p">(</span>
+        <span class="n">adj</span><span class="p">,</span>
+        <span class="n">num_nodes</span><span class="p">,</span>
+        <span class="n">num_edges</span><span class="p">,</span>
+        <span class="n">fill_values</span><span class="p">,</span>
+        <span class="n">pad_num_nodes</span><span class="p">,</span>
+        <span class="n">pad_num_edges</span><span class="p">,</span>
+        <span class="n">pad_value</span><span class="p">,</span>
+        <span class="n">directed</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="bnd_count_atm_count">
+<a class="viewcode-back" href="../../../pedata.encoding.html#pedata.encoding.transforms_graph.bnd_count_atm_count">[docs]</a>
+<span class="k">def</span> <span class="nf">bnd_count_atm_count</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A function to count the number of atoms and bonds for each molecule in a dataset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        df (Union[ds.Dataset, pd.DataFrame]): A dataset or dataframe containing the &quot;bnd_idcs&quot; column.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict[str, list[int]]: A dictionary containing the number of atoms and bonds for each molecule.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_nodes</span><span class="p">,</span> <span class="n">num_edges</span><span class="p">,</span> <span class="n">max_edges</span> <span class="o">=</span> <span class="n">get_num_nodes_edges</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;bnd_idcs&quot;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;atm_count&quot;</span><span class="p">:</span> <span class="n">num_nodes</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="s2">&quot;bnd_count&quot;</span><span class="p">:</span> <span class="n">num_edges</span><span class="o">.</span><span class="n">tolist</span><span class="p">()}</span></div>
+
+
+
+<div class="viewcode-block" id="atm_adj">
+<a class="viewcode-back" href="../../../pedata.encoding.html#pedata.encoding.transforms_graph.atm_adj">[docs]</a>
+<span class="k">def</span> <span class="nf">atm_adj</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A function to convert the atom adjacency list to an adjacency matrix. Symmetric, since the molecule graph is undirected.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        df (Union[ds.Dataset, pd.DataFrame]): A dataset or dataframe containing the &quot;bnd_idcs&quot;, &quot;atm_count&quot;, and &quot;bnd_count&quot; columns.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict[str, list[jnp.ndarray]]: A dictionary containing the adjacency matrices for each molecule.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">with_format</span><span class="p">(</span><span class="s2">&quot;jax&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;atm_adj&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="n">adj_list_to_adjmatr</span><span class="p">(</span>
+                <span class="n">df</span><span class="p">[</span><span class="s2">&quot;bnd_idcs&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;atm_count&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;bnd_count&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))</span>
+        <span class="p">]</span>
+    <span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="atm_bnd_incid">
+<a class="viewcode-back" href="../../../pedata.encoding.html#pedata.encoding.transforms_graph.atm_bnd_incid">[docs]</a>
+<span class="k">def</span> <span class="nf">atm_bnd_incid</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A function to convert the atom-bond incidence list to an incidence matrix.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        df (Union[ds.Dataset, pd.DataFrame]): A dataset or dataframe containing the &quot;bnd_idcs&quot;, &quot;atm_count&quot;, and &quot;bnd_count&quot; columns.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict[str, list[jnp.ndarray]]: A dictionary containing the incidence matrices for each molecule.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">with_format</span><span class="p">(</span><span class="s2">&quot;jax&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;atm_bnd_incid&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="n">adj_list_to_incidence</span><span class="p">(</span>
+                <span class="n">df</span><span class="p">[</span><span class="s2">&quot;bnd_idcs&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;atm_count&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;bnd_count&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))</span>
+        <span class="p">]</span>
+    <span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="return_prob_feat">
+<a class="viewcode-back" href="../../../pedata.encoding.html#pedata.encoding.transforms_graph.return_prob_feat">[docs]</a>
+<span class="k">def</span> <span class="nf">return_prob_feat</span><span class="p">(</span>
+    <span class="n">nb_iter</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A function to compute the return probability feature from the RetGk kernel model. See Zhang et al. (2018) &quot;RetGK: Graph Kernels based on Return Probabilities of Random Walks&quot;, https://arxiv.org/abs/1809.02670</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        nb_iter (int): The number of iterations to run the random walk for.</span>
+<span class="sd">        df (Union[ds.Dataset, pd.DataFrame]): A dataset or dataframe containing the &quot;atm_adj&quot; column.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict[str, list[jnp.ndarray]]: A dictionary containing the return probability feature for each molecule.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">adj_matrices</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;atm_adj&quot;</span><span class="p">]</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">adj_matrices</span><span class="p">)):</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">adj_matrices</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">adj_matrices</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">Ptld</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">))</span> <span class="o">+</span> <span class="n">P</span><span class="p">)</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">))</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">),</span> <span class="n">nb_iter</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_iter</span><span class="p">):</span>
+            <span class="n">H</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Ptld</span><span class="p">)</span>
+            <span class="n">U</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
+        <span class="n">T</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">U</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;atm_retprob100&quot;</span><span class="p">:</span> <span class="n">T</span><span class="p">}</span></div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, Exazyme.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

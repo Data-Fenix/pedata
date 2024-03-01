@@ -1,0 +1,76 @@
+pedata package
+==============
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   pedata.data_io
+   pedata.encoding
+   pedata.hfhub_tools
+   pedata.mutation
+   pedata.preprocessing
+   pedata.processing
+   pedata.static
+   pedata.visual
+
+Submodules
+----------
+
+pedata.constants module
+-----------------------
+
+.. automodule:: pedata.constants
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pedata.disk\_cache module
+-------------------------
+
+.. automodule:: pedata.disk_cache
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pedata.integrity module
+-----------------------
+
+.. automodule:: pedata.integrity
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pedata.pytorch\_dataloaders module
+----------------------------------
+
+.. automodule:: pedata.pytorch_dataloaders
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pedata.typing module
+--------------------
+
+.. automodule:: pedata.typing
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pedata.util module
+------------------
+
+.. automodule:: pedata.util
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: pedata
+   :members:
+   :undoc-members:
+   :show-inheritance:

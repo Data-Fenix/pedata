@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>pedata.preprocessing.tag_finder</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../_static/documentation_options.js?v=a5b3107c"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">pedata documentation</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../index.html#pedata-documentation">pedata documentation!</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.html" class="reference internal ">pedata package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.encoding.html" class="reference internal ">pedata.encoding package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.mutation.html" class="reference internal ">pedata.mutation package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../modules.html" class="reference internal ">pedata</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../index.html">Module code</a> &raquo;</li>
+    
+    <li>pedata.preprocessing.tag_finder</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for pedata.preprocessing.tag_finder</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">abspath</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">isfile</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">from</span> <span class="nn">Bio</span> <span class="kn">import</span> <span class="n">Seq</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy</span> <span class="k">as</span> <span class="nn">sp</span>
+
+<span class="kn">from</span> <span class="nn">pedata.hfhub_tools</span> <span class="kn">import</span> <span class="n">get_dataset</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This is the main module of TagFinder. </span>
+<span class="sd">The main class to import is:</span>
+
+<span class="sd">TagFinder</span>
+
+<span class="sd">The main methods of the TagFinder class are:</span>
+
+<span class="sd">find_tags: Finds tags in a sequence</span>
+<span class="sd">strip_tags: Strips tags from a sequence</span>
+<span class="sd">get_strip_report: Strips tags from a sequence and returns a dictionary report.</span>
+<span class="sd">tag_strip_csv: Strips tags from a .csv file and adds a report of the stripped tags in a new column in the output file.</span>
+<span class="sd">clean_dataset: Cleans a huggingface dataset by converting sequences to protein and removing tags.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="ProteinTag">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTag">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ProteinTag</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A container representing a protein purification tag</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ProteinTag.__init__">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTag.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">sequence</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">origin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">reference</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">fusion</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">leader</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">cleavage</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize a tag from basic tag information.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name: The name of the tag.</span>
+<span class="sd">            sequence: The sequence of the tag.</span>
+<span class="sd">            origin: The origin of the tag, e.g. a protein this tag is derived from.</span>
+<span class="sd">            method: The purification method used with this tag.</span>
+<span class="sd">            reference: The pubmed link referencing this tag.</span>
+<span class="sd">            length: The length of the tag.</span>
+<span class="sd">            fusion: True if the tag is a fusion with another protein or protein domain.</span>
+<span class="sd">            leader: True if the tag is a leader sequence used to promote secretion in mammalian systems.</span>
+<span class="sd">            cleavage: True if the tag is a recognition site for a protease used to remove tags from proteins.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sequence</span> <span class="o">=</span> <span class="n">sequence</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_origin</span> <span class="o">=</span> <span class="n">origin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_method</span> <span class="o">=</span> <span class="n">method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reference</span> <span class="o">=</span> <span class="n">reference</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_length</span> <span class="o">=</span> <span class="n">length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fusion</span> <span class="o">=</span> <span class="n">fusion</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_leader</span> <span class="o">=</span> <span class="n">leader</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cleavage</span> <span class="o">=</span> <span class="n">cleavage</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fusion</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="s2">&quot;Protein Fusion&quot;</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_leader</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="s2">&quot;Leader Sequence&quot;</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cleavage</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="s2">&quot;Cleavage Site&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="s2">&quot;Purification Tag&quot;</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;getting name value&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
+
+    <span class="nd">@name</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;setting name value&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;getting sequence value&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sequence</span>
+
+    <span class="nd">@sequence</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;setting sequence value&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sequence</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">origin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;getting origin value&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_origin</span>
+
+    <span class="nd">@origin</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">origin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;setting origin value&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_origin</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">method</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;getting method value&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_method</span>
+
+    <span class="nd">@method</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;setting origin value&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_method</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">reference</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;getting reference value&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reference</span>
+
+    <span class="nd">@reference</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">reference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;setting reference value&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reference</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">length</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;getting length value&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_length</span>
+
+    <span class="nd">@length</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">length</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;setting length value&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_length</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">fusion</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;getting fusion value&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fusion</span>
+
+    <span class="nd">@fusion</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">fusion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;setting fusion value&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fusion</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">leader</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;getting leader value&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_leader</span>
+
+    <span class="nd">@leader</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">leader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;setting leader value&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_leader</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cleavage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;getting cleavage value&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cleavage</span>
+
+    <span class="nd">@cleavage</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">cleavage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;setting cleavage value&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cleavage</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;getting type value&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_type</span>
+
+    <span class="nd">@type</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;setting type value&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A nice print for a ProteinTag.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            info_string (str): The string that is displayed when printing a ProteinTag</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">        &gt;&gt;&gt; tag_finder = TagFinder()</span>
+<span class="sd">        &gt;&gt;&gt; print(tag_finder._tags[0])</span>
+
+<span class="sd">        Output:</span>
+<span class="sd">        Name:      AviTag</span>
+<span class="sd">        Sequence:  GLNDIFEAQKIEWHE</span>
+<span class="sd">        Length:    15</span>
+<span class="sd">        Origin:    Synthetic peptide</span>
+<span class="sd">        Method:    Binding to Streptavidin via biotinylation</span>
+<span class="sd">        Reference: https://pubmed.ncbi.nlm.nih.gov/17379573/</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">info_string</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Name:      </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Sequence:  </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">sequence</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Length:    </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Type:      </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Origin:    </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Method:    </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Reference: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">info_string</span></div>
+
+
+
+<div class="viewcode-block" id="ProteinTagHit">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTagHit">[docs]</a>
+<span class="k">class</span> <span class="nc">ProteinTagHit</span><span class="p">(</span><span class="n">ProteinTag</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A container representing a hit of a tag in a query sequence. This is the class that will be returned when TagFinder</span>
+<span class="sd">    finds a tag in a sequence, and contains information of the tag and where in the sequence the tag was found.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ProteinTagHit.__init__">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTagHit.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">tag</span><span class="p">:</span> <span class="n">ProteinTag</span><span class="p">,</span>
+        <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">end</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">query_aln</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">tag_aln</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">location</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">identity</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">conservation</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the ProteinTagHit with the necessary information.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tag (ProteinTag): The tag that was found in the query sequence.</span>
+<span class="sd">            start (int): The start position of the tag within the query sequence.</span>
+<span class="sd">            end (int): The end position of the tag within the query sequence.</span>
+<span class="sd">            query_aln (str): A string representing the query alignment to the tag.</span>
+<span class="sd">            tag_aln (str): A string representing the tag alignment to the query.</span>
+<span class="sd">            location (str): The location of the tag. This can be N-Terminus, C-Terminus or Internal.</span>
+<span class="sd">            identity (float): The sequence identity between the tag and a query sequence.</span>
+<span class="sd">            conservation (float): The conservation of a tag relative to a reference sequence.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ProteinTagHit</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">tag</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">sequence</span><span class="o">=</span><span class="n">tag</span><span class="o">.</span><span class="n">sequence</span><span class="p">,</span>
+            <span class="n">origin</span><span class="o">=</span><span class="n">tag</span><span class="o">.</span><span class="n">origin</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="n">tag</span><span class="o">.</span><span class="n">method</span><span class="p">,</span>
+            <span class="n">reference</span><span class="o">=</span><span class="n">tag</span><span class="o">.</span><span class="n">reference</span><span class="p">,</span>
+            <span class="n">length</span><span class="o">=</span><span class="n">tag</span><span class="o">.</span><span class="n">length</span><span class="p">,</span>
+            <span class="n">fusion</span><span class="o">=</span><span class="n">tag</span><span class="o">.</span><span class="n">fusion</span><span class="p">,</span>
+            <span class="n">leader</span><span class="o">=</span><span class="n">tag</span><span class="o">.</span><span class="n">leader</span><span class="p">,</span>
+            <span class="n">cleavage</span><span class="o">=</span><span class="n">tag</span><span class="o">.</span><span class="n">cleavage</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_start</span> <span class="o">=</span> <span class="n">start</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_end</span> <span class="o">=</span> <span class="n">end</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_query_aln</span> <span class="o">=</span> <span class="n">query_aln</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tag_aln</span> <span class="o">=</span> <span class="n">tag_aln</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_location</span> <span class="o">=</span> <span class="n">location</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_identity</span> <span class="o">=</span> <span class="n">identity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_conservation</span> <span class="o">=</span> <span class="n">conservation</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;getting start value&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_start</span>
+
+    <span class="nd">@start</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;setting start value&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_start</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">end</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;getting end value&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_end</span>
+
+    <span class="nd">@end</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;setting end value&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_end</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">query_aln</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;getting query_aln value&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_query_aln</span>
+
+    <span class="nd">@query_aln</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">query_aln</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;setting query_aln value&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_query_aln</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">tag_aln</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;getting tag_aln value&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tag_aln</span>
+
+    <span class="nd">@tag_aln</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">tag_aln</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;setting tag_aln value&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tag_aln</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">location</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;getting location value&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_location</span>
+
+    <span class="nd">@location</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;setting location value&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_location</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">identity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;getting identity value&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_identity</span>
+
+    <span class="nd">@identity</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">identity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;setting identity value&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_identity</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">conservation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;getting conservation value&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_conservation</span>
+
+    <span class="nd">@conservation</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">conservation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;setting conservation value&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_conservation</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A nice print for a ProteinTagHit.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            info_string (str): The string that is displayed when printing a ProteinTagHit</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; tag_finder = TagFinder()</span>
+<span class="sd">            &gt;&gt;&gt; my_tags, my_termini = tag_finder.find_tags(sequence=&#39;GHHHHHHMYNAMEISCARL&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; print(my_tags[0])</span>
+<span class="sd">            Output:</span>
+<span class="sd">            Name:      His-Tag</span>
+<span class="sd">            Sequence:  GHHHHHH</span>
+<span class="sd">            Location:  1-7</span>
+<span class="sd">            Identity:  100.0</span>
+<span class="sd">            Length:    7</span>
+<span class="sd">            Origin:    Synthetic peptide</span>
+<span class="sd">            Method:    Divalent Ion Chelate (Ni2+, Co2+, Cu2+, Zn2+)</span>
+<span class="sd">            Reference: https://pubmed.ncbi.nlm.nih.gov/34520613/</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">info_string</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Name:      </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Sequence:  </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">sequence</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Location:  </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Identity:  </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">identity</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Length:    </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Type:      </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Origin:    </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">origin</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Method:    </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Reference: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">info_string</span></div>
+
+
+
+<div class="viewcode-block" id="TagFinder">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.tag_finder.TagFinder">[docs]</a>
+<span class="k">class</span> <span class="nc">TagFinder</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is the main class used for finding tags in sequences. When initialized this class builds an internal tag</span>
+<span class="sd">    library to use when searching for tags in sequences.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TagFinder.__init__">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.tag_finder.TagFinder.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identity_cutoff</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">90.0</span><span class="p">,</span> <span class="n">margin_cutoff</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the tag finder class and build the internal list of tags used to search for tags in sequences.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            identity_cutoff (float): The minimum required identity for a tag to be considered a hit. This is also the</span>
+<span class="sd">            minimum requires conservation for a sequence to be removed if a reference alignment is provided.</span>
+<span class="sd">            [Default=90.0].</span>
+<span class="sd">            margin_cutoff (float): The maximum number of amino-acids between tag and termini or between two tags</span>
+<span class="sd">            [Default=4].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tags</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_identity_cutoff</span> <span class="o">=</span> <span class="n">identity_cutoff</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_margin_cutoff</span> <span class="o">=</span> <span class="n">margin_cutoff</span>
+
+        <span class="c1"># Read in the tag database</span>
+        <span class="n">tag_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dirname</span><span class="p">(</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span><span class="si">}</span><span class="s2">/static/protein_tags.csv&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">isfile</span><span class="p">(</span><span class="n">tag_file</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not find tag database file: </span><span class="si">{</span><span class="n">tag_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">tag_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">tag_file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">low_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">tag_data</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_tag</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+                <span class="n">sequence</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;sequence&quot;</span><span class="p">],</span>
+                <span class="n">method</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">],</span>
+                <span class="n">origin</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">],</span>
+                <span class="n">reference</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;reference&quot;</span><span class="p">],</span>
+            <span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">identity_cutoff</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;getting identity_cutoff value&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_identity_cutoff</span>
+
+    <span class="nd">@identity_cutoff</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">identity_cutoff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;setting identity_cutoff value&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_identity_cutoff</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">margin_cutoff</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;getting margin_cutoff value&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_margin_cutoff</span>
+
+    <span class="nd">@margin_cutoff</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">margin_cutoff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;setting margin_cutoff value&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_margin_cutoff</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">_add_tag</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sequence</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">origin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">reference</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProteinTag</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a tag to the internal tag library.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): The name of the tag.</span>
+<span class="sd">            sequence (str): The amino-acid sequence of the tag.</span>
+<span class="sd">            method (str): The method used for protein purification with the tag.</span>
+<span class="sd">            origin (str): The origin of the tag.</span>
+<span class="sd">            reference (str): The reference describing the tag.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Nothing. Updates the internal tag library.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">is_fusion</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;-Fusion&quot;</span><span class="p">)</span>
+        <span class="n">is_leader</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;-Leader&quot;</span><span class="p">)</span>
+        <span class="n">is_cleavage</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;-Cleavage&quot;</span><span class="p">)</span>
+        <span class="n">tag</span> <span class="o">=</span> <span class="n">ProteinTag</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">sequence</span><span class="o">=</span><span class="n">sequence</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+            <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span>
+            <span class="n">reference</span><span class="o">=</span><span class="n">reference</span><span class="p">,</span>
+            <span class="n">length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">sequence</span><span class="p">),</span>
+            <span class="n">fusion</span><span class="o">=</span><span class="n">is_fusion</span><span class="p">,</span>
+            <span class="n">leader</span><span class="o">=</span><span class="n">is_leader</span><span class="p">,</span>
+            <span class="n">cleavage</span><span class="o">=</span><span class="n">is_cleavage</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tag</span>
+
+    <span class="k">def</span> <span class="nf">_tag_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">:</span> <span class="n">ProteinTag</span><span class="p">,</span> <span class="n">query_seq</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">ProteinTagHit</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Search for a single in a query sequence and return a list of ProteinTagHits.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tag (ProteinTag): The ProteinTag to search for.</span>
+<span class="sd">            query_seq (str): The sequence to search for the tag in.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            hits (list[ProteinTagHit]): A list of ProteinTagHits for the query sequence.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">query_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">query_seq</span><span class="p">)</span>
+        <span class="n">hits</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Don&#39;t count protein fusions if the non-fusion part</span>
+        <span class="c1"># is smaller than 25 amino acid residues.</span>
+        <span class="k">if</span> <span class="n">tag</span><span class="o">.</span><span class="n">fusion</span> <span class="ow">and</span> <span class="n">query_len</span> <span class="o">-</span> <span class="n">tag</span><span class="o">.</span><span class="n">length</span> <span class="o">&lt;</span> <span class="mi">25</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">tag</span><span class="o">.</span><span class="n">length</span> <span class="o">&lt;</span> <span class="n">query_len</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">query_len</span> <span class="o">-</span> <span class="n">tag</span><span class="o">.</span><span class="n">length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="c1">#  TODO: This can be done faster at some point</span>
+                <span class="c1">#  TODO: (doing the comparison for positions only once)</span>
+                <span class="c1">#  TODO: Similar to offset estimation and</span>
+                <span class="c1">#  TODO: Ingmars PosXobsKernel</span>
+                <span class="n">query_sub</span> <span class="o">=</span> <span class="n">query_seq</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">tag</span><span class="o">.</span><span class="n">length</span><span class="p">]</span>
+                <span class="n">identity</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">t</span> <span class="o">==</span> <span class="n">q</span> <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">sequence</span><span class="p">,</span> <span class="n">query_sub</span><span class="p">)]</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="o">/</span> <span class="n">tag</span><span class="o">.</span><span class="n">length</span>
+                    <span class="o">*</span> <span class="mi">100</span><span class="p">,</span>
+                    <span class="mi">2</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">identity</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">identity_cutoff</span><span class="p">:</span>
+                    <span class="n">start</span> <span class="o">=</span> <span class="n">i</span>
+                    <span class="n">end</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">tag</span><span class="o">.</span><span class="n">length</span>
+                    <span class="n">tag_aln</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="n">tag</span><span class="o">.</span><span class="n">sequence</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="n">query_len</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="n">tag</span><span class="o">.</span><span class="n">length</span><span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="n">hit</span> <span class="o">=</span> <span class="n">ProteinTagHit</span><span class="p">(</span>
+                        <span class="n">tag</span><span class="o">=</span><span class="n">tag</span><span class="p">,</span>
+                        <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
+                        <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">,</span>
+                        <span class="n">query_aln</span><span class="o">=</span><span class="n">query_seq</span><span class="p">,</span>
+                        <span class="n">tag_aln</span><span class="o">=</span><span class="n">tag_aln</span><span class="p">,</span>
+                        <span class="n">identity</span><span class="o">=</span><span class="n">identity</span><span class="p">,</span>
+                        <span class="n">location</span><span class="o">=</span><span class="s2">&quot;Unknown&quot;</span><span class="p">,</span>
+                        <span class="n">conservation</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">hits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hit</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">hits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="n">hits</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_tag_hit_overlap</span><span class="p">(</span><span class="n">hit1</span><span class="p">:</span> <span class="n">ProteinTagHit</span><span class="p">,</span> <span class="n">hit2</span><span class="p">:</span> <span class="n">ProteinTagHit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test if two tag hits are overlapping.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            hit1 (ProteinTagHit): First ProteinTagHit.</span>
+<span class="sd">            hit2 (ProteinTagHit): Second ProteinTagHit.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            overlap (bool): True if the two tags overlap otherwise False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">overlap12</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">hit2</span><span class="o">.</span><span class="n">start</span> <span class="o">&lt;=</span> <span class="n">hit1</span><span class="o">.</span><span class="n">start</span> <span class="o">&lt;=</span> <span class="n">hit2</span><span class="o">.</span><span class="n">end</span> <span class="ow">and</span> <span class="n">hit2</span><span class="o">.</span><span class="n">start</span> <span class="o">&lt;=</span> <span class="n">hit1</span><span class="o">.</span><span class="n">end</span> <span class="o">&lt;=</span> <span class="n">hit2</span><span class="o">.</span><span class="n">end</span>
+        <span class="p">)</span>
+        <span class="n">overlap21</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">hit1</span><span class="o">.</span><span class="n">start</span> <span class="o">&lt;=</span> <span class="n">hit2</span><span class="o">.</span><span class="n">start</span> <span class="o">&lt;=</span> <span class="n">hit1</span><span class="o">.</span><span class="n">end</span> <span class="ow">and</span> <span class="n">hit1</span><span class="o">.</span><span class="n">start</span> <span class="o">&lt;=</span> <span class="n">hit2</span><span class="o">.</span><span class="n">end</span> <span class="o">&lt;=</span> <span class="n">hit1</span><span class="o">.</span><span class="n">end</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">overlap12</span> <span class="ow">or</span> <span class="n">overlap21</span>
+
+    <span class="k">def</span> <span class="nf">_get_non_redundant_tag_hits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">ProteinTagHit</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get non-redundant tags in an input sequence.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sequence (str): The input sequence in which the tags are found.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tag_hits (list[ProteinTagHit]): Output non-redundant list of ProteinTagHits.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Find all hits and group by tag name or prefix</span>
+        <span class="n">all_hits</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">all_prefixes</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tags</span><span class="p">:</span>
+            <span class="n">hits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tag_search</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">sequence</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">hit</span> <span class="ow">in</span> <span class="n">hits</span><span class="p">:</span>
+                <span class="n">prefix</span> <span class="o">=</span> <span class="n">hit</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">hit</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">all_hits</span><span class="p">:</span>
+                    <span class="n">all_hits</span><span class="p">[</span><span class="n">hit</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">hit</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="n">all_prefixes</span><span class="p">:</span>
+                    <span class="n">all_hits</span><span class="p">[</span><span class="n">all_prefixes</span><span class="p">[</span><span class="n">prefix</span><span class="p">]]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">hit</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">all_hits</span><span class="p">[</span><span class="n">hit</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">hit</span><span class="p">]</span>
+                    <span class="n">all_prefixes</span><span class="p">[</span><span class="n">prefix</span><span class="p">]</span> <span class="o">=</span> <span class="n">hit</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="c1"># Remove redundant hits that overlap</span>
+        <span class="n">non_redundant</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">all_hits</span><span class="p">:</span>
+            <span class="n">kept_hits</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">hit1</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">all_hits</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">length</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                <span class="n">overlap</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">for</span> <span class="n">hit2</span> <span class="ow">in</span> <span class="n">kept_hits</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tag_hit_overlap</span><span class="p">(</span><span class="n">hit1</span><span class="p">,</span> <span class="n">hit2</span><span class="p">):</span>
+                        <span class="n">overlap</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">break</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">overlap</span><span class="p">:</span>
+                    <span class="n">kept_hits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hit1</span><span class="p">)</span>
+            <span class="n">non_redundant</span> <span class="o">+=</span> <span class="n">kept_hits</span>
+
+        <span class="k">return</span> <span class="n">non_redundant</span>
+
+    <span class="k">def</span> <span class="nf">_get_termini</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">tag_hits</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ProteinTagHit</span><span class="p">],</span> <span class="n">sequence</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find N-terminal and C-terminal regions containing tags.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tag_hits (list[ProteinTagHit]): Input list of ProteinTagHits.</span>
+<span class="sd">            sequence (str): Input sequence in which the tags are found.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            termini (dict[str, tuple[int, int]]): Output dictionary with N-terminal and C-terminal regions with tags.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Check if within the limit of a given distance</span>
+        <span class="k">def</span> <span class="nf">within_limit</span><span class="p">(</span><span class="n">input_hit</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">input_hit</span><span class="o">.</span><span class="n">length</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">margin_cutoff</span><span class="p">:</span>
+                <span class="n">limit</span> <span class="o">=</span> <span class="n">input_hit</span><span class="o">.</span><span class="n">length</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">limit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">margin_cutoff</span>
+            <span class="k">return</span> <span class="n">distance</span> <span class="o">&lt;=</span> <span class="n">limit</span>
+
+        <span class="c1"># Find the maximum n-terminus cutoff and minimum c-terminus cutoff</span>
+        <span class="n">max_n_terminus</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">h</span><span class="p">,</span> <span class="n">hit</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">tag_hits</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">start</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">within_limit</span><span class="p">(</span><span class="n">hit</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">hit</span><span class="o">.</span><span class="n">start</span> <span class="o">-</span> <span class="n">max_n_terminus</span><span class="p">)):</span>
+                <span class="k">break</span>
+            <span class="n">max_n_terminus</span> <span class="o">=</span> <span class="n">hit</span><span class="o">.</span><span class="n">end</span>
+
+        <span class="n">min_c_terminus</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">h</span><span class="p">,</span> <span class="n">hit</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">tag_hits</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">end</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">within_limit</span><span class="p">(</span><span class="n">hit</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">hit</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="n">min_c_terminus</span><span class="p">)):</span>
+                <span class="k">break</span>
+            <span class="n">min_c_terminus</span> <span class="o">=</span> <span class="n">hit</span><span class="o">.</span><span class="n">start</span>
+
+        <span class="c1"># Adjust the maximum n terminus by extending it if a methionine is found</span>
+        <span class="c1"># close to where the tag ends, as this methionine is likely to be the</span>
+        <span class="c1"># biological start of the sequence.</span>
+        <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_n_terminus</span><span class="p">,</span> <span class="n">max_n_terminus</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">margin_cutoff</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">sequence</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;M&quot;</span><span class="p">:</span>
+                <span class="n">max_n_terminus</span> <span class="o">=</span> <span class="n">pos</span>
+                <span class="k">break</span>
+
+        <span class="n">termini</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;N-terminus&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_n_terminus</span><span class="p">),</span>
+            <span class="s2">&quot;C-terminus&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">min_c_terminus</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">sequence</span><span class="p">)),</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">termini</span>
+
+    <span class="k">def</span> <span class="nf">_assign_locations</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">tag_hits</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ProteinTagHit</span><span class="p">],</span> <span class="n">termini</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">ProteinTagHit</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assigns tags a location flag specifying if they are in the N-terminus, C-terminus or internal.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tag_hits (list[ProteinTagHit]): Input list of ProteinTagHits.</span>
+<span class="sd">            termini (dict[str, tuple[int, int]]): Output dictionary with N-terminal and C-terminal regions with tags.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tag_hits (list[ProteinTagHit]): Output list of ProteinTagHits with updated location attributes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Separate hits into n-terminal, c-terminal and internal hits</span>
+        <span class="n">max_n_terminus</span> <span class="o">=</span> <span class="n">termini</span><span class="p">[</span><span class="s2">&quot;N-terminus&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">min_c_terminus</span> <span class="o">=</span> <span class="n">termini</span><span class="p">[</span><span class="s2">&quot;C-terminus&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Find N-terminal hits</span>
+        <span class="n">n_terminal_hits</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">hit</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">tag_hits</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">start</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">hit</span><span class="o">.</span><span class="n">end</span> <span class="o">&lt;=</span> <span class="n">max_n_terminus</span><span class="p">:</span>
+                <span class="c1"># If the tag is small, it has to be close to the terminus to be found</span>
+                <span class="k">if</span> <span class="n">hit</span><span class="o">.</span><span class="n">length</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">margin_cutoff</span> <span class="ow">and</span> <span class="n">hit</span><span class="o">.</span><span class="n">start</span> <span class="o">&gt;</span> <span class="n">hit</span><span class="o">.</span><span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">hit</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="s2">&quot;N-terminus&quot;</span>
+                <span class="n">n_terminal_hits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hit</span><span class="p">)</span>
+
+        <span class="c1"># Find C-terminal hits</span>
+        <span class="n">c_terminal_hits</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">hit</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">tag_hits</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">start</span><span class="p">):</span>
+            <span class="c1"># Leader sequences can only be in the N-terminus</span>
+            <span class="k">if</span> <span class="n">hit</span><span class="o">.</span><span class="n">leader</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">hit</span><span class="o">.</span><span class="n">start</span> <span class="o">&gt;=</span> <span class="n">min_c_terminus</span><span class="p">:</span>
+                <span class="c1"># If the tag is small, it has to be close to the terminus to be found</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">hit</span><span class="o">.</span><span class="n">length</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">margin_cutoff</span>
+                    <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">hit</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">hit</span><span class="o">.</span><span class="n">query_aln</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">hit</span><span class="o">.</span><span class="n">length</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="n">hit</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="s2">&quot;C-terminus&quot;</span>
+                <span class="n">c_terminal_hits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hit</span><span class="p">)</span>
+
+        <span class="c1"># Find internal hits</span>
+        <span class="n">internal_hits</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">hit</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">tag_hits</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">start</span><span class="p">):</span>
+            <span class="c1"># Leader sequences, cleavage sites, and protein fusions can not be internal</span>
+            <span class="k">if</span> <span class="n">hit</span><span class="o">.</span><span class="n">leader</span> <span class="ow">or</span> <span class="n">hit</span><span class="o">.</span><span class="n">fusion</span> <span class="ow">or</span> <span class="n">hit</span><span class="o">.</span><span class="n">cleavage</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">hit</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">n_terminal_hits</span> <span class="ow">and</span> <span class="n">hit</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">c_terminal_hits</span><span class="p">:</span>
+                <span class="n">hit</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="s2">&quot;Internal&quot;</span>
+                <span class="n">internal_hits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hit</span><span class="p">)</span>
+
+        <span class="n">combined_hits</span> <span class="o">=</span> <span class="n">n_terminal_hits</span> <span class="o">+</span> <span class="n">c_terminal_hits</span> <span class="o">+</span> <span class="n">internal_hits</span>
+        <span class="n">assigned_hits</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">combined_hits</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">assigned_hits</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_assign_conservation</span><span class="p">(</span>
+        <span class="n">tag_hits</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ProteinTagHit</span><span class="p">],</span> <span class="n">query_aln</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">reference_aln</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">ProteinTagHit</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assigns conservation to tags based on a pairwise alignment between the query sequence and a biological reference</span>
+<span class="sd">        sequence. Calculate the conservation of the tags based on the alignment. Conserved tags (high identity) are</span>
+<span class="sd">        likely to be false positives, since the sequence is conserved in the reference.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tag_hits (list[ProteinTagHit]): Input list of ProteinTagHits.</span>
+<span class="sd">            query_aln (str): Input alignment of the query sequence.</span>
+<span class="sd">            reference_aln (str): Input alignment of the reference sequence.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tag_hits (list[ProteinTagHit]): Output list of ProteinTagHits with updated conservation.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If the input alignments do not have equal length.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">query_aln</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">reference_aln</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">tag_hits</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">query_aln</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">reference_aln</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Alignments query_aln and reference_aln must have equal length.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">identity_mask</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">que</span><span class="p">,</span> <span class="n">ref</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">query_aln</span><span class="p">,</span> <span class="n">reference_aln</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">que</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">elif</span> <span class="n">ref</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span> <span class="ow">or</span> <span class="n">que</span> <span class="o">!=</span> <span class="n">ref</span><span class="p">:</span>
+                <span class="n">identity_mask</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">identity_mask</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tag_hits</span><span class="p">:</span>
+            <span class="n">reference_identity</span> <span class="o">=</span> <span class="n">identity_mask</span><span class="p">[</span><span class="n">tag</span><span class="o">.</span><span class="n">start</span> <span class="p">:</span> <span class="n">tag</span><span class="o">.</span><span class="n">end</span><span class="p">]</span>
+            <span class="n">tag</span><span class="o">.</span><span class="n">conservation</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">reference_identity</span><span class="p">)</span> <span class="o">/</span> <span class="n">tag</span><span class="o">.</span><span class="n">length</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">tag_hits</span>
+
+<div class="viewcode-block" id="TagFinder.find_tags">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.tag_finder.TagFinder.find_tags">[docs]</a>
+    <span class="k">def</span> <span class="nf">find_tags</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">sequence</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">query_aln</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">reference_aln</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">ProteinTagHit</span><span class="p">],</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find tags in an input sequence and return tags and termini.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sequence (str): Input sequence to find tags in.</span>
+<span class="sd">            query_aln (str): (Optional) Input query alignment [Default=None].</span>
+<span class="sd">            reference_aln (str): (Optional) Input reference alignment [Default=None].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tags (tuple[list[ProteinTagHit]]): A list of ProteinTagHits.</span>
+<span class="sd">            termini (dict[str, tuple[int, int]]): Output dictionary with N-terminal and C-terminal regions with tags.</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If the query_aln and reference_aln do not have equal length or if the alignments are empty or if</span>
+<span class="sd">            the query does not match the query sequence.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; tag_finder = TagFinder()</span>
+<span class="sd">            &gt;&gt;&gt; my_tags, my_termini = tag_finder.find_tags(sequence=&#39;GHHHHHHMYNAMEISCARL&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; print(my_tags[0].sequence)</span>
+<span class="sd">            &gt;&gt;&gt; &#39;GHHHHHH&#39;</span>
+<span class="sd">            &gt;&gt;&gt; print(my_termini)</span>
+<span class="sd">            &gt;&gt;&gt; &#39;{&quot;N-terminus&quot;: (0, 7), &quot;C-terminus&quot;: (18, 18)}&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tag_hits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_non_redundant_tag_hits</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
+
+        <span class="c1"># Validate tags if a query and reference alignment is provided</span>
+        <span class="k">if</span> <span class="n">query_aln</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">reference_aln</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">query_aln</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">reference_aln</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">query_aln</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Error: The query alignment is of length 0&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">reference_aln</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Error: The reference alignment is of length 0&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">query_aln</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">reference_aln</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Error: The query and reference alignments must have equal length&quot;</span>
+                <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">query_aln</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="n">sequence</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Error: The query alignment does not match the input sequence&quot;</span>
+                <span class="p">)</span>
+
+        <span class="n">valid_hits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_assign_conservation</span><span class="p">(</span>
+            <span class="n">tag_hits</span><span class="o">=</span><span class="n">tag_hits</span><span class="p">,</span> <span class="n">query_aln</span><span class="o">=</span><span class="n">query_aln</span><span class="p">,</span> <span class="n">reference_aln</span><span class="o">=</span><span class="n">reference_aln</span>
+        <span class="p">)</span>
+        <span class="c1"># Keep tags with low conservation, as these are not found in the reference sequence</span>
+        <span class="n">tag_hits</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">tag</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">valid_hits</span> <span class="k">if</span> <span class="n">tag</span><span class="o">.</span><span class="n">conservation</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">identity_cutoff</span>
+        <span class="p">]</span>
+        <span class="n">termini</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_termini</span><span class="p">(</span><span class="n">tag_hits</span><span class="p">,</span> <span class="n">sequence</span><span class="p">)</span>
+        <span class="n">all_tags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_assign_locations</span><span class="p">(</span><span class="n">tag_hits</span><span class="p">,</span> <span class="n">termini</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">all_tags</span><span class="p">,</span> <span class="n">termini</span></div>
+
+
+<div class="viewcode-block" id="TagFinder.strip_tags">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.tag_finder.TagFinder.strip_tags">[docs]</a>
+    <span class="k">def</span> <span class="nf">strip_tags</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">sequence</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">ProteinTagHit</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stips tags from the N- and C-terminus of a sequence and reports the tags stripped away.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sequence (str): Input sequence to strip tags from.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            sequence (str): The output sequence without tags.</span>
+<span class="sd">            remove_tags (list[ProteinTagHit]): The output list of tags that were removed from the input sequence.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            TypeError: If the input file is not a .csv file</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; tag_finder = TagFinder()</span>
+<span class="sd">            &gt;&gt;&gt; no_tag_seq, tag_list = tag_finder.strip_tags(sequence=&#39;GHHHHHHMYNAMEISCARL&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; print(no_tag_seq)</span>
+<span class="sd">            &gt;&gt;&gt; &#39;MYNAMEISCARL&#39;</span>
+<span class="sd">            &gt;&gt;&gt; print(tag_list[0].sequence)</span>
+<span class="sd">            &gt;&gt;&gt; &#39;GHHHHHH&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tags</span><span class="p">,</span> <span class="n">termini</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_tags</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="n">sequence</span><span class="p">)</span>
+        <span class="n">stripped_seq</span> <span class="o">=</span> <span class="n">sequence</span><span class="p">[</span><span class="n">termini</span><span class="p">[</span><span class="s2">&quot;N-terminus&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="p">:</span> <span class="n">termini</span><span class="p">[</span><span class="s2">&quot;C-terminus&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">removed_tags</span> <span class="o">=</span> <span class="p">[</span><span class="n">tag</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tags</span> <span class="k">if</span> <span class="n">tag</span><span class="o">.</span><span class="n">location</span> <span class="o">!=</span> <span class="s2">&quot;Internal&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">stripped_seq</span><span class="p">,</span> <span class="n">removed_tags</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_tag_report</span><span class="p">(</span><span class="n">removed_tag_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ProteinTagHit</span><span class="p">],</span> <span class="n">terminus</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a report string from a list of ProteinTagHits and a terminus.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            removed_tag_list (list[ProteinTagHit]): The input list of ProteinTagHits.</span>
+<span class="sd">            terminus (str): The input terminus, must be either &#39;N&#39; or &#39;C&#39;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            report (str): The output report string of the hits.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">terminal_tags</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">removed_tag_list</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">start</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">location</span> <span class="o">==</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">terminus</span><span class="si">}</span><span class="s2">-terminus&quot;</span><span class="p">:</span>
+                <span class="n">description</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">sequence</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">end</span><span class="si">}</span><span class="s2">]&quot;</span>
+                <span class="n">terminal_tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">description</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">terminal_tags</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">report_string</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">report_string</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">terminal_tags</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">report_string</span>
+
+<div class="viewcode-block" id="TagFinder.get_strip_report">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.tag_finder.TagFinder.get_strip_report">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_strip_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Strip tags from a sequence and return a report dictionary of the stripped tags.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sequence (str): Input sequence to strip tags from.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            output (dict): A dictionary of the following form:</span>
+<span class="sd">            output = {&#39;tags_found&#39;: (bool), # True if tags are found in the sequence</span>
+<span class="sd">                      &#39;names&#39;: ([str]), # List of removed tag names</span>
+<span class="sd">                      &#39;locations&#39;: ([str]), # List of removed tag locations</span>
+<span class="sd">                      &#39;summary&#39;: (str),  # Summary of the removed tags</span>
+<span class="sd">                      &#39;sequence&#39;: (str),  # Sequence without tags}</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; my_sequence = &#39;MAHHHHHHMSFFRMKRRLNFVVKRGIEELWENSFLDNNVDMKKIEYSKTG&#39;</span>
+<span class="sd">            &gt;&gt;&gt;               &#39;DAWPCVLLRKKSFEDLHKLYYICLKEKNKLLGEQYFHLQNSTKMLQHGRL&#39;</span>
+<span class="sd">            &gt;&gt;&gt;               &#39;KKVKLTMKRILTVLSRRAIHDQCLRAKDMLKKQEEREFYEIQKFKLNEQL&#39;</span>
+<span class="sd">            &gt;&gt;&gt;               &#39;LCLKHKMNILKKYNSFSLEQISLTFSIKKIENKIQQIDIILNPLRKETMY&#39;</span>
+<span class="sd">            &gt;&gt;&gt;               &#39;LLIPHFKYQRKYSDLPGFISWKKQNIIALRNNMSKLHRLY&#39;</span>
+<span class="sd">            &gt;&gt;&gt; tag_finder = TagFinder()</span>
+<span class="sd">            &gt;&gt;&gt; report = tag_finder.get_strip_report(sequence=my_sequence)</span>
+<span class="sd">            &gt;&gt;&gt; print(report)</span>
+<span class="sd">            Output:</span>
+<span class="sd">            {&#39;tags_found&#39;: True,</span>
+<span class="sd">             &#39;names&#39;: [&#39;PolyHis-Tag&#39;],</span>
+<span class="sd">             &#39;locations&#39;: [&#39;N-terminus&#39;],</span>
+<span class="sd">             &#39;summary&#39;: &#39;N-term: [PolyHis-Tag:2-HHHHHH-8] C-term: None&#39;,</span>
+<span class="sd">             &#39;sequence&#39;: &#39;MSFFRMKRRLNFVVKRGIEELWENSFLDNNVDMKKIEYSKTGDAWPCVLL</span>
+<span class="sd">                          RKKSFEDLHKLYYICLKEKNKLLGEQYFHLQNSTKMLQHGRLKKVKLTMK</span>
+<span class="sd">                          RILTVLSRRAIHDQCLRAKDMLKKQEEREFYEIQKFKLNEQLLCLKHKMN</span>
+<span class="sd">                          ILKKYNSFSLEQISLTFSIKKIENKIQQIDIILNPLRKETMYLLIPHFKY</span>
+<span class="sd">                          QRKYSDLPGFISWKKQNIIALRNNMSKLHRLY&#39;</span>
+<span class="sd">            }</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">found_tag</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">removed_names</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">removed_locations</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">stripped_sequence</span><span class="p">,</span> <span class="n">removed_tags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">strip_tags</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
+
+        <span class="c1"># Create a tag report for both termini</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">removed_tags</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">removed_tags</span><span class="p">:</span>
+                <span class="n">removed_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">removed_locations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">location</span><span class="p">)</span>
+            <span class="n">n_terminal_tags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tag_report</span><span class="p">(</span><span class="n">removed_tags</span><span class="p">,</span> <span class="n">terminus</span><span class="o">=</span><span class="s2">&quot;N&quot;</span><span class="p">)</span>
+            <span class="n">c_terminal_tags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tag_report</span><span class="p">(</span><span class="n">removed_tags</span><span class="p">,</span> <span class="n">terminus</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">)</span>
+            <span class="n">removal_report</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;N-term: </span><span class="si">{</span><span class="n">n_terminal_tags</span><span class="si">}</span><span class="s2"> C-term: </span><span class="si">{</span><span class="n">c_terminal_tags</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">found_tag</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">removal_report</span> <span class="o">=</span> <span class="s2">&quot;N-term: None C-term: None&quot;</span>
+
+        <span class="n">output</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;tags_found&quot;</span><span class="p">:</span> <span class="n">found_tag</span><span class="p">,</span>
+            <span class="s2">&quot;names&quot;</span><span class="p">:</span> <span class="n">removed_names</span><span class="p">,</span>
+            <span class="s2">&quot;locations&quot;</span><span class="p">:</span> <span class="n">removed_locations</span><span class="p">,</span>
+            <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="n">removal_report</span><span class="p">,</span>
+            <span class="s2">&quot;sequence&quot;</span><span class="p">:</span> <span class="n">stripped_sequence</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">output</span></div>
+
+
+<div class="viewcode-block" id="TagFinder.tag_strip_csv">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.tag_finder.TagFinder.tag_strip_csv">[docs]</a>
+    <span class="k">def</span> <span class="nf">tag_strip_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">col_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Strip terminal purification tags from an input .csv file containing protein sequences.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            input_file (str): Full path of the input CSV file.</span>
+<span class="sd">            output_file (str): Full path of the output CSV file.</span>
+<span class="sd">            col_name (str): The column name containing the sequence.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            output_file (str): An output file where the sequences in the column specified by &#39;col_name&#39; have their</span>
+<span class="sd">            terminal tags stripped off. A column called &#39;removed_tags&#39; is added to the output file with information</span>
+<span class="sd">            about the removed tags.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            TypeError: If the input file is not a .csv file.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; tag_finder = TagFinder()</span>
+<span class="sd">            &gt;&gt;&gt; tag_finder.tag_strip_csv.(input_file=&#39;/path/to/my_input.csv&#39;,</span>
+<span class="sd">            &gt;&gt;&gt;                           output_file=&#39;/path/to/my_output.csv&#39;,</span>
+<span class="sd">            &gt;&gt;&gt;                           col_name=&#39;aa_seq&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">input_file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.csv&quot;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Input File is not a .csv file!&quot;</span><span class="p">)</span>
+
+        <span class="n">dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">low_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">dataframe</span><span class="p">[</span><span class="s2">&quot;removed_tags&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">tag_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">seq_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">tag_names</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">tag_locations</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
+            <span class="n">dataframe</span><span class="o">.</span><span class="n">iterrows</span><span class="p">(),</span> <span class="n">total</span><span class="o">=</span><span class="n">dataframe</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Processing&quot;</span>
+        <span class="p">):</span>
+            <span class="n">report</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_strip_report</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="n">col_name</span><span class="p">])</span>
+            <span class="n">tag_names</span> <span class="o">+=</span> <span class="n">report</span><span class="p">[</span><span class="s2">&quot;names&quot;</span><span class="p">]</span>
+            <span class="n">tag_locations</span> <span class="o">+=</span> <span class="n">report</span><span class="p">[</span><span class="s2">&quot;locations&quot;</span><span class="p">]</span>
+            <span class="n">dataframe</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">col_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">report</span><span class="p">[</span><span class="s2">&quot;sequence&quot;</span><span class="p">]</span>
+            <span class="n">dataframe</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="s2">&quot;removed_tags&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">report</span><span class="p">[</span><span class="s2">&quot;summary&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">report</span><span class="p">[</span><span class="s2">&quot;tag_found&quot;</span><span class="p">]:</span>
+                <span class="n">tag_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">seq_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Generate basic report</span>
+        <span class="n">tag_percent</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">tag_counter</span> <span class="o">/</span> <span class="n">seq_counter</span> <span class="o">*</span> <span class="mi">100</span><span class="p">))</span>
+        <span class="n">tag_total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tag_locations</span><span class="p">)</span>
+        <span class="n">n_term_counter</span> <span class="o">=</span> <span class="n">tag_locations</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;N-terminus&quot;</span><span class="p">)</span>
+        <span class="n">n_term_percent</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">n_term_counter</span> <span class="o">/</span> <span class="n">tag_total</span> <span class="o">*</span> <span class="mi">100</span><span class="p">))</span>
+        <span class="n">c_term_counter</span> <span class="o">=</span> <span class="n">tag_locations</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;C-terminus&quot;</span><span class="p">)</span>
+        <span class="n">c_term_percent</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">c_term_counter</span> <span class="o">/</span> <span class="n">tag_total</span> <span class="o">*</span> <span class="mi">100</span><span class="p">))</span>
+        <span class="n">report</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Found and removed tags in </span><span class="si">{</span><span class="n">tag_counter</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">seq_counter</span><span class="si">}</span><span class="s2"> sequences (</span><span class="si">{</span><span class="n">tag_percent</span><span class="si">}</span><span class="s2">%)</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">report</span> <span class="o">+=</span> <span class="s2">&quot;Tag locations:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">report</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;N-terminus: </span><span class="si">{</span><span class="n">n_term_counter</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">tag_total</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">n_term_percent</span><span class="si">}</span><span class="s2">%)</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">report</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;C-terminus: </span><span class="si">{</span><span class="n">c_term_counter</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">tag_total</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">c_term_percent</span><span class="si">}</span><span class="s2">%)</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">report</span> <span class="o">+=</span> <span class="s2">&quot;Tag types:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">report</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">tag_names</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
+        <span class="n">dataframe</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">output_file</span></div>
+
+
+<div class="viewcode-block" id="TagFinder.clean_dataset">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.tag_finder.TagFinder.clean_dataset">[docs]</a>
+    <span class="k">def</span> <span class="nf">clean_dataset</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">dataset</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">,</span>
+        <span class="n">seq_col_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">num_proc</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">convert_nucleotide</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">remove_artificial</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dataset</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clean an input Huggingface Dataset by converting to protein sequences and removing tags. This will add a column</span>
+<span class="sd">        with a summary of removed tags to the dataset. This function can run using multiple processors by specifying</span>
+<span class="sd">        the num_procs flags, however if using multiple processors it will not present a summary of the removed flags.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dataset (Dataset): Input HuggingFace dataset.</span>
+<span class="sd">            seq_col_name (str): Input column name containing the sequences.</span>
+<span class="sd">            num_proc (int): Number of processors used for finding tags [Default=1].</span>
+<span class="sd">            convert_nucleotide (bool): If True, convert DNA and RNA sequences to protein sequences before removing tags.</span>
+<span class="sd">            remove_artificial (bool): If True, remove artificial low entropy sequences with a Jensen-Shannon distance</span>
+<span class="sd">            over 0.6 to naturally occuring proteins from the data-set if they do not start with methionine.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            dataset: Modified HuggingFace dataset. The seq_col_name column has been replaced with a sequence where</span>
+<span class="sd">            N-terminal and C-terminal tags are removed. The dataset also has a new column called &#39;removed_tags&#39; where a</span>
+<span class="sd">            summary of the removed N-terminal and C-terminal tags is shown. If convert_nucleotide is True, DNA and RNA</span>
+<span class="sd">            sequences have been converted to protein. If remove_artificial is True, artificial low entropy sequences</span>
+<span class="sd">            with a Jensen-Shannon distance over 0.6 to naturally occuring proteins have been removed.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; tag_finder = TagFinder()</span>
+<span class="sd">            &gt;&gt;&gt; raw_dataset = load_full_dataset(&quot;Exazyme/ProteineaSolubility&quot;)</span>
+<span class="sd">            &gt;&gt;&gt; no_tags_dataset = tag_finder.clean_dataset(dataset=raw_dataset,</span>
+<span class="sd">            &gt;&gt;&gt;                                            seq_col_name=&quot;aa_seq&quot;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dataset_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="n">tag_column</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;N-term: None C-term: None&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">dataset_size</span>
+        <span class="n">artificial_column</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="o">*</span> <span class="n">dataset_size</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="s2">&quot;removed_tags&quot;</span><span class="p">,</span> <span class="n">tag_column</span><span class="p">)</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="s2">&quot;artificial_sequence&quot;</span><span class="p">,</span> <span class="n">artificial_column</span><span class="p">)</span>
+        <span class="n">cleaner</span> <span class="o">=</span> <span class="n">SequenceCleaner</span><span class="p">(</span>
+            <span class="n">seq_col_name</span><span class="o">=</span><span class="n">seq_col_name</span><span class="p">,</span>
+            <span class="n">tag_col_name</span><span class="o">=</span><span class="s2">&quot;removed_tags&quot;</span><span class="p">,</span>
+            <span class="n">artificial_col_name</span><span class="o">=</span><span class="s2">&quot;artificial_sequence&quot;</span><span class="p">,</span>
+            <span class="n">tag_finder</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">convert_nucleotide</span><span class="o">=</span><span class="n">convert_nucleotide</span><span class="p">,</span>
+            <span class="n">label_artificial</span><span class="o">=</span><span class="n">remove_artificial</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">cleaner</span><span class="p">,</span> <span class="n">num_proc</span><span class="o">=</span><span class="n">num_proc</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">num_proc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">cleaner</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">no_tags</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;removed_tags&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;N-term: None C-term: None&quot;</span><span class="p">)</span>
+            <span class="n">tag_num</span> <span class="o">=</span> <span class="n">dataset_size</span> <span class="o">-</span> <span class="n">no_tags</span>
+            <span class="n">tag_percent</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">tag_num</span> <span class="o">/</span> <span class="n">dataset_size</span> <span class="o">*</span> <span class="mi">100</span><span class="p">))</span>
+            <span class="n">report</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Found and removed tags in </span><span class="si">{</span><span class="n">tag_num</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">dataset_size</span><span class="si">}</span><span class="s2"> sequences (</span><span class="si">{</span><span class="n">tag_percent</span><span class="si">}</span><span class="s2">%)</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No detailed Cleaning summary when using multiple processors.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">remove_artificial</span><span class="p">:</span>
+            <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;artificial_sequence&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">,</span> <span class="n">num_proc</span><span class="o">=</span><span class="n">num_proc</span>
+            <span class="p">)</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">remove_columns</span><span class="p">(</span><span class="s2">&quot;artificial_sequence&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dataset</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SequenceCleaner">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.tag_finder.SequenceCleaner">[docs]</a>
+<span class="k">class</span> <span class="nc">SequenceCleaner</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is used to interface with huggingface datasets. It is a callable class is used for the huggingface .map()</span>
+<span class="sd">    method to clean sequences by detecting and converting DNA and RNA sequences to protein sequences and use TagFinder</span>
+<span class="sd">    on the sequences converted sequences to remove tags.</span>
+
+<span class="sd">    This class operates on individual samples (rows) and returns new samples where the sequence column has been replaced</span>
+<span class="sd">    with a cleaned up sequence without tags and where the removed_tags column has a summary of the tags that were</span>
+<span class="sd">    removed from the input sequence.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SequenceCleaner.__init__">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.tag_finder.SequenceCleaner.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">seq_col_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">tag_col_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">artificial_col_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">tag_finder</span><span class="p">:</span> <span class="n">TagFinder</span><span class="p">,</span>
+        <span class="n">convert_nucleotide</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">label_artificial</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A Class that can be mapped across a HuggingFace dataset to clean and convert sequences and find and remove</span>
+<span class="sd">        terminal protein purification tags, fusion proteins, cleavage sites, and leader sequences.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            seq_col_name (str): The column name of the column containing the query sequence in which to remove tags.</span>
+<span class="sd">            tag_col_name (str): The column name to store the summary of identified terminal tags that were removed.</span>
+<span class="sd">            tag_finder (TagFinder): A TagFinder instance used for tag identification.</span>
+<span class="sd">            convert_nucleotide (bool): If True, convert DNA and RNA sequences to protein before removing tags.</span>
+<span class="sd">            label_artificial (bool): If True, label low complexity sequences that do not start with M.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tag_finder</span> <span class="o">=</span> <span class="n">tag_finder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_seq_col_name</span> <span class="o">=</span> <span class="n">seq_col_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tag_col_name</span> <span class="o">=</span> <span class="n">tag_col_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_artificial_col_name</span> <span class="o">=</span> <span class="n">artificial_col_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ambiguous_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_protein_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dna_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rna_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tag_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tag_names</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tag_locations</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_convert_nucleotide</span> <span class="o">=</span> <span class="n">convert_nucleotide</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_label_artificial</span> <span class="o">=</span> <span class="n">label_artificial</span></div>
+
+
+<div class="viewcode-block" id="SequenceCleaner.get_sequence_type">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.tag_finder.SequenceCleaner.get_sequence_type">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_sequence_type</span><span class="p">(</span><span class="n">sequence</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the sequence type (DNA, RNA, Protein, Ambiguous Protein) of an input sequence.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sequence (str): The input sequence.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            seq_type (str): The type of the input sequence.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">alphabet</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
+        <span class="n">dna_fraction</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">sequence</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="s2">&quot;ATGC&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
+        <span class="n">rna_fraction</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">sequence</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="s2">&quot;AUGC&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">dna_fraction</span> <span class="o">&gt;</span> <span class="mf">0.99</span>
+            <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span>
+            <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="s2">&quot;ATGCWSMKRYBDHVN.X&quot;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">alphabet</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="n">seq_type</span> <span class="o">=</span> <span class="s2">&quot;DNA&quot;</span>
+        <span class="k">elif</span> <span class="p">(</span>
+            <span class="n">rna_fraction</span> <span class="o">&gt;</span> <span class="mf">0.99</span>
+            <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span>
+            <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="s2">&quot;AUGCWSMKRYBDHVN.X&quot;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">alphabet</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="n">seq_type</span> <span class="o">=</span> <span class="s2">&quot;RNA&quot;</span>
+        <span class="k">elif</span> <span class="nb">all</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="s2">&quot;QWERTYIPASDFGHKLCVNM&quot;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">alphabet</span><span class="p">):</span>
+            <span class="n">seq_type</span> <span class="o">=</span> <span class="s2">&quot;Protein&quot;</span>
+        <span class="k">elif</span> <span class="nb">all</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="s2">&quot;QWERTYIPASDFGHKLCVNMX&quot;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">alphabet</span><span class="p">):</span>
+            <span class="n">seq_type</span> <span class="o">=</span> <span class="s2">&quot;Ambiguous_Protein&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">seq_type</span> <span class="o">=</span> <span class="s2">&quot;Unknown&quot;</span>
+        <span class="k">return</span> <span class="n">seq_type</span></div>
+
+
+<div class="viewcode-block" id="SequenceCleaner.js_distance">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.tag_finder.SequenceCleaner.js_distance">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">js_distance</span><span class="p">(</span><span class="n">sequence</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the Jensen-Shannon distance of a sequence based on comparison to natural amino-acid frequencies.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sequence (str): The input sequence.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            entropy (float): Shannon Entropy of the input sequence.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Amino-Acid frequencies based on https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7127678/</span>
+        <span class="n">aa_frequencies</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="mf">0.0777</span><span class="p">,</span>
+            <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="mf">0.0157</span><span class="p">,</span>
+            <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="mf">0.0530</span><span class="p">,</span>
+            <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="mf">0.0656</span><span class="p">,</span>
+            <span class="s2">&quot;F&quot;</span><span class="p">:</span> <span class="mf">0.0405</span><span class="p">,</span>
+            <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="mf">0.0691</span><span class="p">,</span>
+            <span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="mf">0.0227</span><span class="p">,</span>
+            <span class="s2">&quot;I&quot;</span><span class="p">:</span> <span class="mf">0.0591</span><span class="p">,</span>
+            <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="mf">0.0595</span><span class="p">,</span>
+            <span class="s2">&quot;L&quot;</span><span class="p">:</span> <span class="mf">0.0960</span><span class="p">,</span>
+            <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="mf">0.0238</span><span class="p">,</span>
+            <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mf">0.0427</span><span class="p">,</span>
+            <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="mf">0.0469</span><span class="p">,</span>
+            <span class="s2">&quot;Q&quot;</span><span class="p">:</span> <span class="mf">0.0393</span><span class="p">,</span>
+            <span class="s2">&quot;R&quot;</span><span class="p">:</span> <span class="mf">0.0526</span><span class="p">,</span>
+            <span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="mf">0.0694</span><span class="p">,</span>
+            <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="mf">0.0550</span><span class="p">,</span>
+            <span class="s2">&quot;V&quot;</span><span class="p">:</span> <span class="mf">0.0667</span><span class="p">,</span>
+            <span class="s2">&quot;W&quot;</span><span class="p">:</span> <span class="mf">0.0118</span><span class="p">,</span>
+            <span class="s2">&quot;Y&quot;</span><span class="p">:</span> <span class="mf">0.0311</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">aa_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">aa_frequencies</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">sequence</span> <span class="o">=</span> <span class="n">sequence</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">observed_frequencies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">sequence</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">aa</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span> <span class="k">for</span> <span class="n">aa</span> <span class="ow">in</span> <span class="n">aa_list</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">expected_frequencies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">aa_frequencies</span><span class="p">[</span><span class="n">aa</span><span class="p">]</span> <span class="k">for</span> <span class="n">aa</span> <span class="ow">in</span> <span class="n">aa_list</span><span class="p">])</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span>
+            <span class="n">aa_frequencies</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="c1"># Add a small number to avoid division by zero</span>
+        <span class="n">observed_frequencies</span> <span class="o">+=</span> <span class="mf">1e-16</span>
+        <span class="n">observed_frequencies</span> <span class="o">=</span> <span class="n">observed_frequencies</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">observed_frequencies</span><span class="p">)</span>
+
+        <span class="c1"># Calculate JS-distance</span>
+        <span class="n">js_distance</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">spatial</span><span class="o">.</span><span class="n">distance</span><span class="o">.</span><span class="n">jensenshannon</span><span class="p">(</span>
+            <span class="n">observed_frequencies</span><span class="p">,</span> <span class="n">expected_frequencies</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">js_distance</span></div>
+
+
+<div class="viewcode-block" id="SequenceCleaner.convert_sequence">
+<a class="viewcode-back" href="../../../pedata.preprocessing.html#pedata.preprocessing.tag_finder.SequenceCleaner.convert_sequence">[docs]</a>
+    <span class="k">def</span> <span class="nf">convert_sequence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Cleans up an input sequence by checking the sequence type and converting to a protein sequence if possible.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sequence (str): Input sequence which can be DNA, RNA or protein.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            sequence (str): Output sequence converted to protein.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">seq_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sequence_type</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">seq_type</span> <span class="o">==</span> <span class="s2">&quot;RNA&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_rna_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">seq_type</span> <span class="o">==</span> <span class="s2">&quot;DNA&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dna_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">seq_type</span> <span class="o">==</span> <span class="s2">&quot;Protein&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_protein_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">seq_type</span> <span class="o">==</span> <span class="s2">&quot;Ambiguous_Protein&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_protein_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ambiguous_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">seq_type</span> <span class="o">=</span> <span class="s2">&quot;Unknown&quot;</span>
+
+        <span class="k">if</span> <span class="n">seq_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;DNA&quot;</span><span class="p">,</span> <span class="s2">&quot;RNA&quot;</span><span class="p">]:</span>
+            <span class="n">translated</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Seq</span><span class="o">.</span><span class="n">Seq</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span><span class="o">.</span><span class="n">translate</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+            <span class="n">seq_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_sequence_type</span><span class="p">(</span><span class="n">translated</span><span class="p">)</span>
+            <span class="n">sequence</span> <span class="o">=</span> <span class="n">translated</span>
+
+            <span class="k">if</span> <span class="n">seq_type</span> <span class="o">==</span> <span class="s2">&quot;Protein&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_protein_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">seq_type</span> <span class="o">==</span> <span class="s2">&quot;Ambiguous_Protein&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_protein_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_ambiguous_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown sequence: </span><span class="si">{</span><span class="n">sequence</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">sequence</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The function called by the HuggingFace .map() function.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sample: The input row in the HuggingFace dataset.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            sample: The modified row in the HuggingFace dataset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_nucleotide</span><span class="p">:</span>
+            <span class="n">sequence</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_seq_col_name</span><span class="p">]</span>
+            <span class="n">converted_sequence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert_sequence</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">sequence</span> <span class="o">!=</span> <span class="n">converted_sequence</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Converting Nucleotide Sequence:&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">()</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">converted_sequence</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_seq_col_name</span><span class="p">]</span>
+
+        <span class="c1"># Calculate a probability that the sequence is natural based on AA frequency</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_label_artificial</span><span class="p">:</span>
+            <span class="n">js_dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">js_distance</span><span class="p">(</span><span class="n">converted_sequence</span><span class="p">)</span>
+            <span class="n">artificial_candidate</span> <span class="o">=</span> <span class="n">js_dist</span> <span class="o">&gt;</span> <span class="mf">0.6</span> <span class="ow">and</span> <span class="n">converted_sequence</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;M&quot;</span>
+            <span class="k">if</span> <span class="n">artificial_candidate</span><span class="p">:</span>
+                <span class="n">sample</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_artificial_col_name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Removing artificial sequence:&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">converted_sequence</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">()</span>
+        <span class="n">report</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tag_finder</span><span class="o">.</span><span class="n">get_strip_report</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="n">converted_sequence</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tag_names</span> <span class="o">+=</span> <span class="n">report</span><span class="p">[</span><span class="s2">&quot;names&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tag_locations</span> <span class="o">+=</span> <span class="n">report</span><span class="p">[</span><span class="s2">&quot;locations&quot;</span><span class="p">]</span>
+        <span class="n">sample</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_seq_col_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">report</span><span class="p">[</span><span class="s2">&quot;sequence&quot;</span><span class="p">]</span>
+        <span class="n">sample</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_tag_col_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">report</span><span class="p">[</span><span class="s2">&quot;summary&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">report</span><span class="p">[</span><span class="s2">&quot;tags_found&quot;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tag_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">sample</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Print a summary of the tag removal across the dataset.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            map_report (str): A string report of the TagFinder results of the dataset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nucleic_acid_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dna_counter</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rna_counter</span>
+        <span class="n">convert_percent</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">nucleic_acid_count</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_protein_counter</span> <span class="o">*</span> <span class="mi">100</span><span class="p">))</span>
+        <span class="n">ambiguous_percent</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ambiguous_counter</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_protein_counter</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">tag_percent</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tag_counter</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_protein_counter</span> <span class="o">*</span> <span class="mi">100</span><span class="p">))</span>
+        <span class="n">tag_total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tag_locations</span><span class="p">)</span>
+        <span class="n">n_term_counter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tag_locations</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;N-terminus&quot;</span><span class="p">)</span>
+        <span class="n">n_term_percent</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">n_term_counter</span> <span class="o">/</span> <span class="n">tag_total</span> <span class="o">*</span> <span class="mi">100</span><span class="p">))</span>
+        <span class="n">c_term_counter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tag_locations</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;C-terminus&quot;</span><span class="p">)</span>
+        <span class="n">c_term_percent</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">c_term_counter</span> <span class="o">/</span> <span class="n">tag_total</span> <span class="o">*</span> <span class="mi">100</span><span class="p">))</span>
+        <span class="n">map_report</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Converted </span><span class="si">{</span><span class="n">nucleic_acid_count</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_protein_counter</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;sequences from DNA/RNA to protein (</span><span class="si">{</span><span class="n">convert_percent</span><span class="si">}</span><span class="s2">%)</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="n">map_report</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_ambiguous_counter</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_protein_counter</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;proteins sequences with ambiguous residues (</span><span class="si">{</span><span class="n">ambiguous_percent</span><span class="si">}</span><span class="s2">%)</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="n">map_report</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Removed tags in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_tag_counter</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_protein_counter</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;protein sequences (</span><span class="si">{</span><span class="n">tag_percent</span><span class="si">}</span><span class="s2">%)</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="n">map_report</span> <span class="o">+=</span> <span class="s2">&quot;Tag locations:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">map_report</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;N-terminus: </span><span class="si">{</span><span class="n">n_term_counter</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">tag_total</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">n_term_percent</span><span class="si">}</span><span class="s2">%)</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">map_report</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;C-terminus: </span><span class="si">{</span><span class="n">c_term_counter</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">tag_total</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">c_term_percent</span><span class="si">}</span><span class="s2">%)</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">map_report</span> <span class="o">+=</span> <span class="s2">&quot;Tag types:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">map_report</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tag_names</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">map_report</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">tag_finder</span> <span class="o">=</span> <span class="n">TagFinder</span><span class="p">()</span>
+    <span class="n">tf</span> <span class="o">=</span> <span class="n">TagFinder</span><span class="p">()</span>
+    <span class="c1"># ds = load_full_dataset(&#39;Exazyme/TemStaProLabelled&#39;)</span>
+    <span class="c1"># ds = load_full_dataset(&#39;Exazyme/fpbase_original&#39;)</span>
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">get_dataset</span><span class="p">(</span><span class="s2">&quot;Exazyme/ProteineaSolubility&quot;</span><span class="p">,</span> <span class="n">as_DatasetDict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ds</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">clean_dataset</span><span class="p">(</span>
+        <span class="n">dataset</span><span class="o">=</span><span class="n">ds</span><span class="p">,</span>
+        <span class="n">seq_col_name</span><span class="o">=</span><span class="s2">&quot;aa_seq&quot;</span><span class="p">,</span>
+        <span class="n">num_proc</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">convert_nucleotide</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">remove_artificial</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, Exazyme.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

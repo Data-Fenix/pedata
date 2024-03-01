@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>pedata.encoding.add_encodings</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../_static/documentation_options.js?v=a5b3107c"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">pedata documentation</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../index.html#pedata-documentation">pedata documentation!</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.html" class="reference internal ">pedata package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.encoding.html" class="reference internal ">pedata.encoding package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.mutation.html" class="reference internal ">pedata.mutation package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../modules.html" class="reference internal ">pedata</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../index.html">Module code</a> &raquo;</li>
+    
+    <li>pedata.encoding.add_encodings</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for pedata.encoding.add_encodings</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot; Module for adding encodings to datasets &quot;&quot;&quot;</span>
+
+<span class="c1"># datasets</span>
+<span class="kn">import</span> <span class="nn">datasets</span> <span class="k">as</span> <span class="nn">ds</span>
+
+<span class="c1"># ml</span>
+<span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="kn">import</span> <span class="n">TransformerMixin</span>
+
+<span class="c1"># peadata</span>
+<span class="kn">from</span> <span class="nn">.encoding_specs</span> <span class="kn">import</span> <span class="n">encodings</span><span class="p">,</span> <span class="n">provided_encodings</span><span class="p">,</span> <span class="n">find_function_order</span>
+
+
+<div class="viewcode-block" id="add_encodings">
+<a class="viewcode-back" href="../../../pedata.encoding.html#pedata.encoding.add_encodings.add_encodings">[docs]</a>
+<span class="k">def</span> <span class="nf">add_encodings</span><span class="p">(</span>
+    <span class="n">dataset_dict</span><span class="p">:</span> <span class="n">ds</span><span class="o">.</span><span class="n">DatasetDict</span> <span class="o">|</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
+    <span class="n">needed</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ds</span><span class="o">.</span><span class="n">DatasetDict</span> <span class="o">|</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add encodings to a single Dataset or Datasets in a dataset dictionary.</span>
+
+<span class="sd">    This function takes a dataset dictionary or a single dataset and adds the specified encodings to it.</span>
+<span class="sd">    Encodings are applied in a specific order based on their dependencies.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dataset_dict: Dataset or dataset dictionary to which encodings should be added</span>
+<span class="sd">        needed: List or set of encodings to be added. Defaults to None.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Dataset or dataset dictionary with new encodings added</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the input is not a valid dataset or dictionary of datasets.</span>
+<span class="sd">        TypeError: If the `needed` parameter is not a list or valid encodings.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; needed = [&quot;aa_len&quot;, &quot;aa_1gram&quot;, &quot;aa_1hot&quot;]</span>
+<span class="sd">        &gt;&gt;&gt; dataset = ds.Dataset.from_dict(</span>
+<span class="sd">        ...     {</span>
+<span class="sd">        ...         &quot;aa_mut&quot;: [&quot;wildtype&quot;, &quot;L2A&quot;],</span>
+<span class="sd">        ...         &quot;aa_seq&quot;: [&quot;MLGTK&quot;, &quot;MAGTK&quot;],</span>
+<span class="sd">        ...         &quot;target foo&quot;: [1, 2],</span>
+<span class="sd">        ...     }</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; encoded = add_encodings(dataset, needed)</span>
+<span class="sd">        &gt;&gt;&gt; print(encoded) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE</span>
+<span class="sd">        Dataset({</span>
+<span class="sd">            features: [&#39;aa_mut&#39;, &#39;aa_seq&#39;, &#39;target foo&#39;, &#39;aa_len&#39;, &#39;aa_1gram&#39;, &#39;aa_1hot&#39;],</span>
+<span class="sd">            num_rows: 2</span>
+<span class="sd">        })</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># do not include by default because they are very long to be computed</span>
+    <span class="c1">#   &quot;aa_ankh_base&quot;, &quot;aa_esm2_t6_8M&quot;, &quot;aa_esm2_avg&quot;, &quot;aa_ankh_avg&quot;, &quot;aa_unirep_1900&quot;, &quot;atm_retprob100&quot;</span>
+    <span class="c1"># FIXME: add this above in the encoding list as fast_compute = False</span>
+    <span class="n">none_default_encodings</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;aa_ankh_base&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aa_ankh_avg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aa_esm2_avg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aa_esm2_t6_8M&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;atm_retprob100&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="c1"># If `dataset_dict` is a dictionary, iterate over each dataset and recursively call `add_encodings`</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset_dict</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">DatasetDict</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">dataset_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">dataset_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">add_encodings</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">needed</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dataset_dict</span>
+
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset_dict</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="p">):</span>
+        <span class="n">require_all</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># Will help determine how strict encodings should be</span>
+
+        <span class="c1"># If no encoding was provided, apply only encodings that are satisfiable by changing &quot;require_all&quot; to False</span>
+        <span class="k">if</span> <span class="n">needed</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">needed</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">provided_encodings</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">none_default_encodings</span><span class="p">))</span>
+            <span class="n">require_all</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">needed</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Input a valid list of encodings&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Determine the order in which encodings should be applied based on their dependencies</span>
+
+        <span class="n">func_order</span> <span class="o">=</span> <span class="n">find_function_order</span><span class="p">(</span>
+            <span class="n">encoders</span><span class="o">=</span><span class="n">encodings</span><span class="p">,</span>
+            <span class="n">provided_encodings</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
+            <span class="n">required_encodings</span><span class="o">=</span><span class="n">needed</span><span class="p">,</span>
+            <span class="n">satisfy_all</span><span class="o">=</span><span class="n">require_all</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Apply the encoding functions and add the resulting columns to the dataset</span>
+        <span class="k">for</span> <span class="n">enc</span> <span class="ow">in</span> <span class="n">func_order</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">enc</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">TransformerMixin</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">enc</span><span class="o">.</span><span class="n">provides</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                        <span class="s2">&quot;Only single column encodings supported when using the old TransformerMixin interface&quot;</span>
+                    <span class="p">)</span>
+
+                <span class="c1"># Apply encoding using the `map_func` if available</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">enc</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="s2">&quot;map_func&quot;</span><span class="p">):</span>
+                    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+                        <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">{</span><span class="n">enc</span><span class="o">.</span><span class="n">provides</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">enc</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">map_func</span><span class="p">(</span><span class="n">x</span><span class="p">)},</span>
+                        <span class="n">writer_batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                        <span class="n">batch_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                        <span class="n">batched</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># Fit and transform the dataset using the encoding function</span>
+                    <span class="n">enc</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">enc</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+                    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="n">enc</span><span class="o">.</span><span class="n">provides</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">val</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">enc</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">prov</span> <span class="ow">in</span> <span class="n">enc</span><span class="o">.</span><span class="n">provides</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">prov</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">val</span><span class="p">:</span>
+                        <span class="k">assert</span> <span class="sa">f</span><span class="s2">&quot;Encoding </span><span class="si">{</span><span class="n">enc</span><span class="si">}</span><span class="s2"> did not provide </span><span class="si">{</span><span class="n">prov</span><span class="si">}</span><span class="s2"> unlike specified&quot;</span>
+
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">val</span><span class="p">:</span>
+                    <span class="c1"># if the column already exists - it might happen when multiple encodings are returned together (e.g. unirep)</span>
+                    <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                        <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">remove_columns</span><span class="p">(</span>
+                            <span class="n">k</span>
+                        <span class="p">)</span>  <span class="c1"># TODO: write a test for this</span>
+                    <span class="c1"># adds the column</span>
+                    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">val</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Invalid input type. Expected Dataset or a dataset dictionary.&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">dataset</span></div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, Exazyme.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

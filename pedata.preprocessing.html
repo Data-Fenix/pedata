@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+      <title>pedata.preprocessing package</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=a5b3107c"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="pedata.processing package" href="pedata.processing.html" />
+  <link rel="prev" title="pedata.mutation package" href="pedata.mutation.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">pedata documentation</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#pedata-documentation">pedata documentation!</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="pedata.html" class="reference internal ">pedata package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="pedata.encoding.html" class="reference internal ">pedata.encoding package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="pedata.mutation.html" class="reference internal ">pedata.mutation package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="modules.html" class="reference internal ">pedata</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="pedata.html">pedata package</a> &raquo;</li>
+    
+    <li>pedata.preprocessing package</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="pedata.mutation.html"
+       title="previous chapter">← pedata.mutation package</a>
+  </li>
+  <li class="next">
+    <a href="pedata.processing.html"
+       title="next chapter">pedata.processing package →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="pedata-preprocessing-package">
+<h1>pedata.preprocessing package<a class="headerlink" href="#pedata-preprocessing-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-pedata.preprocessing.index">
+<span id="pedata-preprocessing-index-module"></span><h2>pedata.preprocessing.index module<a class="headerlink" href="#module-pedata.preprocessing.index" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.preprocessing.index.append_index_column_to_dataset">
+<span class="sig-prename descclassname"><span class="pre">pedata.preprocessing.index.</span></span><span class="sig-name descname"><span class="pre">append_index_column_to_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dataset</span></span></span><a class="reference internal" href="_modules/pedata/preprocessing/index.html#append_index_column_to_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.index.append_index_column_to_dataset" title="Link to this definition">¶</a></dt>
+<dd><p>Add an index column to the dataset
+:param dataset: dataset to add index column to</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dataset with index column added</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>ds.Dataset</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TypeError</strong> – If the input type is not datasets.Dataset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pedata.preprocessing.preprocessing_pipeline">
+<span id="pedata-preprocessing-preprocessing-pipeline-module"></span><h2>pedata.preprocessing.preprocessing_pipeline module<a class="headerlink" href="#module-pedata.preprocessing.preprocessing_pipeline" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.preprocessing.preprocessing_pipeline.preprocessing_pipeline">
+<span class="sig-prename descclassname"><span class="pre">pedata.preprocessing.preprocessing_pipeline.</span></span><span class="sig-name descname"><span class="pre">preprocessing_pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">invalid_data_removal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_missing_sequences</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mutation_code_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_finder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_splits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dataset</span></span></span><a class="reference internal" href="_modules/pedata/preprocessing/preprocessing_pipeline.html#preprocessing_pipeline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.preprocessing_pipeline.preprocessing_pipeline" title="Link to this definition">¶</a></dt>
+<dd><p>Perform preprocessing on the dataset
+Args</p>
+<blockquote>
+<div><p>dataset: dataset to process
+invalid_data_removal: whether to remove invalid data from the dataset</p>
+<blockquote>
+<div><p>if <cite>False</cite> will return an error if a character is not in the alphabet
+otherwise will remove the invalid datapoints</p>
+</div></blockquote>
+<dl class="simple">
+<dt>fill_missing_sequences: whether to fill missing sequences.</dt><dd><p>The mutation code is used in combination with the parent sequence and the offset to fill the missing sequences
+The parent sequence should be in the dataset; the mutation code offset can be detemrined automatically or provided (mutation_code_offset)</p>
+</dd>
+<dt>mutation_code_offset: offset to apply to the missing values</dt><dd><p>Will be automatically determined if not provided</p>
+</dd>
+</dl>
+<p>add_index: whether to add an index column to the dataset
+tag_finder: whether to process dataset using tag_finder
+add_splits: whether to add split columns to the dataset
+mutation_code_offset: offset to apply to the missing values</p>
+<blockquote>
+<div><p>Default to None, meaning that the mutation_code_offset will be determined automatically through the mutation code.</p>
+</div></blockquote>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>preprocessed dataset</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the input is not a valid dataset or dictionary of datasets.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pedata.preprocessing.split">
+<span id="pedata-preprocessing-split-module"></span><h2>pedata.preprocessing.split module<a class="headerlink" href="#module-pedata.preprocessing.split" title="Link to this heading">¶</a></h2>
+<p>This file contains the abstract base class for splitters.
+DatasetSplitter</p>
+<p>it contains the following splitter classes:
+- DatasetSplitterRandomTrainTest class for random train test split</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pedata.preprocessing.split.DatasetSplitter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pedata.preprocessing.split.</span></span><span class="sig-name descname"><span class="pre">DatasetSplitter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">append_split_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/preprocessing/split.html#DatasetSplitter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.split.DatasetSplitter" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Dataset Splitter for random Train Test Split.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.preprocessing.split.DatasetSplitter.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">append_split_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pedata/preprocessing/split.html#DatasetSplitter.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.split.DatasetSplitter.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize the DatasetSplitter class.
+:param dataset: The dataset to split
+:param seed: The seed to use for the split</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Type</strong> – If the dataset is not a Dataset or a DatasetDict</p></li>
+<li><p><strong>Exception</strong> – If the dataset is a DatasetDict and contains more than one column</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The Dataset can be a DatasetDict or a Dataset.
+If it is a DatasetDict, it should contain only one column, and it will be converted as Dataset.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.preprocessing.split.DatasetSplitter.append_split_column">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">append_split_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DatasetDict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_col_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DatasetDict</span></span></span><a class="reference internal" href="_modules/pedata/preprocessing/split.html#DatasetSplitter.append_split_column"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.split.DatasetSplitter.append_split_column" title="Link to this definition">¶</a></dt>
+<dd><p>Add a column to the dataset with the name of the split.
+:param dataset: The dataset to modify
+:param split_col_name: The name of the column containing the split name</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The modified dataset</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Exception</strong> – If the split column was not added correctly - this should never happen but as quite critical, we check it anyway</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.preprocessing.split.DatasetSplitter.concatenated_dataset">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">concatenated_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DatasetDict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dataset</span></span></span><a class="reference internal" href="_modules/pedata/preprocessing/split.html#DatasetSplitter.concatenated_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.split.DatasetSplitter.concatenated_dataset" title="Link to this definition">¶</a></dt>
+<dd><p>Return the concatenated dataset.
+:param dataset: The dataset to concatenate.
+:param split_list: The list of splits to concatenate</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The concatenated dataset</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.preprocessing.split.DatasetSplitter.dataset">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dataset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dataset</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">DatasetDict</span></em><a class="headerlink" href="#pedata.preprocessing.split.DatasetSplitter.dataset" title="Link to this definition">¶</a></dt>
+<dd><p>Return the dataset.
+:returns: The dataset as a DatasetDict or Dataset</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If self.return_dataset_dict is True, return a DatasetDict
+If self.return_dataset_dict is False, return a Dataset</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.preprocessing.split.DatasetSplitter.split">
+<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DatasetDict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng_seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_dataset_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DatasetDict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dataset</span></span></span><a class="reference internal" href="_modules/pedata/preprocessing/split.html#DatasetSplitter.split"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.split.DatasetSplitter.split" title="Link to this definition">¶</a></dt>
+<dd><p>Split the dataset and return it.
+:param dataset: The dataset to split -</p>
+<blockquote>
+<div><p>if it is a DatasetDict, it should contain only one split</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>return_dataset_dict</strong> – Whether to return a concatenated dataset or a DatasetDict
+If True -&gt; return concatenated dataset -&gt; Dataset
+If False, return a DatasetDict with the split name as key (Default)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The split dataset as a DatasetDict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.preprocessing.split.DatasetSplitter.split_col_name">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">split_col_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pedata.preprocessing.split.DatasetSplitter.split_col_name" title="Link to this definition">¶</a></dt>
+<dd><p>Abstract method returning the name of the column containing the split name
+:returns: The name of the column containing the split name</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.preprocessing.split.DatasetSplitter.split_dataset_using_split_column">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">split_dataset_using_split_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_col_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DatasetDict</span></span></span><a class="reference internal" href="_modules/pedata/preprocessing/split.html#DatasetSplitter.split_dataset_using_split_column"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.split.DatasetSplitter.split_dataset_using_split_column" title="Link to this definition">¶</a></dt>
+<dd><p>Split the dataset using a column containing the split name.
+:param dataset: The dataset to split
+:param split_col_name: The name of the column containing the split name</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DatasetDict containing the split dataset</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the dataset is not a Dataset</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.preprocessing.split.DatasetSplitter.yield_all_train_test_sets">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">yield_all_train_test_sets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DatasetDict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combined_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DatasetDict</span></span></span><a class="reference internal" href="_modules/pedata/preprocessing/split.html#DatasetSplitter.yield_all_train_test_sets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.split.DatasetSplitter.yield_all_train_test_sets" title="Link to this definition">¶</a></dt>
+<dd><p>Yield all train test splits from a k-fold dataset
+:param dataset: The dataset dictionnary to process</p>
+<blockquote>
+<div><p>It must contain items with keys such as “split_1”, “split_2”, …, “split_k”</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>combine_n</strong> – The number of splits to combine for the TEST set</p>
+</dd>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
+<dd class="field-even"><p>The train test splits</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the dataset is already a train test split, the train and test sets will simply be yielded</p>
+</div>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">datasets</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pedata.preprocessing.split</span> <span class="kn">import</span> <span class="n">DatasetSplitterRandomKFold</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">toy_dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
+<span class="gp">... </span>   <span class="p">{</span>
+<span class="gp">... </span>        <span class="s2">&quot;aa_seq&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;MLGLYITR&quot;</span><span class="p">,</span> <span class="s2">&quot;MAGLYITR&quot;</span><span class="p">,</span> <span class="s2">&quot;MLYLYITR&quot;</span><span class="p">,</span> <span class="s2">&quot;RAGLYITR&quot;</span><span class="p">,</span> <span class="s2">&quot;MLRLYITR&quot;</span><span class="p">,</span> <span class="s2">&quot;RLGLYITR&quot;</span><span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;target a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;aa_mut&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;A2L&quot;</span><span class="p">,</span> <span class="s2">&quot;wildtype&quot;</span><span class="p">,</span> <span class="s2">&quot;A2L_G3Y&quot;</span><span class="p">,</span> <span class="s2">&quot;M1R&quot;</span><span class="p">,</span> <span class="s2">&quot;A2L_G3R&quot;</span><span class="p">,</span> <span class="s2">&quot;A2L_M1R&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="p">}</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">splitter</span> <span class="o">=</span> <span class="n">DatasetSplitterRandomKFold</span><span class="p">(</span><span class="n">toy_dataset</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">splitter</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">train_test_set</span> <span class="ow">in</span> <span class="n">splitter</span><span class="o">.</span><span class="n">yield_all_train_test_sets</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">combined_n</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">k</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;________________&quot;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- train_test_</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> -&quot;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">train_test_set</span><span class="p">)</span>
+<span class="go">________________</span>
+<span class="go">- train_test_1 -</span>
+<span class="go">DatasetDict({</span>
+<span class="go">    train: Dataset({</span>
+<span class="go">        features: [&#39;aa_seq&#39;, &#39;target a&#39;, &#39;aa_mut&#39;, &#39;random_split_3_fold&#39;],</span>
+<span class="go">        num_rows: 4</span>
+<span class="go">    })</span>
+<span class="go">    test: Dataset({</span>
+<span class="go">        features: [&#39;aa_seq&#39;, &#39;target a&#39;, &#39;aa_mut&#39;, &#39;random_split_3_fold&#39;],</span>
+<span class="go">        num_rows: 2</span>
+<span class="go">    })</span>
+<span class="go">})</span>
+<span class="go">________________</span>
+<span class="go">- train_test_2 -</span>
+<span class="go">DatasetDict({</span>
+<span class="go">    train: Dataset({</span>
+<span class="go">        features: [&#39;aa_seq&#39;, &#39;target a&#39;, &#39;aa_mut&#39;, &#39;random_split_3_fold&#39;],</span>
+<span class="go">        num_rows: 4</span>
+<span class="go">    })</span>
+<span class="go">    test: Dataset({</span>
+<span class="go">        features: [&#39;aa_seq&#39;, &#39;target a&#39;, &#39;aa_mut&#39;, &#39;random_split_3_fold&#39;],</span>
+<span class="go">        num_rows: 2</span>
+<span class="go">    })</span>
+<span class="go">})</span>
+<span class="go">________________</span>
+<span class="go">- train_test_3 -</span>
+<span class="go">DatasetDict({</span>
+<span class="go">    train: Dataset({</span>
+<span class="go">        features: [&#39;aa_seq&#39;, &#39;target a&#39;, &#39;aa_mut&#39;, &#39;random_split_3_fold&#39;],</span>
+<span class="go">        num_rows: 4</span>
+<span class="go">    })</span>
+<span class="go">    test: Dataset({</span>
+<span class="go">        features: [&#39;aa_seq&#39;, &#39;target a&#39;, &#39;aa_mut&#39;, &#39;random_split_3_fold&#39;],</span>
+<span class="go">        num_rows: 2</span>
+<span class="go">    })</span>
+<span class="go">})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pedata.preprocessing.split.DatasetSplitterRandomKFold">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pedata.preprocessing.split.</span></span><span class="sig-name descname"><span class="pre">DatasetSplitterRandomKFold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/preprocessing/split.html#DatasetSplitterRandomKFold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.split.DatasetSplitterRandomKFold" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pedata.preprocessing.split.DatasetSplitter" title="pedata.preprocessing.split.DatasetSplitter"><code class="xref py py-class docutils literal notranslate"><span class="pre">DatasetSplitter</span></code></a></p>
+<p>Dataset Splitter for random Train Test Split.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.preprocessing.split.DatasetSplitterRandomKFold.split_col_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">split_col_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pedata.preprocessing.split.DatasetSplitterRandomKFold.split_col_name" title="Link to this definition">¶</a></dt>
+<dd><p>Abstract method returning the name of the column containing the split name
+Retunrs:</p>
+<blockquote>
+<div><p>The name of the column containing the split name</p>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pedata.preprocessing.split.DatasetSplitterRandomTrainTest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pedata.preprocessing.split.</span></span><span class="sig-name descname"><span class="pre">DatasetSplitterRandomTrainTest</span></span><a class="reference internal" href="_modules/pedata/preprocessing/split.html#DatasetSplitterRandomTrainTest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.split.DatasetSplitterRandomTrainTest" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pedata.preprocessing.split.DatasetSplitter" title="pedata.preprocessing.split.DatasetSplitter"><code class="xref py py-class docutils literal notranslate"><span class="pre">DatasetSplitter</span></code></a></p>
+<p>Dataset Splitter for random Train Test Split.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.preprocessing.split.DatasetSplitterRandomTrainTest.split_col_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">split_col_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pedata.preprocessing.split.DatasetSplitterRandomTrainTest.split_col_name" title="Link to this definition">¶</a></dt>
+<dd><p>Abstract method returning the name of the column containing the split name
+Retunrs:</p>
+<blockquote>
+<div><p>The name of the column containing the split name</p>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pedata.preprocessing.split.ZeroShotSpliter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pedata.preprocessing.split.</span></span><span class="sig-name descname"><span class="pre">ZeroShotSpliter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split_col_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/preprocessing/split.html#ZeroShotSpliter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.split.ZeroShotSpliter" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pedata.preprocessing.split.DatasetSplitter" title="pedata.preprocessing.split.DatasetSplitter"><code class="xref py py-class docutils literal notranslate"><span class="pre">DatasetSplitter</span></code></a></p>
+<p>Dataset Splitter for zero shot datasets.
+Zero Shot datasets have manually defined splits instead of random splits.
+This splitter splits the datasets using a defined split column or using the existing
+hugging face splits</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.preprocessing.split.ZeroShotSpliter.split_col_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">split_col_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pedata.preprocessing.split.ZeroShotSpliter.split_col_name" title="Link to this definition">¶</a></dt>
+<dd><p>Abstract method returning the name of the column containing the split name
+:returns: The name of the column containing the split name</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.preprocessing.split.add_source_split_column">
+<span class="sig-prename descclassname"><span class="pre">pedata.preprocessing.split.</span></span><span class="sig-name descname"><span class="pre">add_source_split_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DatasetDict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">merge_split</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DatasetDict</span></span></span><a class="reference internal" href="_modules/pedata/preprocessing/split.html#add_source_split_column"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.split.add_source_split_column" title="Link to this definition">¶</a></dt>
+<dd><p>Add a column to the dataset with the name of the splits used by the source of the dataset.
+:param dataset: The dataset to modify
+:param merge_split: Whether to merge the split columns into one column</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The modified dataset</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.preprocessing.split.append_split_columns_to_dataset">
+<span class="sig-prename descclassname"><span class="pre">pedata.preprocessing.split.</span></span><span class="sig-name descname"><span class="pre">append_split_columns_to_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dataset</span></span></span><a class="reference internal" href="_modules/pedata/preprocessing/split.html#append_split_columns_to_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.split.append_split_columns_to_dataset" title="Link to this definition">¶</a></dt>
+<dd><p>Append all split columns to a dataset
+:param dataset: The dataset to modify</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The modified dataset</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.preprocessing.split.get_split_col_names">
+<span class="sig-prename descclassname"><span class="pre">pedata.preprocessing.split.</span></span><span class="sig-name descname"><span class="pre">get_split_col_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">DatasetDict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/preprocessing/split.html#get_split_col_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.split.get_split_col_names" title="Link to this definition">¶</a></dt>
+<dd><p>Return the split column names of a dataset
+:param dataset: The dataset to process</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The split column names</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">datasets</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pedata.preprocessing.split</span> <span class="kn">import</span> <span class="n">get_split_col_names</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">toy_dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
+<span class="gp">... </span>   <span class="p">{</span>
+<span class="gp">... </span>        <span class="s2">&quot;aa_seq&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;MLGLYITR&quot;</span><span class="p">,</span> <span class="s2">&quot;MAGLYITR&quot;</span><span class="p">,</span> <span class="s2">&quot;MLYLYITR&quot;</span><span class="p">,</span> <span class="s2">&quot;RAGLYITR&quot;</span><span class="p">,</span> <span class="s2">&quot;MLRLYITR&quot;</span><span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;target a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;aa_mut&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;A2L&quot;</span><span class="p">,</span> <span class="s2">&quot;wildtype&quot;</span><span class="p">,</span> <span class="s2">&quot;A2L_G3Y&quot;</span><span class="p">,</span> <span class="s2">&quot;M1R&quot;</span><span class="p">,</span> <span class="s2">&quot;A2L_G3R&quot;</span><span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;split_random&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;splittraintest&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;RandomSplit&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;source split&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;split_k_fold&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;split-k-fold&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;train&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="p">}</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_split_col_names</span><span class="p">(</span><span class="n">toy_dataset</span><span class="p">)</span>
+<span class="go">[&#39;split_random&#39;, &#39;splittraintest&#39;, &#39;RandomSplit&#39;, &#39;source split&#39;, &#39;split_k_fold&#39;, &#39;split-k-fold&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.preprocessing.split.get_split_map">
+<span class="sig-prename descclassname"><span class="pre">pedata.preprocessing.split.</span></span><span class="sig-name descname"><span class="pre">get_split_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">splits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_name_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/preprocessing/split.html#get_split_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.split.get_split_map" title="Link to this definition">¶</a></dt>
+<dd><p>Return the split map
+:param splits: The splits
+:param split_name_map: The split name map</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The split map</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.preprocessing.split.rename_splits">
+<span class="sig-prename descclassname"><span class="pre">pedata.preprocessing.split.</span></span><span class="sig-name descname"><span class="pre">rename_splits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">DatasetDict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_name_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dataset</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">DatasetDict</span></span></span><a class="reference internal" href="_modules/pedata/preprocessing/split.html#rename_splits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.split.rename_splits" title="Link to this definition">¶</a></dt>
+<dd><p>Rename the splits of a dataset
+:param dataset: The dataset to process
+:param split_name_map: The split name map</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The modified dataset</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">datasets</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pedata.preprocessing.split</span> <span class="kn">import</span> <span class="n">rename_splits</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">toy_dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
+<span class="gp">... </span>   <span class="p">{</span>
+<span class="gp">... </span>        <span class="s2">&quot;aa_seq&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;MLGLYITR&quot;</span><span class="p">,</span> <span class="s2">&quot;MAGLYITR&quot;</span><span class="p">,</span> <span class="s2">&quot;MLYLYITR&quot;</span><span class="p">,</span> <span class="s2">&quot;RAGLYITR&quot;</span><span class="p">,</span> <span class="s2">&quot;MLRLYITR&quot;</span><span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;target a&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;aa_mut&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;A2L&quot;</span><span class="p">,</span> <span class="s2">&quot;wildtype&quot;</span><span class="p">,</span> <span class="s2">&quot;A2L_G3Y&quot;</span><span class="p">,</span> <span class="s2">&quot;M1R&quot;</span><span class="p">,</span> <span class="s2">&quot;A2L_G3R&quot;</span><span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;split_random&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;training&#39;</span><span class="p">,</span> <span class="s1">&#39;training&#39;</span><span class="p">,</span> <span class="s1">&#39;training&#39;</span><span class="p">,</span> <span class="s1">&#39;testing&#39;</span><span class="p">,</span> <span class="s1">&#39;testing&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="p">}</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rename_splits</span><span class="p">(</span><span class="n">toy_dataset</span><span class="p">)[</span><span class="s1">&#39;split_random&#39;</span><span class="p">]</span>
+<span class="go">[&#39;train&#39;, &#39;train&#39;, &#39;train&#39;, &#39;test&#39;, &#39;test&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.preprocessing.split.split_col_histogram">
+<span class="sig-prename descclassname"><span class="pre">pedata.preprocessing.split.</span></span><span class="sig-name descname"><span class="pre">split_col_histogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">DatasetDict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/preprocessing/split.html#split_col_histogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.split.split_col_histogram" title="Link to this definition">¶</a></dt>
+<dd><p>Return the split column histogram of a dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataset</strong> – The dataset to process</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The split column histogram</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pedata.preprocessing.tag_finder">
+<span id="pedata-preprocessing-tag-finder-module"></span><h2>pedata.preprocessing.tag_finder module<a class="headerlink" href="#module-pedata.preprocessing.tag_finder" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.ProteinTag">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pedata.preprocessing.tag_finder.</span></span><span class="sig-name descname"><span class="pre">ProteinTag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sequence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cleavage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/preprocessing/tag_finder.html#ProteinTag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.tag_finder.ProteinTag" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A container representing a protein purification tag</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.ProteinTag.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sequence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fusion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cleavage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/preprocessing/tag_finder.html#ProteinTag.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.tag_finder.ProteinTag.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize a tag from basic tag information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – The name of the tag.</p></li>
+<li><p><strong>sequence</strong> – The sequence of the tag.</p></li>
+<li><p><strong>origin</strong> – The origin of the tag, e.g. a protein this tag is derived from.</p></li>
+<li><p><strong>method</strong> – The purification method used with this tag.</p></li>
+<li><p><strong>reference</strong> – The pubmed link referencing this tag.</p></li>
+<li><p><strong>length</strong> – The length of the tag.</p></li>
+<li><p><strong>fusion</strong> – True if the tag is a fusion with another protein or protein domain.</p></li>
+<li><p><strong>leader</strong> – True if the tag is a leader sequence used to promote secretion in mammalian systems.</p></li>
+<li><p><strong>cleavage</strong> – True if the tag is a recognition site for a protease used to remove tags from proteins.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.ProteinTag.cleavage">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cleavage</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pedata.preprocessing.tag_finder.ProteinTag.cleavage" title="Link to this definition">¶</a></dt>
+<dd><p>getting cleavage value</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.ProteinTag.fusion">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fusion</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pedata.preprocessing.tag_finder.ProteinTag.fusion" title="Link to this definition">¶</a></dt>
+<dd><p>getting fusion value</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.ProteinTag.leader">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">leader</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pedata.preprocessing.tag_finder.ProteinTag.leader" title="Link to this definition">¶</a></dt>
+<dd><p>getting leader value</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.ProteinTag.length">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">length</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pedata.preprocessing.tag_finder.ProteinTag.length" title="Link to this definition">¶</a></dt>
+<dd><p>getting length value</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.ProteinTag.method">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">method</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pedata.preprocessing.tag_finder.ProteinTag.method" title="Link to this definition">¶</a></dt>
+<dd><p>getting method value</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.ProteinTag.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pedata.preprocessing.tag_finder.ProteinTag.name" title="Link to this definition">¶</a></dt>
+<dd><p>getting name value</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.ProteinTag.origin">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">origin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pedata.preprocessing.tag_finder.ProteinTag.origin" title="Link to this definition">¶</a></dt>
+<dd><p>getting origin value</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.ProteinTag.reference">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reference</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pedata.preprocessing.tag_finder.ProteinTag.reference" title="Link to this definition">¶</a></dt>
+<dd><p>getting reference value</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.ProteinTag.sequence">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sequence</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pedata.preprocessing.tag_finder.ProteinTag.sequence" title="Link to this definition">¶</a></dt>
+<dd><p>getting sequence value</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.ProteinTag.type">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pedata.preprocessing.tag_finder.ProteinTag.type" title="Link to this definition">¶</a></dt>
+<dd><p>getting type value</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.ProteinTagHit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pedata.preprocessing.tag_finder.</span></span><span class="sig-name descname"><span class="pre">ProteinTagHit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pedata.preprocessing.tag_finder.ProteinTag" title="pedata.preprocessing.tag_finder.ProteinTag"><span class="pre">ProteinTag</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_aln</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_aln</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">identity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conservation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/preprocessing/tag_finder.html#ProteinTagHit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.tag_finder.ProteinTagHit" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pedata.preprocessing.tag_finder.ProteinTag" title="pedata.preprocessing.tag_finder.ProteinTag"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProteinTag</span></code></a></p>
+<p>A container representing a hit of a tag in a query sequence. This is the class that will be returned when TagFinder
+finds a tag in a sequence, and contains information of the tag and where in the sequence the tag was found.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.ProteinTagHit.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pedata.preprocessing.tag_finder.ProteinTag" title="pedata.preprocessing.tag_finder.ProteinTag"><span class="pre">ProteinTag</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_aln</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_aln</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">identity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conservation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/preprocessing/tag_finder.html#ProteinTagHit.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.tag_finder.ProteinTagHit.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize the ProteinTagHit with the necessary information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tag</strong> (<a class="reference internal" href="#pedata.preprocessing.tag_finder.ProteinTag" title="pedata.preprocessing.tag_finder.ProteinTag"><em>ProteinTag</em></a>) – The tag that was found in the query sequence.</p></li>
+<li><p><strong>start</strong> (<em>int</em>) – The start position of the tag within the query sequence.</p></li>
+<li><p><strong>end</strong> (<em>int</em>) – The end position of the tag within the query sequence.</p></li>
+<li><p><strong>query_aln</strong> (<em>str</em>) – A string representing the query alignment to the tag.</p></li>
+<li><p><strong>tag_aln</strong> (<em>str</em>) – A string representing the tag alignment to the query.</p></li>
+<li><p><strong>location</strong> (<em>str</em>) – The location of the tag. This can be N-Terminus, C-Terminus or Internal.</p></li>
+<li><p><strong>identity</strong> (<em>float</em>) – The sequence identity between the tag and a query sequence.</p></li>
+<li><p><strong>conservation</strong> (<em>float</em>) – The conservation of a tag relative to a reference sequence.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.ProteinTagHit.conservation">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">conservation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pedata.preprocessing.tag_finder.ProteinTagHit.conservation" title="Link to this definition">¶</a></dt>
+<dd><p>getting conservation value</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.ProteinTagHit.end">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">end</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pedata.preprocessing.tag_finder.ProteinTagHit.end" title="Link to this definition">¶</a></dt>
+<dd><p>getting end value</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.ProteinTagHit.identity">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identity</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pedata.preprocessing.tag_finder.ProteinTagHit.identity" title="Link to this definition">¶</a></dt>
+<dd><p>getting identity value</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.ProteinTagHit.location">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">location</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pedata.preprocessing.tag_finder.ProteinTagHit.location" title="Link to this definition">¶</a></dt>
+<dd><p>getting location value</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.ProteinTagHit.query_aln">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">query_aln</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pedata.preprocessing.tag_finder.ProteinTagHit.query_aln" title="Link to this definition">¶</a></dt>
+<dd><p>getting query_aln value</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.ProteinTagHit.start">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pedata.preprocessing.tag_finder.ProteinTagHit.start" title="Link to this definition">¶</a></dt>
+<dd><p>getting start value</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.ProteinTagHit.tag_aln">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tag_aln</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pedata.preprocessing.tag_finder.ProteinTagHit.tag_aln" title="Link to this definition">¶</a></dt>
+<dd><p>getting tag_aln value</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.SequenceCleaner">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pedata.preprocessing.tag_finder.</span></span><span class="sig-name descname"><span class="pre">SequenceCleaner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seq_col_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_col_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">artificial_col_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_finder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pedata.preprocessing.tag_finder.TagFinder" title="pedata.preprocessing.tag_finder.TagFinder"><span class="pre">TagFinder</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">convert_nucleotide</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_artificial</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/preprocessing/tag_finder.html#SequenceCleaner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.tag_finder.SequenceCleaner" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class is used to interface with huggingface datasets. It is a callable class is used for the huggingface .map()
+method to clean sequences by detecting and converting DNA and RNA sequences to protein sequences and use TagFinder
+on the sequences converted sequences to remove tags.</p>
+<p>This class operates on individual samples (rows) and returns new samples where the sequence column has been replaced
+with a cleaned up sequence without tags and where the removed_tags column has a summary of the tags that were
+removed from the input sequence.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.SequenceCleaner.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seq_col_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_col_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">artificial_col_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_finder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pedata.preprocessing.tag_finder.TagFinder" title="pedata.preprocessing.tag_finder.TagFinder"><span class="pre">TagFinder</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">convert_nucleotide</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_artificial</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/preprocessing/tag_finder.html#SequenceCleaner.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.tag_finder.SequenceCleaner.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>A Class that can be mapped across a HuggingFace dataset to clean and convert sequences and find and remove
+terminal protein purification tags, fusion proteins, cleavage sites, and leader sequences.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>seq_col_name</strong> (<em>str</em>) – The column name of the column containing the query sequence in which to remove tags.</p></li>
+<li><p><strong>tag_col_name</strong> (<em>str</em>) – The column name to store the summary of identified terminal tags that were removed.</p></li>
+<li><p><strong>tag_finder</strong> (<a class="reference internal" href="#pedata.preprocessing.tag_finder.TagFinder" title="pedata.preprocessing.tag_finder.TagFinder"><em>TagFinder</em></a>) – A TagFinder instance used for tag identification.</p></li>
+<li><p><strong>convert_nucleotide</strong> (<em>bool</em>) – If True, convert DNA and RNA sequences to protein before removing tags.</p></li>
+<li><p><strong>label_artificial</strong> (<em>bool</em>) – If True, label low complexity sequences that do not start with M.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.SequenceCleaner.convert_sequence">
+<span class="sig-name descname"><span class="pre">convert_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/pedata/preprocessing/tag_finder.html#SequenceCleaner.convert_sequence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.tag_finder.SequenceCleaner.convert_sequence" title="Link to this definition">¶</a></dt>
+<dd><p>Cleans up an input sequence by checking the sequence type and converting to a protein sequence if possible.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sequence</strong> (<em>str</em>) – Input sequence which can be DNA, RNA or protein.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Output sequence converted to protein.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>sequence (str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.SequenceCleaner.get_sequence_type">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_sequence_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/pedata/preprocessing/tag_finder.html#SequenceCleaner.get_sequence_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.tag_finder.SequenceCleaner.get_sequence_type" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the sequence type (DNA, RNA, Protein, Ambiguous Protein) of an input sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sequence</strong> (<em>str</em>) – The input sequence.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The type of the input sequence.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>seq_type (str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.SequenceCleaner.js_distance">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">js_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/pedata/preprocessing/tag_finder.html#SequenceCleaner.js_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.tag_finder.SequenceCleaner.js_distance" title="Link to this definition">¶</a></dt>
+<dd><p>Calculates the Jensen-Shannon distance of a sequence based on comparison to natural amino-acid frequencies.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sequence</strong> (<em>str</em>) – The input sequence.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Shannon Entropy of the input sequence.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>entropy (float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.TagFinder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pedata.preprocessing.tag_finder.</span></span><span class="sig-name descname"><span class="pre">TagFinder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identity_cutoff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">90.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">margin_cutoff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/preprocessing/tag_finder.html#TagFinder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.tag_finder.TagFinder" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This is the main class used for finding tags in sequences. When initialized this class builds an internal tag
+library to use when searching for tags in sequences.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.TagFinder.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identity_cutoff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">90.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">margin_cutoff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/preprocessing/tag_finder.html#TagFinder.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.tag_finder.TagFinder.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize the tag finder class and build the internal list of tags used to search for tags in sequences.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>identity_cutoff</strong> (<em>float</em>) – The minimum required identity for a tag to be considered a hit. This is also the</p></li>
+<li><p><strong>provided.</strong> (<em>minimum requires conservation for a sequence to be removed if a reference alignment is</em>) – </p></li>
+<li><p><strong>[</strong><strong>Default=90.0</strong><strong>]</strong><strong>.</strong> – </p></li>
+<li><p><strong>margin_cutoff</strong> (<em>float</em>) – The maximum number of amino-acids between tag and termini or between two tags</p></li>
+<li><p><strong>[</strong><strong>Default=4</strong><strong>]</strong><strong>.</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.TagFinder.clean_dataset">
+<span class="sig-name descname"><span class="pre">clean_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_col_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_proc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convert_nucleotide</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_artificial</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dataset</span></span></span><a class="reference internal" href="_modules/pedata/preprocessing/tag_finder.html#TagFinder.clean_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.tag_finder.TagFinder.clean_dataset" title="Link to this definition">¶</a></dt>
+<dd><p>Clean an input Huggingface Dataset by converting to protein sequences and removing tags. This will add a column
+with a summary of removed tags to the dataset. This function can run using multiple processors by specifying
+the num_procs flags, however if using multiple processors it will not present a summary of the removed flags.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>Dataset</em>) – Input HuggingFace dataset.</p></li>
+<li><p><strong>seq_col_name</strong> (<em>str</em>) – Input column name containing the sequences.</p></li>
+<li><p><strong>num_proc</strong> (<em>int</em>) – Number of processors used for finding tags [Default=1].</p></li>
+<li><p><strong>convert_nucleotide</strong> (<em>bool</em>) – If True, convert DNA and RNA sequences to protein sequences before removing tags.</p></li>
+<li><p><strong>remove_artificial</strong> (<em>bool</em>) – If True, remove artificial low entropy sequences with a Jensen-Shannon distance</p></li>
+<li><p><strong>methionine.</strong> (<em>over 0.6 to naturally occuring proteins from the data-set if they do not start with</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Modified HuggingFace dataset. The seq_col_name column has been replaced with a sequence where
+N-terminal and C-terminal tags are removed. The dataset also has a new column called ‘removed_tags’ where a
+summary of the removed N-terminal and C-terminal tags is shown. If convert_nucleotide is True, DNA and RNA
+sequences have been converted to protein. If remove_artificial is True, artificial low entropy sequences
+with a Jensen-Shannon distance over 0.6 to naturally occuring proteins have been removed.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dataset</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tag_finder</span> <span class="o">=</span> <span class="n">TagFinder</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">raw_dataset</span> <span class="o">=</span> <span class="n">load_full_dataset</span><span class="p">(</span><span class="s2">&quot;Exazyme/ProteineaSolubility&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">no_tags_dataset</span> <span class="o">=</span> <span class="n">tag_finder</span><span class="o">.</span><span class="n">clean_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">raw_dataset</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                                           <span class="n">seq_col_name</span><span class="o">=</span><span class="s2">&quot;aa_seq&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.TagFinder.find_tags">
+<span class="sig-name descname"><span class="pre">find_tags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_aln</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_aln</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pedata.preprocessing.tag_finder.ProteinTagHit" title="pedata.preprocessing.tag_finder.ProteinTagHit"><span class="pre">ProteinTagHit</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/preprocessing/tag_finder.html#TagFinder.find_tags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.tag_finder.TagFinder.find_tags" title="Link to this definition">¶</a></dt>
+<dd><p>Find tags in an input sequence and return tags and termini.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sequence</strong> (<em>str</em>) – Input sequence to find tags in.</p></li>
+<li><p><strong>query_aln</strong> (<em>str</em>) – (Optional) Input query alignment [Default=None].</p></li>
+<li><p><strong>reference_aln</strong> (<em>str</em>) – (Optional) Input reference alignment [Default=None].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of ProteinTagHits.
+termini (dict[str, tuple[int, int]]): Output dictionary with N-terminal and C-terminal regions with tags.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tags (tuple[list[<a class="reference internal" href="#pedata.preprocessing.tag_finder.ProteinTagHit" title="pedata.preprocessing.tag_finder.ProteinTagHit">ProteinTagHit</a>]])</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If the query_aln and reference_aln do not have equal length or if the alignments are empty or if</p></li>
+<li><p><strong>the query does not match the query sequence.</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tag_finder</span> <span class="o">=</span> <span class="n">TagFinder</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_tags</span><span class="p">,</span> <span class="n">my_termini</span> <span class="o">=</span> <span class="n">tag_finder</span><span class="o">.</span><span class="n">find_tags</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="s1">&#39;GHHHHHHMYNAMEISCARL&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">my_tags</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sequence</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;GHHHHHH&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">my_termini</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;{&quot;N-terminus&quot;: (0, 7), &quot;C-terminus&quot;: (18, 18)}&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.TagFinder.get_strip_report">
+<span class="sig-name descname"><span class="pre">get_strip_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/pedata/preprocessing/tag_finder.html#TagFinder.get_strip_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.tag_finder.TagFinder.get_strip_report" title="Link to this definition">¶</a></dt>
+<dd><p>Strip tags from a sequence and return a report dictionary of the stripped tags.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sequence</strong> (<em>str</em>) – Input sequence to strip tags from.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A dictionary of the following form:
+output = {‘tags_found’: (bool), # True if tags are found in the sequence</p>
+<blockquote>
+<div><p>’names’: ([str]), # List of removed tag names
+‘locations’: ([str]), # List of removed tag locations
+‘summary’: (str),  # Summary of the removed tags
+‘sequence’: (str),  # Sequence without tags}</p>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>output (dict)</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_sequence</span> <span class="o">=</span> <span class="s1">&#39;MAHHHHHHMSFFRMKRRLNFVVKRGIEELWENSFLDNNVDMKKIEYSKTG&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span>              <span class="s1">&#39;DAWPCVLLRKKSFEDLHKLYYICLKEKNKLLGEQYFHLQNSTKMLQHGRL&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span>              <span class="s1">&#39;KKVKLTMKRILTVLSRRAIHDQCLRAKDMLKKQEEREFYEIQKFKLNEQL&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span>              <span class="s1">&#39;LCLKHKMNILKKYNSFSLEQISLTFSIKKIENKIQQIDIILNPLRKETMY&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span>              <span class="s1">&#39;LLIPHFKYQRKYSDLPGFISWKKQNIIALRNNMSKLHRLY&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tag_finder</span> <span class="o">=</span> <span class="n">TagFinder</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report</span> <span class="o">=</span> <span class="n">tag_finder</span><span class="o">.</span><span class="n">get_strip_report</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="n">my_sequence</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
+<span class="go">Output:</span>
+<span class="go">{&#39;tags_found&#39;: True,</span>
+<span class="go"> &#39;names&#39;: [&#39;PolyHis-Tag&#39;],</span>
+<span class="go"> &#39;locations&#39;: [&#39;N-terminus&#39;],</span>
+<span class="go"> &#39;summary&#39;: &#39;N-term: [PolyHis-Tag:2-HHHHHH-8] C-term: None&#39;,</span>
+<span class="go"> &#39;sequence&#39;: &#39;MSFFRMKRRLNFVVKRGIEELWENSFLDNNVDMKKIEYSKTGDAWPCVLL</span>
+<span class="go">              RKKSFEDLHKLYYICLKEKNKLLGEQYFHLQNSTKMLQHGRLKKVKLTMK</span>
+<span class="go">              RILTVLSRRAIHDQCLRAKDMLKKQEEREFYEIQKFKLNEQLLCLKHKMN</span>
+<span class="go">              ILKKYNSFSLEQISLTFSIKKIENKIQQIDIILNPLRKETMYLLIPHFKY</span>
+<span class="go">              QRKYSDLPGFISWKKQNIIALRNNMSKLHRLY&#39;</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.TagFinder.identity_cutoff">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identity_cutoff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#pedata.preprocessing.tag_finder.TagFinder.identity_cutoff" title="Link to this definition">¶</a></dt>
+<dd><p>getting identity_cutoff value</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.TagFinder.margin_cutoff">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">margin_cutoff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pedata.preprocessing.tag_finder.TagFinder.margin_cutoff" title="Link to this definition">¶</a></dt>
+<dd><p>getting margin_cutoff value</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.TagFinder.strip_tags">
+<span class="sig-name descname"><span class="pre">strip_tags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pedata.preprocessing.tag_finder.ProteinTagHit" title="pedata.preprocessing.tag_finder.ProteinTagHit"><span class="pre">ProteinTagHit</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/preprocessing/tag_finder.html#TagFinder.strip_tags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.tag_finder.TagFinder.strip_tags" title="Link to this definition">¶</a></dt>
+<dd><p>Stips tags from the N- and C-terminus of a sequence and reports the tags stripped away.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sequence</strong> (<em>str</em>) – Input sequence to strip tags from.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The output sequence without tags.
+remove_tags (list[ProteinTagHit]): The output list of tags that were removed from the input sequence.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>sequence (str)</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the input file is not a .csv file</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tag_finder</span> <span class="o">=</span> <span class="n">TagFinder</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">no_tag_seq</span><span class="p">,</span> <span class="n">tag_list</span> <span class="o">=</span> <span class="n">tag_finder</span><span class="o">.</span><span class="n">strip_tags</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="s1">&#39;GHHHHHHMYNAMEISCARL&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">no_tag_seq</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;MYNAMEISCARL&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">tag_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sequence</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;GHHHHHH&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.preprocessing.tag_finder.TagFinder.tag_strip_csv">
+<span class="sig-name descname"><span class="pre">tag_strip_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/pedata/preprocessing/tag_finder.html#TagFinder.tag_strip_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.preprocessing.tag_finder.TagFinder.tag_strip_csv" title="Link to this definition">¶</a></dt>
+<dd><p>Strip terminal purification tags from an input .csv file containing protein sequences.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_file</strong> (<em>str</em>) – Full path of the input CSV file.</p></li>
+<li><p><strong>output_file</strong> (<em>str</em>) – Full path of the output CSV file.</p></li>
+<li><p><strong>col_name</strong> (<em>str</em>) – The column name containing the sequence.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An output file where the sequences in the column specified by ‘col_name’ have their
+terminal tags stripped off. A column called ‘removed_tags’ is added to the output file with information
+about the removed tags.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>output_file (str)</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the input file is not a .csv file.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tag_finder</span> <span class="o">=</span> <span class="n">TagFinder</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tag_finder</span><span class="o">.</span><span class="n">tag_strip_csv</span><span class="o">.</span><span class="p">(</span><span class="n">input_file</span><span class="o">=</span><span class="s1">&#39;/path/to/my_input.csv&#39;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                          <span class="n">output_file</span><span class="o">=</span><span class="s1">&#39;/path/to/my_output.csv&#39;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                          <span class="n">col_name</span><span class="o">=</span><span class="s1">&#39;aa_seq&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pedata.preprocessing">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pedata.preprocessing" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="pedata.mutation.html"
+       title="previous chapter">← pedata.mutation package</a>
+  </li>
+  <li class="next">
+    <a href="pedata.processing.html"
+       title="next chapter">pedata.processing package →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, Exazyme.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

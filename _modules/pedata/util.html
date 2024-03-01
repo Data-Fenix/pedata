@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>pedata.util</title>
+    
+          <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../_static/documentation_options.js?v=a5b3107c"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../_static/theme-vendors.js"></script> -->
+      <script src="../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../genindex.html" />
+  <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../index.html" class="home-link">
+    
+      <span class="site-name">pedata documentation</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../index.html#pedata-documentation">pedata documentation!</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../pedata.html" class="reference internal ">pedata package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../pedata.encoding.html" class="reference internal ">pedata.encoding package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../pedata.mutation.html" class="reference internal ">pedata.mutation package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../modules.html" class="reference internal ">pedata</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../index.html">Module code</a> &raquo;</li>
+    
+    <li>pedata.util</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for pedata.util</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;============ util.py =========== </span>
+<span class="sd">#FIXME: change to a better name </span>
+<span class="sd">- &gt; these are dataset handling functions</span>
+<span class="sd">- &gt; name should be something like dataset_handling.py</span>
+
+<span class="sd">The util module contains utility functions for HuggingFace datasets such as:</span>
+<span class="sd">- data extraction</span>
+<span class="sd">- normalization (z-score)</span>
+<span class="sd">- optimization objective definition (min, max, fix)</span>
+<span class="sd">- target adjustement for optimization objectives</span>
+<span class="sd">- summary variable calculation</span>
+<span class="sd">- metadata handling.</span>
+
+<span class="sd">============ util.py ===========</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">import</span> <span class="nn">datasets</span> <span class="k">as</span> <span class="nn">ds</span>
+<span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">prod</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;OptimizationObjective&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_target_columns&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_target&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adjust_all_targets_maximization&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;zscore&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;de_zscore_predictions&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;get_summary_variable&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;append_summary_variable&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DatasetHandler&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="OptimizationObjective">
+<a class="viewcode-back" href="../../pedata.html#pedata.util.OptimizationObjective">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">OptimizationObjective</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dataclass for optimization objectives.</span>
+<span class="sd">    direction: Direction of the optimization objective.</span>
+<span class="sd">        Valid values are &#39;min&#39;, &#39;max&#39;, and &#39;fix&#39;. If &#39;fix&#39;, the value to aim for must be specified in `aim_for`.</span>
+<span class="sd">    aim_for: Target value for the optimization objective. This is only used if `direction` is set to &#39;fix&#39;.</span>
+<span class="sd">    weight: Weight for the objective. This is used to adjust the relative importance of the objective compared to other objectives.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; # For &#39;min&#39; direction with default values for aim_for and weight</span>
+<span class="sd">        &gt;&gt;&gt; objective_min = OptimizationObjective(direction=&#39;min&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; print(objective_min)</span>
+<span class="sd">        OptimizationObjective(direction=&#39;min&#39;, aim_for=None, weight=1)</span>
+
+<span class="sd">        &gt;&gt;&gt; # For &#39;fix&#39; direction with a specific aim_for value and default weight</span>
+<span class="sd">        &gt;&gt;&gt; objective_fix = OptimizationObjective(direction=&#39;fix&#39;, aim_for=42.0)</span>
+<span class="sd">        &gt;&gt;&gt; print(objective_fix)</span>
+<span class="sd">        OptimizationObjective(direction=&#39;fix&#39;, aim_for=42.0, weight=1)</span>
+
+<span class="sd">        &gt;&gt;&gt; # For &#39;max&#39; direction with custom values for aim_for and weight</span>
+<span class="sd">        &gt;&gt;&gt; objective_max = OptimizationObjective(direction=&#39;max&#39;, weight=2)</span>
+<span class="sd">        &gt;&gt;&gt; print(objective_max)</span>
+<span class="sd">        OptimizationObjective(direction=&#39;max&#39;, aim_for=None, weight=2)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">direction</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;max&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;min&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;fix&quot;</span><span class="p">]</span>
+    <span class="n">aim_for</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float16</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># target value for direction == &#39;fix&#39;</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># weight for the objective</span></div>
+
+
+
+<div class="viewcode-block" id="get_target_columns">
+<a class="viewcode-back" href="../../pedata.html#pedata.util.get_target_columns">[docs]</a>
+<span class="k">def</span> <span class="nf">get_target_columns</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get target columns from dataset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        d (ds.Dataset): Dataset to extract target columns from</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Sequence[str]: Target columns</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the input is not a valid dataset object.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">    &gt;&gt;&gt; import datasets as ds</span>
+<span class="sd">    &gt;&gt;&gt; dataset = ds.Dataset.from_dict({&quot;aa_seq&quot;: [&quot;MATCG&quot;, &quot;KTGAC&quot;], &quot;target 1&quot;:[1, 2], &quot;target 2&quot;: [3, 4]})</span>
+<span class="sd">    &gt;&gt;&gt; target_columns = get_target_columns(dataset)</span>
+<span class="sd">    &gt;&gt;&gt; print(target_columns)</span>
+<span class="sd">    [&#39;target 1&#39;, &#39;target 2&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="p">):</span>
+        <span class="c1"># Extract target columns</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">features</span> <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;target&quot;</span><span class="p">)]</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;Invalid input: try again with a valid dataset to extract target columns.&quot;</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_target">
+<a class="viewcode-back" href="../../pedata.html#pedata.util.get_target">[docs]</a>
+<span class="k">def</span> <span class="nf">get_target</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">:</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
+    <span class="n">max_targets</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">normalization</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
+    <span class="n">as_dict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract target variables from a Hugging Face dataset.</span>
+
+<span class="sd">    This function retrieves the target variables from a Hugging Face dataset and provides options for normalization and returning the targets as a dictionary or tuple.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dataset: The dataset to extract target variables from.</span>
+<span class="sd">        max_targets: Maximum number of targets to return. Defaults to None, which returns all targets.</span>
+<span class="sd">        normalization: A function for normalizing the target values. Defaults to the identity function (no normalization).</span>
+<span class="sd">        as_dict: Whether to return the targets as a dictionary of target names mapping to values. Defaults to False, in which case target names and values are returned as a tuple.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        If `as_dict` is False, returns a tuple containing the target names and the normalized target values.</span>
+<span class="sd">        If `as_dict` is True, returns a dictionary where the keys are the target names and the values are the normalized target values.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; import datasets as ds</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as onp</span>
+<span class="sd">        &gt;&gt;&gt; dataset = ds.Dataset.from_dict({&quot;target1&quot;: onp.array([1, 2, 3]),&quot;target2&quot;: onp.array([4, 5, 6]),&quot;target3&quot;: onp.array([7, 8, 9])})</span>
+<span class="sd">        &gt;&gt;&gt; subset_targets_dict = get_target(dataset, max_targets=2, as_dict=True)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Invalid input: Please, input a valid HuggingFace Dataset&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Set the dataset format to pandas for easy column access</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">with_format</span><span class="p">(</span><span class="s2">&quot;pandas&quot;</span><span class="p">)</span>
+
+    <span class="n">targ_values</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Stores target values</span>
+    <span class="n">targ_keys</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Stores target keys</span>
+
+    <span class="c1"># Iterate over target columns and extract values</span>
+    <span class="k">for</span> <span class="n">targ</span> <span class="ow">in</span> <span class="n">get_target_columns</span><span class="p">(</span><span class="n">dataset</span><span class="p">):</span>
+        <span class="n">targ_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="n">targ</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+        <span class="n">targ_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">targ</span><span class="p">)</span>
+
+        <span class="c1"># Break the loop if the maximum number of targets is reached</span>
+        <span class="k">if</span> <span class="n">max_targets</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">targ_keys</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">max_targets</span><span class="p">:</span>
+            <span class="k">break</span>
+
+    <span class="c1"># Convert target values to a stacked numpy array</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">targ_values</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">targ_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">targ_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">targ_values</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="c1"># Add a new axis if the target values have only one dimension</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">targ_values</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">targ_values</span> <span class="o">=</span> <span class="n">targ_values</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+
+    <span class="c1"># Return targets as a tuple or dictionary, based on `as_dict` flag</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">as_dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">targ_keys</span><span class="p">,</span> <span class="n">normalization</span><span class="p">(</span><span class="n">targ_values</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">normalization</span><span class="p">(</span><span class="n">targ_values</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">targ_keys</span><span class="p">)}</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">adjust_single_target_maximization</span><span class="p">(</span>
+    <span class="n">target_value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">target_opt_obj</span><span class="p">:</span> <span class="n">OptimizationObjective</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Adjust a single target variable to ensure that the optimization objective is always maximization.</span>
+
+<span class="sd">    This function takes a single target variable `target_value` and an optimization objective `target_opt_obj`.</span>
+<span class="sd">    It achieves this by performing either of the following steps for each target variable:</span>
+<span class="sd">        1. Multiplying the target variable by -1 if the objective is minimization.</span>
+<span class="sd">        2. Using the absolute difference between the target value and a fixed value to get close to the desired value if the objective is to fix the value.</span>
+<span class="sd">        3. (default). Using the target variable as is if the objective is maximization.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        target_value (np.ndarray): The target variable to adjust.</span>
+<span class="sd">        target_opt_obj (OptimizationObjective): The optimization objective for the target variable.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.ndarray: The adjusted target variable.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the input is not a valid OptimizationObjective object.</span>
+<span class="sd">        ValueError: If the objective type is not one of the valid types.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target_opt_obj</span><span class="p">,</span> <span class="n">OptimizationObjective</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Invalid input: target_opt_obj must be of type OptimizationObjective. Received type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">target_opt_obj</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">target_opt_obj</span><span class="o">.</span><span class="n">direction</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="s2">&quot;fix&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Invalid objective type: </span><span class="si">{</span><span class="n">target_opt_obj</span><span class="o">.</span><span class="n">direction</span><span class="si">}</span><span class="s2">. Expected value is &#39;min&#39;, &#39;max&#39;, or &#39;fix&#39;.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">target_opt_obj</span><span class="o">.</span><span class="n">direction</span> <span class="o">==</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="o">-</span><span class="n">target_value</span>
+        <span class="p">)</span>  <span class="c1"># Multiply the target variable by -1 if the objective is minimization</span>
+
+    <span class="k">elif</span> <span class="n">target_opt_obj</span><span class="o">.</span><span class="n">direction</span> <span class="o">==</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">target_value</span>  <span class="c1"># Use the target variable as is if the objective is maximization</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span>
+            <span class="n">target_value</span> <span class="o">-</span> <span class="n">target_opt_obj</span><span class="o">.</span><span class="n">aim_for</span>
+        <span class="p">)</span>  <span class="c1"># Adjust the target variable to get close to a fixed value if the objective is fixed</span>
+
+
+<div class="viewcode-block" id="adjust_all_targets_maximization">
+<a class="viewcode-back" href="../../pedata.html#pedata.util.adjust_all_targets_maximization">[docs]</a>
+<span class="k">def</span> <span class="nf">adjust_all_targets_maximization</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">:</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span> <span class="n">objectives</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">OptimizationObjective</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Adjust target variables to ensure that optimization objective is always maximization.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        d: The dataset to adjust.</span>
+<span class="sd">        objectives: Dictionary with targets names as keys and an OptimizationObjective Dataclass as values.</span>
+<span class="sd">            see OptimizationObjective Dataclass for details.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ds.Dataset: The adjusted dataset with modified target variables.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        Exception: If not all target columns have an objective specified.</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">        The objective type is specified as a dictionary with targets names as keys and an OptimizationObjective Dataclass as values.</span>
+<span class="sd">        In this method, the only the objective direction is extracted from the OptimizationObjective Dataclass.</span>
+
+<span class="sd">        Uses `adjust_single_target_maximization` nested method which takes a single target variable `target_value` and an optimization objective `target_opt_obj`.</span>
+<span class="sd">        It adjusts the target by performing either of the following steps:</span>
+<span class="sd">            1. Multiplying the target variable by -1 if the objective is minimization.</span>
+<span class="sd">            2. Using the absolute difference between the target value and a fixed value to get close to the desired value if the objective is to fix the value.</span>
+<span class="sd">            3. (default). Using the target variable as is if the objective is maximization.</span>
+
+
+<span class="sd">    Example usage:</span>
+<span class="sd">        &gt;&gt;&gt; import datasets as ds</span>
+<span class="sd">        &gt;&gt;&gt; import pandas as pd</span>
+<span class="sd">        &gt;&gt;&gt; from pedata.util import adjust_all_targets_maximization, OptimizationObjective</span>
+<span class="sd">        &gt;&gt;&gt; dataset = ds.Dataset.from_pandas(pd.DataFrame({&quot;target1&quot;: [11, 12, 13], &quot;target2&quot;: [14, 15, 16], &quot;target3&quot;: [7, 8, 9]}))</span>
+<span class="sd">        &gt;&gt;&gt; objectives = {&quot;target1&quot;: OptimizationObjective(direction=&quot;min&quot;), &quot;target2&quot;: OptimizationObjective(direction=&quot;max&quot;), &quot;target3&quot;: OptimizationObjective(direction=&quot;fix&quot;, aim_for=10.0)}</span>
+<span class="sd">        &gt;&gt;&gt; adjusted_dataset = adjust_all_targets_maximization(dataset, objectives=objectives)</span>
+<span class="sd">        &gt;&gt;&gt; print(adjusted_dataset[&#39;target1&#39;])</span>
+<span class="sd">        [-11 -12 -13]</span>
+<span class="sd">        &gt;&gt;&gt; print(adjusted_dataset[&#39;target2&#39;])</span>
+<span class="sd">        [14 15 16]</span>
+<span class="sd">        &gt;&gt;&gt; print(adjusted_dataset[&#39;target3&#39;])</span>
+<span class="sd">        [-3 -2 -1]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Get the list of target columns in the dataset</span>
+    <span class="n">target_cols</span> <span class="o">=</span> <span class="n">get_target_columns</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+    <span class="c1"># Check if objectives are specified for all target columns</span>
+    <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">target_cols</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">set</span><span class="p">(</span><span class="n">objectives</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;All target columns must have an objective specified. Did not find objectives for </span><span class="si">{</span><span class="nb">set</span><span class="p">(</span><span class="n">target_cols</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">set</span><span class="p">(</span><span class="n">objectives</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Iterate and adjust target column values based on their objectives</span>
+    <span class="k">for</span> <span class="n">target_property_name</span><span class="p">,</span> <span class="n">target_opt_obj</span> <span class="ow">in</span> <span class="n">objectives</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="c1"># Adjust the target variables in the dataset based on the specified objectives</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">dataset</span><span class="o">.</span><span class="n">with_format</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">map</span><span class="p">(</span>
+                <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="n">target_property_name</span><span class="p">:</span> <span class="n">adjust_single_target_maximization</span><span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">target_property_name</span><span class="p">]),</span> <span class="n">target_opt_obj</span>
+                    <span class="p">)</span>
+                <span class="p">},</span>
+                <span class="n">batched</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="o">.</span><span class="n">with_format</span><span class="p">(</span><span class="s2">&quot;numpy&quot;</span><span class="p">)</span>  <span class="c1"># Set the dataset format back to &quot;numpy&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Return the adjusted dataset</span>
+    <span class="k">return</span> <span class="n">dataset</span></div>
+
+
+
+<div class="viewcode-block" id="zscore">
+<a class="viewcode-back" href="../../pedata.html#pedata.util.zscore">[docs]</a>
+<span class="k">def</span> <span class="nf">zscore</span><span class="p">(</span>
+    <span class="n">array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">mean</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">std</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Z-score is a statistical technique used to standardize an array</span>
+<span class="sd">        This is by subtracting the mean and dividing by the standard deviation. This process transforms the</span>
+<span class="sd">        values in the array to have a mean of 0 and a standard deviation of 1, providing a common scale for comparison.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        array: The input array to be normalized.</span>
+<span class="sd">        mean: Should be set as an input when the value is already known. Typically for transforming a test set/target</span>
+<span class="sd">        std: Should be set as an input when the value is already known. Typically for transforming a test set/target</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.ndarray: The normalized array.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; from pedata.util import zscore</span>
+<span class="sd">        &gt;&gt;&gt; array = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])</span>
+<span class="sd">        &gt;&gt;&gt; zc_array = zscore(array)</span>
+<span class="sd">        &gt;&gt;&gt; print(zc_array) # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        [[-1.22474487 -1.22474487 -1.22474487]</span>
+<span class="sd">        [ 0.          0.          0.        ]</span>
+<span class="sd">        [ 1.22474487  1.22474487  1.22474487]]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Invalid input: Input a valid numpy array&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Calculate the mean and standard deviation along axis 0</span>
+    <span class="k">if</span> <span class="n">mean</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">mean</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">std</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">std</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Replace zero standard deviations with 1 to avoid division by zero</span>
+    <span class="n">std</span><span class="p">[</span><span class="n">std</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># Normalize the array using the Z-score formula</span>
+    <span class="n">normalized_array</span> <span class="o">=</span> <span class="p">(</span><span class="n">array</span> <span class="o">-</span> <span class="n">mean</span><span class="p">)</span> <span class="o">/</span> <span class="n">std</span>
+
+    <span class="k">return</span> <span class="n">normalized_array</span></div>
+
+
+
+<div class="viewcode-block" id="de_zscore_predictions">
+<a class="viewcode-back" href="../../pedata.html#pedata.util.de_zscore_predictions">[docs]</a>
+<span class="k">def</span> <span class="nf">de_zscore_predictions</span><span class="p">(</span>
+    <span class="n">zs_pred_means</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">zs_pred_stds</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">mean</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+    <span class="n">std</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;de z-score a zcored array</span>
+<span class="sd">    zs_pred_means can be either the mean or the std or both</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        zs_pred_means: The input mean array to be de_zscored.</span>
+<span class="sd">        zs_pred_stds: The input std array to be de_zscored.</span>
+<span class="sd">        mean: the mean from the original (train) array</span>
+<span class="sd">        std: the std from the original (train) array</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.ndarray: containing the de_zscored arrays:</span>
+<span class="sd">            - the mean array if only mean is passed as an input</span>
+<span class="sd">            - the mean and std arrays if both are passed as inputs</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">zs_pred_means</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Invalid input: zs_pred_means need to be a valid numpy array&quot;</span><span class="p">)</span>
+
+    <span class="n">de_zs_pred_means</span> <span class="o">=</span> <span class="n">zs_pred_means</span> <span class="o">*</span> <span class="n">std</span> <span class="o">+</span> <span class="n">mean</span>
+
+    <span class="k">if</span> <span class="n">zs_pred_stds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">zs_pred_stds</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;Invalid input: zs_pred_stds need to be a valid numpy array&quot;</span>
+            <span class="p">)</span>
+        <span class="n">de_zs_pred_stds</span> <span class="o">=</span> <span class="n">zs_pred_stds</span> <span class="o">*</span> <span class="n">std</span>
+
+        <span class="k">return</span> <span class="n">de_zs_pred_means</span><span class="p">,</span> <span class="n">de_zs_pred_stds</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">de_zs_pred_means</span></div>
+
+
+
+<div class="viewcode-block" id="get_summary_variable">
+<a class="viewcode-back" href="../../pedata.html#pedata.util.get_summary_variable">[docs]</a>
+<span class="k">def</span> <span class="nf">get_summary_variable</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">:</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
+    <span class="n">normalization</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="n">zscore</span><span class="p">,</span>
+    <span class="n">objectives</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">OptimizationObjective</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extracts a summary variable from a dataset.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        dataset: Dataset to extract summary variable from</span>
+<span class="sd">        normalization: A normalization function for the summary variable. Defaults to zscore.</span>
+<span class="sd">        objectives: The optimization objective for the target variable.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.ndarray: The summary variable.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the input is not a valid dataset object.</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">        This function calculates a summary variable from a given dataset as follows:</span>
+
+<span class="sd">        - If the objectives are specified, the summary variable is calculated as the weighted sum of the adjusted targets.</span>
+<span class="sd">            - 0. Adjust the dataset targets to ensure that the optimization objective is always maximization.</span>
+<span class="sd">            uses `adjust_all_targets_maximization` method</span>
+<span class="sd">            - 1. Get the adjusted targets data from the dataset using the specified normalization function.</span>
+<span class="sd">            - 2. Calculate the summary variable by computing the weigthed sum of the adjusted targets</span>
+
+<span class="sd">        - If the objectives are not specified:</span>
+<span class="sd">            - 0. Creates default objective (maximization, weight=1 for all targets) and adjust the dataset targets with it.</span>
+<span class="sd">                Basically, this step does nothing to the target, but defines the objectives, which is a requirement for summing the targets, which requires the weights.</span>
+<span class="sd">            - 1. Get the targets data from the dataset using the specified normalization function.</span>
+<span class="sd">            - 2. Calculate the summary variable by computing the (weigthed) sum of the targets</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; import datasets as ds</span>
+<span class="sd">        &gt;&gt;&gt; from pedata.util import OptimizationObjective, get_summary_variable</span>
+<span class="sd">        &gt;&gt;&gt; dataset = ds.Dataset.from_dict({&quot;target1&quot;: np.arange(10) + 1, &quot;target2&quot;: np.arange(10),&quot;target3&quot;: np.arange(10)})</span>
+<span class="sd">        &gt;&gt;&gt; normalised_summary = get_summary_variable(dataset)</span>
+<span class="sd">        &gt;&gt;&gt; print(normalised_summary) # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        [-4.70009671 -3.65563078 -2.61116484 -1.5666989  -0.52223297  0.52223297</span>
+<span class="sd">        1.5666989   2.61116484  3.65563078  4.70009671]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Validate input</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Invalid input: Please, input a valid HuggingFace Dataset&quot;</span><span class="p">)</span>
+
+    <span class="c1"># 0 - Set default objectives if not specified</span>
+    <span class="k">if</span> <span class="n">objectives</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">objectives</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">target_names</span> <span class="o">=</span> <span class="n">get_target_columns</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">target_name</span> <span class="ow">in</span> <span class="n">target_names</span><span class="p">:</span>
+            <span class="n">objectives</span><span class="p">[</span><span class="n">target_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">OptimizationObjective</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">)</span>
+
+    <span class="c1"># 0 - Adjust the dataset according to the objectives</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">adjust_all_targets_maximization</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">objectives</span><span class="o">=</span><span class="n">objectives</span><span class="p">)</span>
+
+    <span class="c1"># 1 - Get the target data from the dataset using the specified normalization function</span>
+    <span class="n">target_data</span> <span class="o">=</span> <span class="n">get_target</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">normalization</span><span class="p">,</span> <span class="n">as_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># 2 - Calculate the summary variable by summing the (adjusted) targets</span>
+    <span class="n">summary</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">target_name</span><span class="p">,</span> <span class="n">target_value</span> <span class="ow">in</span> <span class="n">target_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">summary</span> <span class="o">+=</span> <span class="n">target_value</span> <span class="o">*</span> <span class="n">objectives</span><span class="p">[</span><span class="n">target_name</span><span class="p">]</span><span class="o">.</span><span class="n">weight</span>
+
+    <span class="c1"># Return the summary variable</span>
+    <span class="k">return</span> <span class="n">summary</span></div>
+
+
+
+<div class="viewcode-block" id="append_summary_variable">
+<a class="viewcode-back" href="../../pedata.html#pedata.util.append_summary_variable">[docs]</a>
+<span class="k">def</span> <span class="nf">append_summary_variable</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">:</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
+    <span class="n">normalization</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="n">zscore</span><span class="p">,</span>
+    <span class="n">objectives</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">OptimizationObjective</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">summary_variable_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;target summary variable&quot;</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Append summary variable to a dataset.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        dataset: Dataset to append summary variable to</span>
+<span class="sd">        normalization: A normalization function for the summary variable. Defaults to zscore.</span>
+<span class="sd">        objectives: The optimization objective for the target variable.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Dataset with summary variable appended as a new column.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If the dataset contains no target columns.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; import datasets as ds</span>
+<span class="sd">        &gt;&gt;&gt; from pedata.util import OptimizationObjective, append_summary_variable, zscore</span>
+<span class="sd">        &gt;&gt;&gt; dataset = ds.Dataset.from_dict({</span>
+<span class="sd">        ...     &quot;target1&quot;: np.arange(10, dtype=np.float64),</span>
+<span class="sd">        ...     &quot;target2&quot;: np.random.random(10),</span>
+<span class="sd">        ...     &quot;target3&quot;: np.arange(10, dtype=np.float64)[::-1],</span>
+<span class="sd">        ... })</span>
+<span class="sd">        &gt;&gt;&gt; objectives = {</span>
+<span class="sd">        ...     &quot;target1&quot;: OptimizationObjective(direction=&quot;min&quot;, weight=2),</span>
+<span class="sd">        ...     &quot;target2&quot;: OptimizationObjective(direction=&quot;max&quot;, weight=1),</span>
+<span class="sd">        ...     &quot;target3&quot;: OptimizationObjective(direction=&quot;fix&quot;, aim_for=0.5, weight=10),</span>
+<span class="sd">        ... }</span>
+<span class="sd">        &gt;&gt;&gt; dataset = append_summary_variable(</span>
+<span class="sd">        ...     dataset,</span>
+<span class="sd">        ...     normalization=zscore,</span>
+<span class="sd">        ...     objectives=objectives,</span>
+<span class="sd">        ...     summary_variable_name=&quot;target summary variable&quot;,</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; print(dataset) # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">        Dataset({</span>
+<span class="sd">            features: [&#39;target1&#39;, &#39;target2&#39;, &#39;target3&#39;, &#39;target summary variable&#39;],</span>
+<span class="sd">            num_rows: 10</span>
+<span class="sd">        })</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_targets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">get_target_columns</span><span class="p">(</span><span class="n">dataset</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="n">num_targets</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Dataset contains no target columns.&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">dataset</span><span class="o">.</span><span class="n">with_format</span><span class="p">(</span><span class="s2">&quot;numpy&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span>
+            <span class="n">summary_variable_name</span><span class="p">,</span>
+            <span class="n">get_summary_variable</span><span class="p">(</span>
+                <span class="n">dataset</span><span class="p">,</span> <span class="n">normalization</span><span class="o">=</span><span class="n">normalization</span><span class="p">,</span> <span class="n">objectives</span><span class="o">=</span><span class="n">objectives</span>
+            <span class="p">),</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="DatasetHandler">
+<a class="viewcode-back" href="../../pedata.html#pedata.util.DatasetHandler">[docs]</a>
+<span class="k">class</span> <span class="nc">DatasetHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class for handling datasets in HuggingFace format.</span>
+<span class="sd">    It stores the feature name, type, and dimension information for each feature as metadata.</span>
+<span class="sd">    it allows to extract features from the dataset and concatenate them into a single tensor</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DatasetHandler.__init__">
+<a class="viewcode-back" href="../../pedata.html#pedata.util.DatasetHandler.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">hf_ds</span><span class="p">:</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">,</span>
+        <span class="n">features</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates the metadata for the dataset and stores it in the object.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            hf_ds : Dataset to handle. If a dictionary is passed, it is converted to a Dataset object.</span>
+<span class="sd">            features : List of feature names to handle</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hf_ds</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">):</span>
+            <span class="c1"># convert to dataset if not already</span>
+            <span class="c1"># (before converting to dict, necessary when using dataset.map())</span>
+            <span class="n">hf_ds</span> <span class="o">=</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">hf_ds</span><span class="p">))</span>
+        <span class="n">hf_ds</span> <span class="o">=</span> <span class="n">hf_ds</span><span class="o">.</span><span class="n">with_format</span><span class="p">(</span><span class="s2">&quot;torch&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">features</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No features specified, using all features in dataset&quot;</span><span class="p">)</span>
+            <span class="n">features</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">hf_ds</span><span class="o">.</span><span class="n">features</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="n">features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">k</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">hf_ds</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="s2">&quot;shape&quot;</span><span class="p">:</span> <span class="n">hf_ds</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">}</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">features</span>
+        <span class="p">}</span>
+        <span class="c1"># compute the start and stop indices for each feature in the concatenated tensor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">feat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">:</span>
+            <span class="c1"># compute start index</span>
+            <span class="n">start_idx</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="n">feat</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;shape&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">start_idx</span> <span class="o">+=</span> <span class="n">prod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;shape&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">start_idx</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">feat</span><span class="p">][</span><span class="s2">&quot;shape&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">end_idx</span> <span class="o">=</span> <span class="n">start_idx</span> <span class="o">+</span> <span class="n">prod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">feat</span><span class="p">][</span><span class="s2">&quot;shape&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">end_idx</span> <span class="o">=</span> <span class="n">start_idx</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="p">[</span><span class="n">feat</span><span class="p">]</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">start_idx</span><span class="p">,</span> <span class="n">end_idx</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DatasetHandler.cat">
+<a class="viewcode-back" href="../../pedata.html#pedata.util.DatasetHandler.cat">[docs]</a>
+    <span class="k">def</span> <span class="nf">cat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hf_ds</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return concatenated tensor with all features and most general type.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            hf_ds: Dataset to concatenate</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Concatenated tensor</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; import datasets as ds</span>
+<span class="sd">            &gt;&gt;&gt; dataset = ds.Dataset.from_dict({&quot;aa_seq&quot;: [&quot;MATCG&quot;, &quot;KTGAC&quot;], &quot;target_1&quot;:[1, 2], &quot;target_2&quot;: [3, 4]})</span>
+<span class="sd">            &gt;&gt;&gt; hfds_metadata = DatasetHandler(dataset, [&quot;target_1&quot;, &quot;target_2&quot;])</span>
+<span class="sd">            &gt;&gt;&gt; print(hfds_metadata.cat(dataset))</span>
+<span class="sd">            tensor([[1., 3.],</span>
+<span class="sd">                    [2., 4.]], dtype=torch.float64)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hf_ds</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">):</span>
+            <span class="c1"># convert to dataset if not already</span>
+            <span class="c1"># (before converting to dict, necessary when using dataset.map())</span>
+            <span class="n">hf_ds</span> <span class="o">=</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">hf_ds</span><span class="p">))</span>
+
+        <span class="n">hf_ds</span> <span class="o">=</span> <span class="n">hf_ds</span><span class="o">.</span><span class="n">with_format</span><span class="p">(</span><span class="s2">&quot;torch&quot;</span><span class="p">)</span>
+        <span class="n">conc_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">(</span>
+                    <span class="n">hf_ds</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hf_ds</span><span class="p">[</span><span class="n">k</span><span class="p">]),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;shape&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">1</span>
+                    <span class="k">else</span> <span class="n">hf_ds</span><span class="p">[</span><span class="n">k</span><span class="p">][:,</span> <span class="kc">None</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span>
+            <span class="p">],</span>
+            <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">conc_tensor</span></div>
+
+
+<div class="viewcode-block" id="DatasetHandler.get">
+<a class="viewcode-back" href="../../pedata.html#pedata.util.DatasetHandler.get">[docs]</a>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="o">*</span><span class="n">feat</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the feature(s) in the concatenated tensor in concatenation axis (i.e. the last axis).</span>
+<span class="sd">        Args:</span>
+<span class="sd">            t: Concatenated tensor</span>
+<span class="sd">            feat: List of feature names to extract</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tensor containing the extracted feature(s)</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; import datasets as ds</span>
+<span class="sd">            &gt;&gt;&gt; dataset = ds.Dataset.from_dict({&quot;aa_seq&quot;: [&quot;MATCG&quot;, &quot;KTGAC&quot;], &quot;target 1&quot;:[1, 2], &quot;target 2&quot;: [3, 4]})</span>
+<span class="sd">            &gt;&gt;&gt; hfds_metadata = DatasetHandler(dataset, [&quot;target 1&quot;, &quot;target 2&quot;])</span>
+<span class="sd">            &gt;&gt;&gt; print(hfds_metadata.get(hfds_metadata.cat(dataset), [&quot;target 1&quot;]))</span>
+<span class="sd">            tensor([[1.],</span>
+<span class="sd">                    [2.]], dtype=torch.float64)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">t</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">(</span><span class="n">feat</span><span class="p">)]</span></div>
+
+
+<div class="viewcode-block" id="DatasetHandler.dims">
+<a class="viewcode-back" href="../../pedata.html#pedata.util.DatasetHandler.dims">[docs]</a>
+    <span class="k">def</span> <span class="nf">dims</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feat</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the dimensions of the feature(s) in the concatenated tensor in concatenation axis (i.e. the last axis).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            feat: List of feature names.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple containing the dimensions of the feature(s) in the concatenated tensor.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; import datasets as ds</span>
+<span class="sd">            &gt;&gt;&gt; dataset = ds.Dataset.from_dict({&quot;aa_seq&quot;: [&quot;MATCG&quot;, &quot;KTGAC&quot;], &quot;target 1&quot;:[1, 2], &quot;target 2&quot;: [[3, 4], [5, 6]]})</span>
+<span class="sd">            &gt;&gt;&gt; hfds_metadata = DatasetHandler(dataset, [&quot;target 1&quot;, &quot;target 2&quot;])</span>
+<span class="sd">            &gt;&gt;&gt; print(hfds_metadata.dims([&quot;target 2&quot;, &quot;target 1&quot;]))</span>
+<span class="sd">            (1, 2, 0)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rval</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">feat</span><span class="p">:</span>
+            <span class="n">rval</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="p">[</span><span class="n">f</span><span class="p">]</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="p">[</span><span class="n">f</span><span class="p">]</span><span class="o">.</span><span class="n">stop</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">rval</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="k">pass</span>
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, Exazyme.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

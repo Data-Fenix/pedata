@@ -1,0 +1,77 @@
+pedata.encoding package
+=======================
+
+Submodules
+----------
+
+pedata.encoding.add\_encodings module
+-------------------------------------
+
+.. automodule:: pedata.encoding.add_encodings
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pedata.encoding.alphabets module
+--------------------------------
+
+.. automodule:: pedata.encoding.alphabets
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pedata.encoding.base module
+---------------------------
+
+.. automodule:: pedata.encoding.base
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pedata.encoding.embeddings module
+---------------------------------
+
+.. automodule:: pedata.encoding.embeddings
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pedata.encoding.embeddings\_transform module
+--------------------------------------------
+
+.. automodule:: pedata.encoding.embeddings_transform
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pedata.encoding.encoding\_specs module
+--------------------------------------
+
+.. automodule:: pedata.encoding.encoding_specs
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pedata.encoding.transform module
+--------------------------------
+
+.. automodule:: pedata.encoding.transform
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pedata.encoding.transforms\_graph module
+----------------------------------------
+
+.. automodule:: pedata.encoding.transforms_graph
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: pedata.encoding
+   :members:
+   :undoc-members:
+   :show-inheritance:

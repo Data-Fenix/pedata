@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+      <title>pedata package</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=a5b3107c"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="pedata.data_io package" href="pedata.data_io.html" />
+  <link rel="prev" title="pedata documentation!" href="index.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">pedata documentation</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#pedata-documentation">pedata documentation!</a></span>
+      </p>
+      <ul class="current">
+        
+          <li class="toctree-l1 current">
+            
+              <a href="#" class="reference internal current">pedata package</a>
+            
+
+            
+              <ul>
+                
+                  <li class="toctree-l2"><a href="#subpackages" class="reference internal">Subpackages</a></li>
+                
+                  <li class="toctree-l2"><a href="#submodules" class="reference internal">Submodules</a></li>
+                
+                  <li class="toctree-l2"><a href="#module-pedata.constants" class="reference internal">pedata.constants module</a></li>
+                
+                  <li class="toctree-l2"><a href="#module-pedata.disk_cache" class="reference internal">pedata.disk_cache module</a></li>
+                
+                  <li class="toctree-l2"><a href="#module-pedata.integrity" class="reference internal">pedata.integrity module</a></li>
+                
+                  <li class="toctree-l2"><a href="#module-pedata.pytorch_dataloaders" class="reference internal">pedata.pytorch_dataloaders module</a></li>
+                
+                  <li class="toctree-l2"><a href="#module-pedata.typing" class="reference internal">pedata.typing module</a></li>
+                
+                  <li class="toctree-l2"><a href="#module-pedata.util" class="reference internal">pedata.util module</a></li>
+                
+                  <li class="toctree-l2"><a href="#module-pedata" class="reference internal">Module contents</a></li>
+                
+              </ul>
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="pedata.encoding.html" class="reference internal ">pedata.encoding package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="pedata.mutation.html" class="reference internal ">pedata.mutation package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="modules.html" class="reference internal ">pedata</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+    <li>pedata package</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="index.html"
+       title="previous chapter">← pedata documentation!</a>
+  </li>
+  <li class="next">
+    <a href="pedata.data_io.html"
+       title="next chapter">pedata.data_io package →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="pedata-package">
+<h1>pedata package<a class="headerlink" href="#pedata-package" title="Link to this heading">¶</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pedata.data_io.html">pedata.data_io package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pedata.data_io.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.data_io.html#module-pedata.data_io.load">pedata.data_io.load module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.data_io.html#pedata.data_io.load.load_data"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.data_io.html#module-pedata.data_io.save">pedata.data_io.save module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.data_io.html#pedata.data_io.save.save_dataset_as_csv"><code class="docutils literal notranslate"><span class="pre">save_dataset_as_csv()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.data_io.html#module-pedata.data_io">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pedata.encoding.html">pedata.encoding package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pedata.encoding.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.encoding.html#module-pedata.encoding.add_encodings">pedata.encoding.add_encodings module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.add_encodings.add_encodings"><code class="docutils literal notranslate"><span class="pre">add_encodings()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.encoding.html#module-pedata.encoding.alphabets">pedata.encoding.alphabets module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.alphabets.atm_alphabet_to_protons"><code class="docutils literal notranslate"><span class="pre">atm_alphabet_to_protons</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.encoding.html#module-pedata.encoding.base">pedata.encoding.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.base.EncodingSpec"><code class="docutils literal notranslate"><span class="pre">EncodingSpec</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.base.EncodingSpec.func"><code class="docutils literal notranslate"><span class="pre">EncodingSpec.func</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.base.EncodingSpec.provides"><code class="docutils literal notranslate"><span class="pre">EncodingSpec.provides</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.base.EncodingSpec.requires"><code class="docutils literal notranslate"><span class="pre">EncodingSpec.requires</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.base.SklEncodingSpec"><code class="docutils literal notranslate"><span class="pre">SklEncodingSpec</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.encoding.html#module-pedata.encoding.embeddings">pedata.encoding.embeddings module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.embeddings.Ankh"><code class="docutils literal notranslate"><span class="pre">Ankh</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.embeddings.Ankh.__init__"><code class="docutils literal notranslate"><span class="pre">Ankh.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.embeddings.Ankh.fit"><code class="docutils literal notranslate"><span class="pre">Ankh.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.embeddings.Ankh.transform"><code class="docutils literal notranslate"><span class="pre">Ankh.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.embeddings.AnkhBatched"><code class="docutils literal notranslate"><span class="pre">AnkhBatched</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.embeddings.AnkhBatched.__init__"><code class="docutils literal notranslate"><span class="pre">AnkhBatched.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.embeddings.AnkhBatched.fit"><code class="docutils literal notranslate"><span class="pre">AnkhBatched.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.embeddings.AnkhBatched.map_func"><code class="docutils literal notranslate"><span class="pre">AnkhBatched.map_func()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.embeddings.AnkhBatched.transform"><code class="docutils literal notranslate"><span class="pre">AnkhBatched.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.embeddings.ESM"><code class="docutils literal notranslate"><span class="pre">ESM</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.embeddings.ESM.__init__"><code class="docutils literal notranslate"><span class="pre">ESM.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.embeddings.ESM.fit"><code class="docutils literal notranslate"><span class="pre">ESM.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.embeddings.ESM.transform"><code class="docutils literal notranslate"><span class="pre">ESM.transform()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.encoding.html#module-pedata.encoding.embeddings_transform">pedata.encoding.embeddings_transform module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.embeddings_transform.kmer_embeddings_centers"><code class="docutils literal notranslate"><span class="pre">kmer_embeddings_centers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.embeddings_transform.kmers_mean_embeddings"><code class="docutils literal notranslate"><span class="pre">kmers_mean_embeddings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.embeddings_transform.linear_kernel"><code class="docutils literal notranslate"><span class="pre">linear_kernel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.embeddings_transform.reshape_1hot"><code class="docutils literal notranslate"><span class="pre">reshape_1hot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.embeddings_transform.rkhs_kmer_embeddings"><code class="docutils literal notranslate"><span class="pre">rkhs_kmer_embeddings()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.encoding.html#module-pedata.encoding.encoding_specs">pedata.encoding.encoding_specs module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.encoding_specs.find_function_order"><code class="docutils literal notranslate"><span class="pre">find_function_order()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.encoding.html#module-pedata.encoding.transform">pedata.encoding.transform module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.FixedSingleColumnTransform"><code class="docutils literal notranslate"><span class="pre">FixedSingleColumnTransform</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.FixedSingleColumnTransform.__init__"><code class="docutils literal notranslate"><span class="pre">FixedSingleColumnTransform.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.FixedSingleColumnTransform.drop_non_column"><code class="docutils literal notranslate"><span class="pre">FixedSingleColumnTransform.drop_non_column()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.FixedSingleColumnTransform.fit"><code class="docutils literal notranslate"><span class="pre">FixedSingleColumnTransform.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.FixedSingleColumnTransform.transform"><code class="docutils literal notranslate"><span class="pre">FixedSingleColumnTransform.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.GuaranteeShapeTransformer"><code class="docutils literal notranslate"><span class="pre">GuaranteeShapeTransformer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.GuaranteeShapeTransformer.__init__"><code class="docutils literal notranslate"><span class="pre">GuaranteeShapeTransformer.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.GuaranteeShapeTransformer.fit"><code class="docutils literal notranslate"><span class="pre">GuaranteeShapeTransformer.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.GuaranteeShapeTransformer.transform"><code class="docutils literal notranslate"><span class="pre">GuaranteeShapeTransformer.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.NGramFeat"><code class="docutils literal notranslate"><span class="pre">NGramFeat</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.NGramFeat.__init__"><code class="docutils literal notranslate"><span class="pre">NGramFeat.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.NGramFeat.fit"><code class="docutils literal notranslate"><span class="pre">NGramFeat.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.NGramFeat.transform"><code class="docutils literal notranslate"><span class="pre">NGramFeat.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.SeqStrLen"><code class="docutils literal notranslate"><span class="pre">SeqStrLen</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.SeqStrLen.__init__"><code class="docutils literal notranslate"><span class="pre">SeqStrLen.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.SeqStrOneHot"><code class="docutils literal notranslate"><span class="pre">SeqStrOneHot</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.SeqStrOneHot.__init__"><code class="docutils literal notranslate"><span class="pre">SeqStrOneHot.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.Unirep1900"><code class="docutils literal notranslate"><span class="pre">Unirep1900</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.Unirep1900.__init__"><code class="docutils literal notranslate"><span class="pre">Unirep1900.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.Unirep1900.map_func"><code class="docutils literal notranslate"><span class="pre">Unirep1900.map_func()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.Unirep1900Final"><code class="docutils literal notranslate"><span class="pre">Unirep1900Final</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.Unirep1900Final.__init__"><code class="docutils literal notranslate"><span class="pre">Unirep1900Final.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.Unirep1900Final.map_func"><code class="docutils literal notranslate"><span class="pre">Unirep1900Final.map_func()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.array_to_list_of_arrays"><code class="docutils literal notranslate"><span class="pre">array_to_list_of_arrays()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.seq_strings_to_array"><code class="docutils literal notranslate"><span class="pre">seq_strings_to_array()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.translate_dna_to_aa_seq"><code class="docutils literal notranslate"><span class="pre">translate_dna_to_aa_seq()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transform.unirep"><code class="docutils literal notranslate"><span class="pre">unirep()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.encoding.html#module-pedata.encoding.transforms_graph">pedata.encoding.transforms_graph module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transforms_graph.adj_list_conversion"><code class="docutils literal notranslate"><span class="pre">adj_list_conversion()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transforms_graph.adj_list_to_adjmatr"><code class="docutils literal notranslate"><span class="pre">adj_list_to_adjmatr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transforms_graph.adj_list_to_incidence"><code class="docutils literal notranslate"><span class="pre">adj_list_to_incidence()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transforms_graph.atm_adj"><code class="docutils literal notranslate"><span class="pre">atm_adj()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transforms_graph.atm_bnd_incid"><code class="docutils literal notranslate"><span class="pre">atm_bnd_incid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transforms_graph.bnd_count_atm_count"><code class="docutils literal notranslate"><span class="pre">bnd_count_atm_count()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transforms_graph.filter_adj_list_by_edge_type"><code class="docutils literal notranslate"><span class="pre">filter_adj_list_by_edge_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transforms_graph.get_num_nodes_edges"><code class="docutils literal notranslate"><span class="pre">get_num_nodes_edges()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.encoding.html#pedata.encoding.transforms_graph.return_prob_feat"><code class="docutils literal notranslate"><span class="pre">return_prob_feat()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.encoding.html#module-pedata.encoding">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pedata.hfhub_tools.html">pedata.hfhub_tools package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pedata.hfhub_tools.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.hfhub_tools.html#module-pedata.hfhub_tools.add_src_split_col">pedata.hfhub_tools.add_src_split_col module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.add_src_split_col.add_src_split_col"><code class="docutils literal notranslate"><span class="pre">add_src_split_col()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.hfhub_tools.html#module-pedata.hfhub_tools.constants">pedata.hfhub_tools.constants module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.hfhub_tools.html#module-pedata.hfhub_tools.explore">pedata.hfhub_tools.explore module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.explore.TagFeaturePattern"><code class="docutils literal notranslate"><span class="pre">TagFeaturePattern</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.explore.TagFeaturePattern.all_patterns"><code class="docutils literal notranslate"><span class="pre">TagFeaturePattern.all_patterns</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.explore.TagFeaturePattern.feature_pattern"><code class="docutils literal notranslate"><span class="pre">TagFeaturePattern.feature_pattern</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.explore.TagFeaturePattern.tag"><code class="docutils literal notranslate"><span class="pre">TagFeaturePattern.tag</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.explore.explore_datasets"><code class="docutils literal notranslate"><span class="pre">explore_datasets()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.explore.get_tag_list"><code class="docutils literal notranslate"><span class="pre">get_tag_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.explore.save_log"><code class="docutils literal notranslate"><span class="pre">save_log()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.hfhub_tools.html#module-pedata.hfhub_tools.readme_update">pedata.hfhub_tools.readme_update module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.readme_update.ReadMe"><code class="docutils literal notranslate"><span class="pre">ReadMe</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.readme_update.ReadMe.__init__"><code class="docutils literal notranslate"><span class="pre">ReadMe.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.readme_update.ReadMe.create_readme"><code class="docutils literal notranslate"><span class="pre">ReadMe.create_readme()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.readme_update.ReadMe.figure_path"><code class="docutils literal notranslate"><span class="pre">ReadMe.figure_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.readme_update.ReadMe.insert_section"><code class="docutils literal notranslate"><span class="pre">ReadMe.insert_section()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.readme_update.ReadMe.pull_readme_from_hub"><code class="docutils literal notranslate"><span class="pre">ReadMe.pull_readme_from_hub()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.readme_update.ReadMe.push_figures_to_hub"><code class="docutils literal notranslate"><span class="pre">ReadMe.push_figures_to_hub()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.readme_update.ReadMe.push_readme_to_hub"><code class="docutils literal notranslate"><span class="pre">ReadMe.push_readme_to_hub()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.readme_update.ReadMe.readme_content"><code class="docutils literal notranslate"><span class="pre">ReadMe.readme_content</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.readme_update.ReadMe.readme_path"><code class="docutils literal notranslate"><span class="pre">ReadMe.readme_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.readme_update.ReadMe.update_readme"><code class="docutils literal notranslate"><span class="pre">ReadMe.update_readme()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.readme_update.ReadMe.update_readme_figures"><code class="docutils literal notranslate"><span class="pre">ReadMe.update_readme_figures()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.readme_update.ReadMe.write_readme"><code class="docutils literal notranslate"><span class="pre">ReadMe.write_readme()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.hfhub_tools.html#module-pedata.hfhub_tools.rename_columns">pedata.hfhub_tools.rename_columns module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.rename_columns.rename_hub_dataset_column"><code class="docutils literal notranslate"><span class="pre">rename_hub_dataset_column()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.rename_columns.validate_dataset_columns_names"><code class="docutils literal notranslate"><span class="pre">validate_dataset_columns_names()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.hfhub_tools.html#module-pedata.hfhub_tools.rename_splits">pedata.hfhub_tools.rename_splits module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.rename_splits.rename_hf_dataset_splits"><code class="docutils literal notranslate"><span class="pre">rename_hf_dataset_splits()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.hfhub_tools.html#module-pedata.hfhub_tools.utils">pedata.hfhub_tools.utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.utils.check_if_dataset_on_hf"><code class="docutils literal notranslate"><span class="pre">check_if_dataset_on_hf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.utils.clear_hub_dataset_files"><code class="docutils literal notranslate"><span class="pre">clear_hub_dataset_files()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.utils.clear_hub_ds_files_and_metadata"><code class="docutils literal notranslate"><span class="pre">clear_hub_ds_files_and_metadata()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.utils.get_all_files_in_ds_repo"><code class="docutils literal notranslate"><span class="pre">get_all_files_in_ds_repo()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.utils.get_dataset"><code class="docutils literal notranslate"><span class="pre">get_dataset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.utils.get_hub_data_folder_files"><code class="docutils literal notranslate"><span class="pre">get_hub_data_folder_files()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.hfhub_tools.html#pedata.hfhub_tools.utils.repo_get_file_list_split_cleanup"><code class="docutils literal notranslate"><span class="pre">repo_get_file_list_split_cleanup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.hfhub_tools.html#module-pedata.hfhub_tools">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pedata.mutation.html">pedata.mutation package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pedata.mutation.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.mutation.html#module-pedata.mutation.mutation">pedata.mutation.mutation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.mutation.html#pedata.mutation.mutation.Mutation"><code class="docutils literal notranslate"><span class="pre">Mutation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pedata.mutation.html#pedata.mutation.mutation.Mutation.apply_all_mutations"><code class="docutils literal notranslate"><span class="pre">Mutation.apply_all_mutations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.mutation.html#pedata.mutation.mutation.Mutation.apply_variant_mutations"><code class="docutils literal notranslate"><span class="pre">Mutation.apply_variant_mutations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.mutation.html#pedata.mutation.mutation.Mutation.combine_variant_mutations"><code class="docutils literal notranslate"><span class="pre">Mutation.combine_variant_mutations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.mutation.html#pedata.mutation.mutation.Mutation.concat_mutations"><code class="docutils literal notranslate"><span class="pre">Mutation.concat_mutations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.mutation.html#pedata.mutation.mutation.Mutation.estimate_offset"><code class="docutils literal notranslate"><span class="pre">Mutation.estimate_offset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.mutation.html#pedata.mutation.mutation.Mutation.generate_variant_mutation_combinations"><code class="docutils literal notranslate"><span class="pre">Mutation.generate_variant_mutation_combinations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.mutation.html#pedata.mutation.mutation.Mutation.generate_variant_mutation_combinations_within_dataset"><code class="docutils literal notranslate"><span class="pre">Mutation.generate_variant_mutation_combinations_within_dataset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.mutation.html#pedata.mutation.mutation.Mutation.get_parent_aa_seq"><code class="docutils literal notranslate"><span class="pre">Mutation.get_parent_aa_seq()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.mutation.html#pedata.mutation.mutation.Mutation.get_parent_sketch_from_mutations"><code class="docutils literal notranslate"><span class="pre">Mutation.get_parent_sketch_from_mutations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.mutation.html#pedata.mutation.mutation.Mutation.parse_all_mutations"><code class="docutils literal notranslate"><span class="pre">Mutation.parse_all_mutations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.mutation.html#pedata.mutation.mutation.Mutation.parse_variant_mutations"><code class="docutils literal notranslate"><span class="pre">Mutation.parse_variant_mutations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.mutation.html#pedata.mutation.mutation.Mutation.sort_mutations_by_pos"><code class="docutils literal notranslate"><span class="pre">Mutation.sort_mutations_by_pos()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.mutation.html#pedata.mutation.mutation.fill_all_missing_sequences"><code class="docutils literal notranslate"><span class="pre">fill_all_missing_sequences()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.mutation.html#pedata.mutation.mutation.fill_missing_sequences"><code class="docutils literal notranslate"><span class="pre">fill_missing_sequences()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.mutation.html#pedata.mutation.mutation.get_missing_values"><code class="docutils literal notranslate"><span class="pre">get_missing_values()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.mutation.html#module-pedata.mutation.mutation_converter">pedata.mutation.mutation_converter module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.mutation.html#pedata.mutation.mutation_converter.convert_all_variant_mutations_to_str"><code class="docutils literal notranslate"><span class="pre">convert_all_variant_mutations_to_str()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.mutation.html#pedata.mutation.mutation_converter.convert_variant_mutation_to_str"><code class="docutils literal notranslate"><span class="pre">convert_variant_mutation_to_str()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.mutation.html#pedata.mutation.mutation_converter.dict_to_namedtuple_mut"><code class="docutils literal notranslate"><span class="pre">dict_to_namedtuple_mut()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.mutation.html#pedata.mutation.mutation_converter.namedtuple_to_dict_mut"><code class="docutils literal notranslate"><span class="pre">namedtuple_to_dict_mut()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.mutation.html#module-pedata.mutation.mutation_extractor">pedata.mutation.mutation_extractor module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.mutation.html#pedata.mutation.mutation_extractor.extract_mutation_namedtuples_from_sequences"><code class="docutils literal notranslate"><span class="pre">extract_mutation_namedtuples_from_sequences()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.mutation.html#pedata.mutation.mutation_extractor.extract_mutation_str_from_sequences"><code class="docutils literal notranslate"><span class="pre">extract_mutation_str_from_sequences()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.mutation.html#module-pedata.mutation.mutation_util">pedata.mutation.mutation_util module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.mutation.html#pedata.mutation.mutation_util.convert_tuple_to_valid_namedtuple"><code class="docutils literal notranslate"><span class="pre">convert_tuple_to_valid_namedtuple()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.mutation.html#module-pedata.mutation">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pedata.preprocessing.html">pedata.preprocessing package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pedata.preprocessing.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.preprocessing.html#module-pedata.preprocessing.index">pedata.preprocessing.index module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.index.append_index_column_to_dataset"><code class="docutils literal notranslate"><span class="pre">append_index_column_to_dataset()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.preprocessing.html#module-pedata.preprocessing.preprocessing_pipeline">pedata.preprocessing.preprocessing_pipeline module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.preprocessing_pipeline.preprocessing_pipeline"><code class="docutils literal notranslate"><span class="pre">preprocessing_pipeline()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.preprocessing.html#module-pedata.preprocessing.split">pedata.preprocessing.split module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.split.DatasetSplitter"><code class="docutils literal notranslate"><span class="pre">DatasetSplitter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.split.DatasetSplitter.__init__"><code class="docutils literal notranslate"><span class="pre">DatasetSplitter.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.split.DatasetSplitter.append_split_column"><code class="docutils literal notranslate"><span class="pre">DatasetSplitter.append_split_column()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.split.DatasetSplitter.concatenated_dataset"><code class="docutils literal notranslate"><span class="pre">DatasetSplitter.concatenated_dataset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.split.DatasetSplitter.dataset"><code class="docutils literal notranslate"><span class="pre">DatasetSplitter.dataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.split.DatasetSplitter.split"><code class="docutils literal notranslate"><span class="pre">DatasetSplitter.split()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.split.DatasetSplitter.split_col_name"><code class="docutils literal notranslate"><span class="pre">DatasetSplitter.split_col_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.split.DatasetSplitter.split_dataset_using_split_column"><code class="docutils literal notranslate"><span class="pre">DatasetSplitter.split_dataset_using_split_column()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.split.DatasetSplitter.yield_all_train_test_sets"><code class="docutils literal notranslate"><span class="pre">DatasetSplitter.yield_all_train_test_sets()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.split.DatasetSplitterRandomKFold"><code class="docutils literal notranslate"><span class="pre">DatasetSplitterRandomKFold</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.split.DatasetSplitterRandomKFold.split_col_name"><code class="docutils literal notranslate"><span class="pre">DatasetSplitterRandomKFold.split_col_name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.split.DatasetSplitterRandomTrainTest"><code class="docutils literal notranslate"><span class="pre">DatasetSplitterRandomTrainTest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.split.DatasetSplitterRandomTrainTest.split_col_name"><code class="docutils literal notranslate"><span class="pre">DatasetSplitterRandomTrainTest.split_col_name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.split.ZeroShotSpliter"><code class="docutils literal notranslate"><span class="pre">ZeroShotSpliter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.split.ZeroShotSpliter.split_col_name"><code class="docutils literal notranslate"><span class="pre">ZeroShotSpliter.split_col_name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.split.add_source_split_column"><code class="docutils literal notranslate"><span class="pre">add_source_split_column()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.split.append_split_columns_to_dataset"><code class="docutils literal notranslate"><span class="pre">append_split_columns_to_dataset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.split.get_split_col_names"><code class="docutils literal notranslate"><span class="pre">get_split_col_names()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.split.get_split_map"><code class="docutils literal notranslate"><span class="pre">get_split_map()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.split.rename_splits"><code class="docutils literal notranslate"><span class="pre">rename_splits()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.split.split_col_histogram"><code class="docutils literal notranslate"><span class="pre">split_col_histogram()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.preprocessing.html#module-pedata.preprocessing.tag_finder">pedata.preprocessing.tag_finder module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTag"><code class="docutils literal notranslate"><span class="pre">ProteinTag</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTag.__init__"><code class="docutils literal notranslate"><span class="pre">ProteinTag.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTag.cleavage"><code class="docutils literal notranslate"><span class="pre">ProteinTag.cleavage</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTag.fusion"><code class="docutils literal notranslate"><span class="pre">ProteinTag.fusion</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTag.leader"><code class="docutils literal notranslate"><span class="pre">ProteinTag.leader</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTag.length"><code class="docutils literal notranslate"><span class="pre">ProteinTag.length</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTag.method"><code class="docutils literal notranslate"><span class="pre">ProteinTag.method</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTag.name"><code class="docutils literal notranslate"><span class="pre">ProteinTag.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTag.origin"><code class="docutils literal notranslate"><span class="pre">ProteinTag.origin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTag.reference"><code class="docutils literal notranslate"><span class="pre">ProteinTag.reference</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTag.sequence"><code class="docutils literal notranslate"><span class="pre">ProteinTag.sequence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTag.type"><code class="docutils literal notranslate"><span class="pre">ProteinTag.type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTagHit"><code class="docutils literal notranslate"><span class="pre">ProteinTagHit</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTagHit.__init__"><code class="docutils literal notranslate"><span class="pre">ProteinTagHit.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTagHit.conservation"><code class="docutils literal notranslate"><span class="pre">ProteinTagHit.conservation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTagHit.end"><code class="docutils literal notranslate"><span class="pre">ProteinTagHit.end</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTagHit.identity"><code class="docutils literal notranslate"><span class="pre">ProteinTagHit.identity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTagHit.location"><code class="docutils literal notranslate"><span class="pre">ProteinTagHit.location</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTagHit.query_aln"><code class="docutils literal notranslate"><span class="pre">ProteinTagHit.query_aln</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTagHit.start"><code class="docutils literal notranslate"><span class="pre">ProteinTagHit.start</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.ProteinTagHit.tag_aln"><code class="docutils literal notranslate"><span class="pre">ProteinTagHit.tag_aln</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.SequenceCleaner"><code class="docutils literal notranslate"><span class="pre">SequenceCleaner</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.SequenceCleaner.__init__"><code class="docutils literal notranslate"><span class="pre">SequenceCleaner.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.SequenceCleaner.convert_sequence"><code class="docutils literal notranslate"><span class="pre">SequenceCleaner.convert_sequence()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.SequenceCleaner.get_sequence_type"><code class="docutils literal notranslate"><span class="pre">SequenceCleaner.get_sequence_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.SequenceCleaner.js_distance"><code class="docutils literal notranslate"><span class="pre">SequenceCleaner.js_distance()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.TagFinder"><code class="docutils literal notranslate"><span class="pre">TagFinder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.TagFinder.__init__"><code class="docutils literal notranslate"><span class="pre">TagFinder.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.TagFinder.clean_dataset"><code class="docutils literal notranslate"><span class="pre">TagFinder.clean_dataset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.TagFinder.find_tags"><code class="docutils literal notranslate"><span class="pre">TagFinder.find_tags()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.TagFinder.get_strip_report"><code class="docutils literal notranslate"><span class="pre">TagFinder.get_strip_report()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.TagFinder.identity_cutoff"><code class="docutils literal notranslate"><span class="pre">TagFinder.identity_cutoff</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.TagFinder.margin_cutoff"><code class="docutils literal notranslate"><span class="pre">TagFinder.margin_cutoff</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.TagFinder.strip_tags"><code class="docutils literal notranslate"><span class="pre">TagFinder.strip_tags()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.preprocessing.html#pedata.preprocessing.tag_finder.TagFinder.tag_strip_csv"><code class="docutils literal notranslate"><span class="pre">TagFinder.tag_strip_csv()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.preprocessing.html#module-pedata.preprocessing">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pedata.processing.html">pedata.processing package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pedata.processing.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.processing.hfhub.html">pedata.processing.hfhub package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pedata.processing.hfhub.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.processing.hfhub.html#module-pedata.processing.hfhub.base">pedata.processing.hfhub.base module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.processing.hfhub.html#module-pedata.processing.hfhub.update">pedata.processing.hfhub.update module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.processing.hfhub.html#module-pedata.processing.hfhub.upload">pedata.processing.hfhub.upload module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.processing.hfhub.html#module-pedata.processing.hfhub">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.processing.html#module-pedata.processing">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pedata.static.html">pedata.static package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pedata.static.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.static.example_data.html">pedata.static.example_data package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="pedata.static.example_data.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.static.example_data.html#module-pedata.static.example_data.data">pedata.static.example_data.data module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.static.example_data.html#module-pedata.static.example_data.dataset_fixtures">pedata.static.example_data.dataset_fixtures module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedata.static.example_data.html#module-pedata.static.example_data">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.static.html#module-pedata.static">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pedata.visual.html">pedata.visual package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pedata.visual.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.visual.html#module-pedata.visual.visual">pedata.visual.visual module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pedata.visual.html#pedata.visual.visual.plot_target_distribution"><code class="docutils literal notranslate"><span class="pre">plot_target_distribution()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedata.visual.html#pedata.visual.visual.plot_target_distributions"><code class="docutils literal notranslate"><span class="pre">plot_target_distributions()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pedata.visual.html#module-pedata.visual">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-pedata.constants">
+<span id="pedata-constants-module"></span><h2>pedata.constants module<a class="headerlink" href="#module-pedata.constants" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pedata.constants.Mut">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pedata.constants.</span></span><span class="sig-name descname"><span class="pre">Mut</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targ</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedata.constants.Mut" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pedata.constants.Mut.pos">
+<span class="sig-name descname"><span class="pre">pos</span></span><a class="headerlink" href="#pedata.constants.Mut.pos" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pedata.constants.Mut.src">
+<span class="sig-name descname"><span class="pre">src</span></span><a class="headerlink" href="#pedata.constants.Mut.src" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pedata.constants.Mut.targ">
+<span class="sig-name descname"><span class="pre">targ</span></span><a class="headerlink" href="#pedata.constants.Mut.targ" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pedata.constants.Mut_with_no_targ">
+<span class="sig-prename descclassname"><span class="pre">pedata.constants.</span></span><span class="sig-name descname"><span class="pre">Mut_with_no_targ</span></span><a class="headerlink" href="#pedata.constants.Mut_with_no_targ" title="Link to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#pedata.constants.Mut" title="pedata.constants.Mut"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mut</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-pedata.disk_cache">
+<span id="pedata-disk-cache-module"></span><h2>pedata.disk_cache module<a class="headerlink" href="#module-pedata.disk_cache" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.disk_cache.data_exists">
+<span class="sig-prename descclassname"><span class="pre">pedata.disk_cache.</span></span><span class="sig-name descname"><span class="pre">data_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/pedata/disk_cache.html#data_exists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.disk_cache.data_exists" title="Link to this definition">¶</a></dt>
+<dd><p>Check if a file exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – name of the file</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if file exists</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.disk_cache.load_similarity">
+<span class="sig-prename descclassname"><span class="pre">pedata.disk_cache.</span></span><span class="sig-name descname"><span class="pre">load_similarity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alphabet_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">similarity_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace_existing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Array</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/disk_cache.html#load_similarity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.disk_cache.load_similarity" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Load similarity matrices.</dt><dd><p>Loads similarity matrices based on the specified alphabet type and similarity names. It provides the capability to load
+multiple similarity matrices simultaneously and preprocesses them into usable similarity matrices. The function also supports
+optional caching of the loaded matrices for improved performance in subsequent operations.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alphabet_type</strong> – Specifies the type of alphabet used in the similarity calculation. It can be either “aa” for amino acids or “dna” for DNA sequences.</p></li>
+<li><p><strong>similarity_name</strong> – The name or list of names of the similarity matrix/matrixes to be loaded.</p></li>
+<li><p><strong>replace_existing</strong> – Determines if an existing matrix should be overwritten. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the alphabet used for the similarity calculation and the preprocessed similarity matrix.</p>
+</dd>
+</dl>
+<p>Example:
+&gt;&gt;&gt; similarity_names = [‘name1’, ‘name2’]
+&gt;&gt;&gt; alphabet, similarity_matrix = load_similarity(‘aa’, similarity_names)
+&gt;&gt;&gt; print(similarity_matrix)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ValueError</strong> – If the specified alphabet type is invalid</p></li>
+<li><p><strong>ValueError</strong> – If the similarity matrix dimensions are not valid. FIXME not tested</p></li>
+<li><p><strong>ValueError</strong> – If the similarity matrix contains superfluous entries.</p></li>
+<li><p><strong>Exception</strong> – If the similarity matrix is missing entries. FIXME not tested</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pedata.integrity">
+<span id="pedata-integrity-module"></span><h2>pedata.integrity module<a class="headerlink" href="#module-pedata.integrity" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.integrity.check_char_integrity_in_sequences">
+<span class="sig-prename descclassname"><span class="pre">pedata.integrity.</span></span><span class="sig-name descname"><span class="pre">check_char_integrity_in_sequences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">invalid_data_padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Dataset</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/integrity.html#check_char_integrity_in_sequences"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.integrity.check_char_integrity_in_sequences" title="Link to this definition">¶</a></dt>
+<dd><p>Check if all elements in each sequence from a sequence list are in the alphabet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> – Dataset to check</p></li>
+<li><p><strong>replace</strong> – If True (default), replace all characters that are not in the alphabet with the padding character
+If False, raise an error if a character is not in the alphabet</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Dataset with replaced characters (if any false one was found)</dt><dd><p>and the list of the rows without errors</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.integrity.check_dataset_format">
+<span class="sig-prename descclassname"><span class="pre">pedata.integrity.</span></span><span class="sig-name descname"><span class="pre">check_dataset_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dataset</span></span></span><a class="reference internal" href="_modules/pedata/integrity.html#check_dataset_format"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.integrity.check_dataset_format" title="Link to this definition">¶</a></dt>
+<dd><p>Function checks if the dataset is valid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataset</strong> – Dataset to check. It should be an instance of Dataset.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>TypeError</strong> – If the input dataset is not an instance of Dataset.</p></li>
+<li><p><strong>KeyError</strong> – If the dataset is missing a required column or contains a non-allowed column.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="s2">&quot;aa_seq&quot;</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]})</span>
+<span class="go">KeyError: Columns are missing in the dataset. In particular: aa_mut.</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.integrity.check_mutation_namedtuple">
+<span class="sig-prename descclassname"><span class="pre">pedata.integrity.</span></span><span class="sig-name descname"><span class="pre">check_mutation_namedtuple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pedata.constants.Mut" title="pedata.constants.Mut"><span class="pre">Mut</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/integrity.html#check_mutation_namedtuple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.integrity.check_mutation_namedtuple" title="Link to this definition">¶</a></dt>
+<dd><p>Function validates a namedtuple mutation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference internal" href="#pedata.constants.Mut" title="pedata.constants.Mut"><em>Mut</em></a>) – The namedtuple mutation to validate.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the mutation is not a valid namedtuple or if attributes are of incorrect types.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mutation</span> <span class="o">=</span> <span class="n">Mut</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="n">src</span><span class="o">=</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="n">targ</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">check_mutation_namedtuple</span><span class="p">(</span><span class="n">mutation</span><span class="p">)</span>
+<span class="go">TypeError: Attribute &#39;pos&#39; should exist in a namedtuple and be an int</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-pedata.pytorch_dataloaders">
+<span id="pedata-pytorch-dataloaders-module"></span><h2>pedata.pytorch_dataloaders module<a class="headerlink" href="#module-pedata.pytorch_dataloaders" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pedata.pytorch_dataloaders.Dataloader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pedata.pytorch_dataloaders.</span></span><span class="sig-name descname"><span class="pre">Dataloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">device</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_norm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">42</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/pytorch_dataloaders.html#Dataloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.pytorch_dataloaders.Dataloader" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code></p>
+<p>A class to create a dataloader for the given dataset.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.pytorch_dataloaders.Dataloader.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">device</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_norm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">42</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pedata/pytorch_dataloaders.html#Dataloader.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.pytorch_dataloaders.Dataloader.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initializes the dataloader.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> – The dataset to be used.</p></li>
+<li><p><strong>embedding_names</strong> – The names of the encodings to be used.</p></li>
+<li><p><strong>targets</strong> – The targets to be used.</p></li>
+<li><p><strong>device</strong> – The device to be used.</p></li>
+<li><p><strong>batch_size</strong> – The batch size to be used.</p></li>
+<li><p><strong>shuffle</strong> – Whether to shuffle the data.</p></li>
+<li><p><strong>batch_norm</strong> – Whether you use batch norm in your model</p></li>
+<li><p><strong>seed</strong> – The seed to be used for shuffling.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pedata.pytorch_dataloaders.Encoder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pedata.pytorch_dataloaders.</span></span><span class="sig-name descname"><span class="pre">Encoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_embedding_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_embedding_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transformer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/pytorch_dataloaders.html#Encoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.pytorch_dataloaders.Encoder" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class to encode the input data.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">encoder</span> <span class="o">=</span> <span class="n">Encoder</span><span class="p">(</span><span class="n">embedding_name</span><span class="o">=</span><span class="s1">&#39;aa_seq&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;aa_seq&#39;</span><span class="p">:</span> <span class="s1">&#39;hello&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">encoder</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">&#39;hello&#39;</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.pytorch_dataloaders.Encoder.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_embedding_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_embedding_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transformer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pedata/pytorch_dataloaders.html#Encoder.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.pytorch_dataloaders.Encoder.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initializes the encoder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_embedding_name</strong> – The name of the input embedding.</p></li>
+<li><p><strong>out_embedding_name</strong> – The name of the output embedding.</p></li>
+<li><p><strong>transformer</strong> – The transformer to be used.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.pytorch_dataloaders.Encoder.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="_modules/pedata/pytorch_dataloaders.html#Encoder.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.pytorch_dataloaders.Encoder.transform" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the transformed input data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> – Input data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Transformed input data as a Pytorch tensor.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pedata.pytorch_dataloaders.Transformer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pedata.pytorch_dataloaders.</span></span><span class="sig-name descname"><span class="pre">Transformer</span></span><a class="reference internal" href="_modules/pedata/pytorch_dataloaders.html#Transformer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.pytorch_dataloaders.Transformer" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A dummy class to be used as a placeholder for the transformer in Encoder class.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.pytorch_dataloaders.Transformer.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pedata/pytorch_dataloaders.html#Transformer.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.pytorch_dataloaders.Transformer.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initializes the transformer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.pytorch_dataloaders.Transformer.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="_modules/pedata/pytorch_dataloaders.html#Transformer.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.pytorch_dataloaders.Transformer.transform" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the input as it is. Removes unnecessary dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> – Input data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Pytorch tensor of the input data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pedata.typing">
+<span id="pedata-typing-module"></span><h2>pedata.typing module<a class="headerlink" href="#module-pedata.typing" title="Link to this heading">¶</a></h2>
+<p>Typing definitions for pedata and guidelines for using some types</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pedata.typing.PRNGKeyT">
+<span class="sig-prename descclassname"><span class="pre">pedata.typing.</span></span><span class="sig-name descname"><span class="pre">PRNGKeyT</span></span><a class="headerlink" href="#pedata.typing.PRNGKeyT" title="Link to this definition">¶</a></dt>
+<dd><p>NUMPY RANDOM GENERATOR
+type: np.random.Generator
+by default we use rng_seed = 0 and instantiate the generator as np.random.default_rng(rng_seed)</p>
+</dd></dl>
+
+</section>
+<section id="module-pedata.util">
+<span id="pedata-util-module"></span><h2>pedata.util module<a class="headerlink" href="#module-pedata.util" title="Link to this heading">¶</a></h2>
+<p>============ util.py ===========
+#FIXME: change to a better name
+- &gt; these are dataset handling functions
+- &gt; name should be something like dataset_handling.py</p>
+<p>The util module contains utility functions for HuggingFace datasets such as:
+- data extraction
+- normalization (z-score)
+- optimization objective definition (min, max, fix)
+- target adjustement for optimization objectives
+- summary variable calculation
+- metadata handling.</p>
+<p>============ util.py ===========</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pedata.util.DatasetHandler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pedata.util.</span></span><span class="sig-name descname"><span class="pre">DatasetHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hf_ds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/util.html#DatasetHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.util.DatasetHandler" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class for handling datasets in HuggingFace format.
+It stores the feature name, type, and dimension information for each feature as metadata.
+it allows to extract features from the dataset and concatenate them into a single tensor</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.util.DatasetHandler.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hf_ds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/util.html#DatasetHandler.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.util.DatasetHandler.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Generates the metadata for the dataset and stores it in the object.
+:param hf_ds: Dataset to handle. If a dictionary is passed, it is converted to a Dataset object.
+:param features: List of feature names to handle</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.util.DatasetHandler.cat">
+<span class="sig-name descname"><span class="pre">cat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hf_ds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="_modules/pedata/util.html#DatasetHandler.cat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.util.DatasetHandler.cat" title="Link to this definition">¶</a></dt>
+<dd><p>Return concatenated tensor with all features and most general type.
+:param hf_ds: Dataset to concatenate</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Concatenated tensor</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">datasets</span> <span class="k">as</span> <span class="nn">ds</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="s2">&quot;aa_seq&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;MATCG&quot;</span><span class="p">,</span> <span class="s2">&quot;KTGAC&quot;</span><span class="p">],</span> <span class="s2">&quot;target_1&quot;</span><span class="p">:[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;target_2&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hfds_metadata</span> <span class="o">=</span> <span class="n">DatasetHandler</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;target_1&quot;</span><span class="p">,</span> <span class="s2">&quot;target_2&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">hfds_metadata</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">dataset</span><span class="p">))</span>
+<span class="go">tensor([[1., 3.],</span>
+<span class="go">        [2., 4.]], dtype=torch.float64)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.util.DatasetHandler.dims">
+<span class="sig-name descname"><span class="pre">dims</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/util.html#DatasetHandler.dims"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.util.DatasetHandler.dims" title="Link to this definition">¶</a></dt>
+<dd><p>Return the dimensions of the feature(s) in the concatenated tensor in concatenation axis (i.e. the last axis).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>feat</strong> – List of feature names.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple containing the dimensions of the feature(s) in the concatenated tensor.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">datasets</span> <span class="k">as</span> <span class="nn">ds</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="s2">&quot;aa_seq&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;MATCG&quot;</span><span class="p">,</span> <span class="s2">&quot;KTGAC&quot;</span><span class="p">],</span> <span class="s2">&quot;target 1&quot;</span><span class="p">:[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;target 2&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hfds_metadata</span> <span class="o">=</span> <span class="n">DatasetHandler</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;target 1&quot;</span><span class="p">,</span> <span class="s2">&quot;target 2&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">hfds_metadata</span><span class="o">.</span><span class="n">dims</span><span class="p">([</span><span class="s2">&quot;target 2&quot;</span><span class="p">,</span> <span class="s2">&quot;target 1&quot;</span><span class="p">]))</span>
+<span class="go">(1, 2, 0)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.util.DatasetHandler.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">feat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tensor</span></span></span><a class="reference internal" href="_modules/pedata/util.html#DatasetHandler.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.util.DatasetHandler.get" title="Link to this definition">¶</a></dt>
+<dd><p>Return the feature(s) in the concatenated tensor in concatenation axis (i.e. the last axis).
+:param t: Concatenated tensor
+:param feat: List of feature names to extract</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tensor containing the extracted feature(s)</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">datasets</span> <span class="k">as</span> <span class="nn">ds</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="s2">&quot;aa_seq&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;MATCG&quot;</span><span class="p">,</span> <span class="s2">&quot;KTGAC&quot;</span><span class="p">],</span> <span class="s2">&quot;target 1&quot;</span><span class="p">:[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;target 2&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hfds_metadata</span> <span class="o">=</span> <span class="n">DatasetHandler</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;target 1&quot;</span><span class="p">,</span> <span class="s2">&quot;target 2&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">hfds_metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">hfds_metadata</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">dataset</span><span class="p">),</span> <span class="p">[</span><span class="s2">&quot;target 1&quot;</span><span class="p">]))</span>
+<span class="go">tensor([[1.],</span>
+<span class="go">        [2.]], dtype=torch.float64)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pedata.util.OptimizationObjective">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pedata.util.</span></span><span class="sig-name descname"><span class="pre">OptimizationObjective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'max'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'min'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'fix'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aim_for</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float16</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uint8</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/util.html#OptimizationObjective"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.util.OptimizationObjective" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Dataclass for optimization objectives.
+direction: Direction of the optimization objective.</p>
+<blockquote>
+<div><p>Valid values are ‘min’, ‘max’, and ‘fix’. If ‘fix’, the value to aim for must be specified in <cite>aim_for</cite>.</p>
+</div></blockquote>
+<p>aim_for: Target value for the optimization objective. This is only used if <cite>direction</cite> is set to ‘fix’.
+weight: Weight for the objective. This is used to adjust the relative importance of the objective compared to other objectives.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># For &#39;min&#39; direction with default values for aim_for and weight</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objective_min</span> <span class="o">=</span> <span class="n">OptimizationObjective</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">objective_min</span><span class="p">)</span>
+<span class="go">OptimizationObjective(direction=&#39;min&#39;, aim_for=None, weight=1)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># For &#39;fix&#39; direction with a specific aim_for value and default weight</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objective_fix</span> <span class="o">=</span> <span class="n">OptimizationObjective</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s1">&#39;fix&#39;</span><span class="p">,</span> <span class="n">aim_for</span><span class="o">=</span><span class="mf">42.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">objective_fix</span><span class="p">)</span>
+<span class="go">OptimizationObjective(direction=&#39;fix&#39;, aim_for=42.0, weight=1)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># For &#39;max&#39; direction with custom values for aim_for and weight</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objective_max</span> <span class="o">=</span> <span class="n">OptimizationObjective</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">objective_max</span><span class="p">)</span>
+<span class="go">OptimizationObjective(direction=&#39;max&#39;, aim_for=None, weight=2)</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pedata.util.OptimizationObjective.aim_for">
+<span class="sig-name descname"><span class="pre">aim_for</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float16</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pedata.util.OptimizationObjective.aim_for" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pedata.util.OptimizationObjective.direction">
+<span class="sig-name descname"><span class="pre">direction</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'max'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'min'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'fix'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pedata.util.OptimizationObjective.direction" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pedata.util.OptimizationObjective.weight">
+<span class="sig-name descname"><span class="pre">weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uint8</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#pedata.util.OptimizationObjective.weight" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.util.adjust_all_targets_maximization">
+<span class="sig-prename descclassname"><span class="pre">pedata.util.</span></span><span class="sig-name descname"><span class="pre">adjust_all_targets_maximization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#pedata.util.OptimizationObjective" title="pedata.util.OptimizationObjective"><span class="pre">OptimizationObjective</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dataset</span></span></span><a class="reference internal" href="_modules/pedata/util.html#adjust_all_targets_maximization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.util.adjust_all_targets_maximization" title="Link to this definition">¶</a></dt>
+<dd><p>Adjust target variables to ensure that optimization objective is always maximization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>d</strong> – The dataset to adjust.</p></li>
+<li><p><strong>objectives</strong> – Dictionary with targets names as keys and an OptimizationObjective Dataclass as values.
+see OptimizationObjective Dataclass for details.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The adjusted dataset with modified target variables.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ds.Dataset</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Exception</strong> – If not all target columns have an objective specified.</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The objective type is specified as a dictionary with targets names as keys and an OptimizationObjective Dataclass as values.
+In this method, the only the objective direction is extracted from the OptimizationObjective Dataclass.</p>
+<p>Uses <cite>adjust_single_target_maximization</cite> nested method which takes a single target variable <cite>target_value</cite> and an optimization objective <cite>target_opt_obj</cite>.
+It adjusts the target by performing either of the following steps:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Multiplying the target variable by -1 if the objective is minimization.</p></li>
+<li><p>Using the absolute difference between the target value and a fixed value to get close to the desired value if the objective is to fix the value.</p></li>
+<li><p>(default). Using the target variable as is if the objective is maximization.</p></li>
+</ol>
+</div></blockquote>
+<dl>
+<dt>Example usage:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">datasets</span> <span class="k">as</span> <span class="nn">ds</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pedata.util</span> <span class="kn">import</span> <span class="n">adjust_all_targets_maximization</span><span class="p">,</span> <span class="n">OptimizationObjective</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;target1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">13</span><span class="p">],</span> <span class="s2">&quot;target2&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">],</span> <span class="s2">&quot;target3&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]}))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objectives</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;target1&quot;</span><span class="p">:</span> <span class="n">OptimizationObjective</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">),</span> <span class="s2">&quot;target2&quot;</span><span class="p">:</span> <span class="n">OptimizationObjective</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">),</span> <span class="s2">&quot;target3&quot;</span><span class="p">:</span> <span class="n">OptimizationObjective</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s2">&quot;fix&quot;</span><span class="p">,</span> <span class="n">aim_for</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">adjusted_dataset</span> <span class="o">=</span> <span class="n">adjust_all_targets_maximization</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">objectives</span><span class="o">=</span><span class="n">objectives</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">adjusted_dataset</span><span class="p">[</span><span class="s1">&#39;target1&#39;</span><span class="p">])</span>
+<span class="go">[-11 -12 -13]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">adjusted_dataset</span><span class="p">[</span><span class="s1">&#39;target2&#39;</span><span class="p">])</span>
+<span class="go">[14 15 16]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">adjusted_dataset</span><span class="p">[</span><span class="s1">&#39;target3&#39;</span><span class="p">])</span>
+<span class="go">[-3 -2 -1]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.util.append_summary_variable">
+<span class="sig-prename descclassname"><span class="pre">pedata.util.</span></span><span class="sig-name descname"><span class="pre">append_summary_variable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">dataset:</span> <span class="pre">~datasets.arrow_dataset.Dataset,</span> <span class="pre">normalization:</span> <span class="pre">~typing.Callable[[~numpy.ndarray],</span> <span class="pre">~numpy.ndarray]</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">zscore&gt;,</span> <span class="pre">objectives:</span> <span class="pre">dict[str,</span> <span class="pre">~pedata.util.OptimizationObjective]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">summary_variable_name:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'target</span> <span class="pre">summary</span> <span class="pre">variable'</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dataset</span></span></span><a class="reference internal" href="_modules/pedata/util.html#append_summary_variable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.util.append_summary_variable" title="Link to this definition">¶</a></dt>
+<dd><p>Append summary variable to a dataset.
+:param dataset: Dataset to append summary variable to
+:param normalization: A normalization function for the summary variable. Defaults to zscore.
+:param objectives: The optimization objective for the target variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dataset with summary variable appended as a new column.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the dataset contains no target columns.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">datasets</span> <span class="k">as</span> <span class="nn">ds</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pedata.util</span> <span class="kn">import</span> <span class="n">OptimizationObjective</span><span class="p">,</span> <span class="n">append_summary_variable</span><span class="p">,</span> <span class="n">zscore</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s2">&quot;target1&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="s2">&quot;target2&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="s2">&quot;target3&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objectives</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s2">&quot;target1&quot;</span><span class="p">:</span> <span class="n">OptimizationObjective</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="s2">&quot;target2&quot;</span><span class="p">:</span> <span class="n">OptimizationObjective</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="s2">&quot;target3&quot;</span><span class="p">:</span> <span class="n">OptimizationObjective</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s2">&quot;fix&quot;</span><span class="p">,</span> <span class="n">aim_for</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">append_summary_variable</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">dataset</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">normalization</span><span class="o">=</span><span class="n">zscore</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">objectives</span><span class="o">=</span><span class="n">objectives</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">summary_variable_name</span><span class="o">=</span><span class="s2">&quot;target summary variable&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> 
+<span class="go">Dataset({</span>
+<span class="go">    features: [&#39;target1&#39;, &#39;target2&#39;, &#39;target3&#39;, &#39;target summary variable&#39;],</span>
+<span class="go">    num_rows: 10</span>
+<span class="go">})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.util.de_zscore_predictions">
+<span class="sig-prename descclassname"><span class="pre">pedata.util.</span></span><span class="sig-name descname"><span class="pre">de_zscore_predictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zs_pred_means</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zs_pred_stds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">array(0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">array(1)</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/pedata/util.html#de_zscore_predictions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.util.de_zscore_predictions" title="Link to this definition">¶</a></dt>
+<dd><p>de z-score a zcored array
+zs_pred_means can be either the mean or the std or both</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>zs_pred_means</strong> – The input mean array to be de_zscored.</p></li>
+<li><p><strong>zs_pred_stds</strong> – The input std array to be de_zscored.</p></li>
+<li><p><strong>mean</strong> – the mean from the original (train) array</p></li>
+<li><p><strong>std</strong> – the std from the original (train) array</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>containing the de_zscored arrays:</dt><dd><ul class="simple">
+<li><p>the mean array if only mean is passed as an input</p></li>
+<li><p>the mean and std arrays if both are passed as inputs</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.util.get_summary_variable">
+<span class="sig-prename descclassname"><span class="pre">pedata.util.</span></span><span class="sig-name descname"><span class="pre">get_summary_variable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">dataset:</span> <span class="pre">~datasets.arrow_dataset.Dataset,</span> <span class="pre">normalization:</span> <span class="pre">~typing.Callable[[~numpy.ndarray],</span> <span class="pre">~numpy.ndarray]</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">zscore&gt;,</span> <span class="pre">objectives:</span> <span class="pre">dict[str,</span> <span class="pre">~pedata.util.OptimizationObjective]</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/pedata/util.html#get_summary_variable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.util.get_summary_variable" title="Link to this definition">¶</a></dt>
+<dd><p>Extracts a summary variable from a dataset.
+:param dataset: Dataset to extract summary variable from
+:param normalization: A normalization function for the summary variable. Defaults to zscore.
+:param objectives: The optimization objective for the target variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The summary variable.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TypeError</strong> – If the input is not a valid dataset object.</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This function calculates a summary variable from a given dataset as follows:</p>
+<ul>
+<li><dl>
+<dt>If the objectives are specified, the summary variable is calculated as the weighted sum of the adjusted targets.</dt><dd><ul class="simple">
+<li><ol class="arabic simple" start="0">
+<li><p>Adjust the dataset targets to ensure that the optimization objective is always maximization.</p></li>
+</ol>
+</li>
+</ul>
+<p>uses <cite>adjust_all_targets_maximization</cite> method
+- 1. Get the adjusted targets data from the dataset using the specified normalization function.
+- 2. Calculate the summary variable by computing the weigthed sum of the adjusted targets</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>If the objectives are not specified:</dt><dd><ul>
+<li><ol class="arabic simple" start="0">
+<li><p>Creates default objective (maximization, weight=1 for all targets) and adjust the dataset targets with it.</p></li>
+</ol>
+<blockquote>
+<div><p>Basically, this step does nothing to the target, but defines the objectives, which is a requirement for summing the targets, which requires the weights.</p>
+</div></blockquote>
+</li>
+<li><ol class="arabic simple">
+<li><p>Get the targets data from the dataset using the specified normalization function.</p></li>
+</ol>
+</li>
+<li><ol class="arabic simple" start="2">
+<li><p>Calculate the summary variable by computing the (weigthed) sum of the targets</p></li>
+</ol>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">datasets</span> <span class="k">as</span> <span class="nn">ds</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pedata.util</span> <span class="kn">import</span> <span class="n">OptimizationObjective</span><span class="p">,</span> <span class="n">get_summary_variable</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="s2">&quot;target1&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;target2&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span><span class="s2">&quot;target3&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">)})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">normalised_summary</span> <span class="o">=</span> <span class="n">get_summary_variable</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">normalised_summary</span><span class="p">)</span> 
+<span class="go">[-4.70009671 -3.65563078 -2.61116484 -1.5666989  -0.52223297  0.52223297</span>
+<span class="go">1.5666989   2.61116484  3.65563078  4.70009671]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.util.get_target">
+<span class="sig-prename descclassname"><span class="pre">pedata.util.</span></span><span class="sig-name descname"><span class="pre">get_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">dataset:</span> <span class="pre">~datasets.arrow_dataset.Dataset,</span> <span class="pre">max_targets:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">normalization:</span> <span class="pre">~typing.Callable[[~numpy.ndarray],</span> <span class="pre">~numpy.ndarray]</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;,</span> <span class="pre">as_dict:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/util.html#get_target"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.util.get_target" title="Link to this definition">¶</a></dt>
+<dd><p>Extract target variables from a Hugging Face dataset.</p>
+<p>This function retrieves the target variables from a Hugging Face dataset and provides options for normalization and returning the targets as a dictionary or tuple.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> – The dataset to extract target variables from.</p></li>
+<li><p><strong>max_targets</strong> – Maximum number of targets to return. Defaults to None, which returns all targets.</p></li>
+<li><p><strong>normalization</strong> – A function for normalizing the target values. Defaults to the identity function (no normalization).</p></li>
+<li><p><strong>as_dict</strong> – Whether to return the targets as a dictionary of target names mapping to values. Defaults to False, in which case target names and values are returned as a tuple.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If <cite>as_dict</cite> is False, returns a tuple containing the target names and the normalized target values.
+If <cite>as_dict</cite> is True, returns a dictionary where the keys are the target names and the values are the normalized target values.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">datasets</span> <span class="k">as</span> <span class="nn">ds</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">onp</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="s2">&quot;target1&quot;</span><span class="p">:</span> <span class="n">onp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]),</span><span class="s2">&quot;target2&quot;</span><span class="p">:</span> <span class="n">onp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]),</span><span class="s2">&quot;target3&quot;</span><span class="p">:</span> <span class="n">onp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">])})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subset_targets_dict</span> <span class="o">=</span> <span class="n">get_target</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">max_targets</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">as_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.util.get_target_columns">
+<span class="sig-prename descclassname"><span class="pre">pedata.util.</span></span><span class="sig-name descname"><span class="pre">get_target_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/util.html#get_target_columns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.util.get_target_columns" title="Link to this definition">¶</a></dt>
+<dd><p>Get target columns from dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>d</strong> (<em>ds.Dataset</em>) – Dataset to extract target columns from</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Target columns</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Sequence[str]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the input is not a valid dataset object.</p>
+</dd>
+</dl>
+<p>Example:
+&gt;&gt;&gt; import datasets as ds
+&gt;&gt;&gt; dataset = ds.Dataset.from_dict({“aa_seq”: [“MATCG”, “KTGAC”], “target 1”:[1, 2], “target 2”: [3, 4]})
+&gt;&gt;&gt; target_columns = get_target_columns(dataset)
+&gt;&gt;&gt; print(target_columns)
+[‘target 1’, ‘target 2’]</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.util.zscore">
+<span class="sig-prename descclassname"><span class="pre">pedata.util.</span></span><span class="sig-name descname"><span class="pre">zscore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/pedata/util.html#zscore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.util.zscore" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Z-score is a statistical technique used to standardize an array</dt><dd><p>This is by subtracting the mean and dividing by the standard deviation. This process transforms the
+values in the array to have a mean of 0 and a standard deviation of 1, providing a common scale for comparison.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> – The input array to be normalized.</p></li>
+<li><p><strong>mean</strong> – Should be set as an input when the value is already known. Typically for transforming a test set/target</p></li>
+<li><p><strong>std</strong> – Should be set as an input when the value is already known. Typically for transforming a test set/target</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The normalized array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pedata.util</span> <span class="kn">import</span> <span class="n">zscore</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zc_array</span> <span class="o">=</span> <span class="n">zscore</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">zc_array</span><span class="p">)</span> 
+<span class="go">[[-1.22474487 -1.22474487 -1.22474487]</span>
+<span class="go">[ 0.          0.          0.        ]</span>
+<span class="go">[ 1.22474487  1.22474487  1.22474487]]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-pedata">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pedata" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="index.html"
+       title="previous chapter">← pedata documentation!</a>
+  </li>
+  <li class="next">
+    <a href="pedata.data_io.html"
+       title="next chapter">pedata.data_io package →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, Exazyme.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

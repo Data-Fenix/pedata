@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>pedata.integrity</title>
+    
+          <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../_static/documentation_options.js?v=a5b3107c"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../_static/theme-vendors.js"></script> -->
+      <script src="../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../genindex.html" />
+  <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../index.html" class="home-link">
+    
+      <span class="site-name">pedata documentation</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../index.html#pedata-documentation">pedata documentation!</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../pedata.html" class="reference internal ">pedata package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../pedata.encoding.html" class="reference internal ">pedata.encoding package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../pedata.mutation.html" class="reference internal ">pedata.mutation package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../modules.html" class="reference internal ">pedata</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../index.html">Module code</a> &raquo;</li>
+    
+    <li>pedata.integrity</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for pedata.integrity</h1><div class="highlight"><pre>
+<span></span><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;check_dataset_format&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;check_mutation_namedtuple&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;check_char_integrity_in_sequences&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">Mut</span><span class="p">,</span> <span class="n">Mut_with_no_targ</span>
+<span class="kn">from</span> <span class="nn">.encoding.alphabets</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">padding_value_enc</span><span class="p">,</span>
+    <span class="n">valid_aa_alphabet</span><span class="p">,</span>
+    <span class="n">valid_dna_alphabet</span><span class="p">,</span>
+    <span class="n">valid_smiles_alphabet</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="check_dataset_format">
+<a class="viewcode-back" href="../../pedata.html#pedata.integrity.check_dataset_format">[docs]</a>
+<span class="k">def</span> <span class="nf">check_dataset_format</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dataset</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function checks if the dataset is valid.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dataset: Dataset to check. It should be an instance of Dataset.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the input dataset is not an instance of Dataset.</span>
+<span class="sd">        KeyError: If the dataset is missing a required column or contains a non-allowed column.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; dataset = Dataset.from_dict({&quot;aa_seq&quot;: [None, None]})</span>
+<span class="sd">        KeyError: Columns are missing in the dataset. In particular: aa_mut.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">):</span>
+        <span class="n">feature_keys</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Mutation should be a dataset&quot;</span><span class="p">)</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">with_format</span><span class="p">(</span><span class="s2">&quot;pandas&quot;</span><span class="p">)</span>
+    <span class="n">missing_cols</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Check if either &quot;aa_seq&quot; or &quot;dna_seq&quot; column is missing</span>
+    <span class="k">if</span> <span class="nb">all</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="s2">&quot;aa_seq&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">feature_keys</span><span class="p">,</span>
+            <span class="s2">&quot;dna_seq&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">feature_keys</span><span class="p">,</span>
+            <span class="s2">&quot;smiles_seq&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">feature_keys</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="p">):</span>
+        <span class="n">missing_cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&quot;aa_seq&quot; or &quot;dna_seq&quot; or &quot;smiles_seq&quot;&#39;</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Calculate the number of missing values in either &quot;aa_seq&quot; or &quot;dna_seq&quot; column</span>
+        <span class="k">if</span> <span class="s2">&quot;aa_seq&quot;</span> <span class="ow">in</span> <span class="n">feature_keys</span><span class="p">:</span>
+            <span class="n">missing_values</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;aa_seq&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+            <span class="c1"># Check if missing values exist and &quot;aa_mut&quot; column is missing</span>
+            <span class="k">if</span> <span class="n">missing_values</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="s2">&quot;aa_mut&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">feature_keys</span><span class="p">:</span>
+                <span class="n">missing_cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;aa_mut&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;dna_seq&quot;</span> <span class="ow">in</span> <span class="n">feature_keys</span><span class="p">:</span>
+            <span class="n">missing_values</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;dna_seq&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+            <span class="c1"># Check if missing values exist and &quot;aa_mut&quot; column is missing</span>
+            <span class="k">if</span> <span class="n">missing_values</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="s2">&quot;dna_mut&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">feature_keys</span><span class="p">:</span>
+                <span class="n">missing_cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;dna_mut&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;smiles_seq&quot;</span> <span class="ow">in</span> <span class="n">feature_keys</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># nothing to do here</span>
+
+    <span class="c1"># Check if &quot;target summary variable&quot; column is present</span>
+    <span class="k">if</span> <span class="s2">&quot;target summary variable&quot;</span> <span class="ow">in</span> <span class="n">feature_keys</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+            <span class="s2">&quot;There was already a column called &#39;target summary variable&#39; in the data set. This is a special column name reserved for Exazymes internal use.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Check if any column starts with &quot;target&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">([</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">feature_keys</span> <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;target&quot;</span><span class="p">)])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">missing_cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;a column starting with &quot;target&quot;&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Raise KeyError if any missing columns are found</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing_cols</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Columns are missing in the data file. In particular: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing_cols</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">dataset</span></div>
+
+
+
+<span class="c1"># Validate namedtuple mutation</span>
+<div class="viewcode-block" id="check_mutation_namedtuple">
+<a class="viewcode-back" href="../../pedata.html#pedata.integrity.check_mutation_namedtuple">[docs]</a>
+<span class="k">def</span> <span class="nf">check_mutation_namedtuple</span><span class="p">(</span><span class="n">m</span><span class="p">:</span> <span class="n">Mut</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function validates a namedtuple mutation.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        m (Mut): The namedtuple mutation to validate.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        TypeError: If the mutation is not a valid namedtuple or if attributes are of incorrect types.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; mutation = Mut(pos=&#39;2&#39;, src=&#39;A&#39;, targ=&#39;C&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; check_mutation_namedtuple(mutation)</span>
+<span class="sd">        TypeError: Attribute &#39;pos&#39; should exist in a namedtuple and be an int</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">Mut</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">Mut_with_no_targ</span><span class="p">))</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;Invalid format. Each mutation namedtuple should be an instance of a Mut namedtuple with at least two attributes: (pos, src), and atmost 3 attributes: (pos, src, targ)&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="s2">&quot;pos&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Attribute &#39;pos&#39; should exist in a namedtuple and be an int&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="s2">&quot;src&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">src</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Attribute &#39;src&#39; should exist in a namedtuple and be a string&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="s2">&quot;targ&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">targ</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;If a namedtuple has length of 3, attribute &#39;targ&#39; should exist as a string&quot;</span>
+            <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="s2">&quot;src&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">src</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mutation source &#39;</span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">src</span><span class="si">}</span><span class="s2">&#39; is not a single character.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="s2">&quot;targ&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">targ</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mutation target &#39;</span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">targ</span><span class="si">}</span><span class="s2">&#39; is not a single character.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="check_char_integrity_in_sequences">
+<a class="viewcode-back" href="../../pedata.html#pedata.integrity.check_char_integrity_in_sequences">[docs]</a>
+<span class="k">def</span> <span class="nf">check_char_integrity_in_sequences</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">,</span>
+    <span class="n">invalid_data_padding</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Dataset</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if all elements in each sequence from a sequence list are in the alphabet.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dataset : Dataset to check</span>
+<span class="sd">        replace :</span>
+<span class="sd">            If True (default), replace all characters that are not in the alphabet with the padding character</span>
+<span class="sd">            If False, raise an error if a character is not in the alphabet</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Dataset with replaced characters (if any false one was found)</span>
+<span class="sd">            and the list of the rows without errors</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">seq_alphabet_dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;aa_seq&quot;</span><span class="p">:</span> <span class="n">valid_aa_alphabet</span><span class="p">,</span>
+        <span class="s2">&quot;dna_seq&quot;</span><span class="p">:</span> <span class="n">valid_dna_alphabet</span><span class="p">,</span>
+        <span class="s2">&quot;smiles_seq&quot;</span><span class="p">:</span> <span class="n">valid_smiles_alphabet</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">rows_with_errors</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># FIXME Use dataset.map() instead of pandas</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">seq_col</span><span class="p">,</span> <span class="n">alphabet</span> <span class="ow">in</span> <span class="n">seq_alphabet_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">seq_col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">sequence</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">seq_col</span><span class="p">]):</span>
+                <span class="n">new_sequence</span><span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="n">_check_sequence</span><span class="p">(</span>
+                    <span class="n">sequence</span><span class="p">,</span> <span class="n">padding_value_enc</span><span class="p">,</span> <span class="n">alphabet</span><span class="p">,</span> <span class="n">invalid_data_padding</span>
+                <span class="p">)</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="nb">id</span><span class="p">,</span> <span class="n">seq_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_sequence</span>
+                <span class="k">if</span> <span class="n">error</span><span class="p">:</span>
+                    <span class="n">rows_with_errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+
+    <span class="n">rows_without_errors</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">rows_with_errors</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">rows_without_errors</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_check_sequence</span><span class="p">(</span>
+    <span class="n">sequence</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">padding_char</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">alphabet</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">invalid_data_padding</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if all elements in a sequence are in the alphabet.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        sequence : Sequence to check</span>
+<span class="sd">        alphabet : List of characters that are allowed in the sequences</span>
+<span class="sd">        replace : If True, replace all characters that are not in the alphabet with the padding character</span>
+<span class="sd">        padding_char: Character to replace the false ones with</span>
+<span class="sd">            if False, raise an error if a character is not in the alphabet</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        sequence : Sequence with replaced characters (if any false one was found)</span>
+<span class="sd">        rows_with_errors : Boolean indicating if there were errors in the sequence</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rows_with_errors</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="n">sequence</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">sequence</span><span class="p">,</span> <span class="kc">False</span>
+
+    <span class="n">new_sequence</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">sequence</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">pos</span><span class="p">,</span> <span class="n">char</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sequence</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">char</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">padding_char</span><span class="p">]</span> <span class="o">+</span> <span class="n">alphabet</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">invalid_data_padding</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">char</span><span class="si">}</span><span class="s2"> found in sequence </span><span class="si">{</span><span class="n">sequence</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">rows_with_errors</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">new_sequence</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">padding_char</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Found &#39;</span><span class="si">{</span><span class="n">char</span><span class="si">}</span><span class="s2">&#39; -&gt; not in alphabet </span><span class="si">{</span><span class="n">alphabet</span><span class="si">}</span><span class="s2"> - sequence: </span><span class="si">{</span><span class="n">sequence</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">new_sequence</span><span class="p">),</span> <span class="n">rows_with_errors</span>
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, Exazyme.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

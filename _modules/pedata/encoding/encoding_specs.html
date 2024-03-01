@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>pedata.encoding.encoding_specs</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../_static/documentation_options.js?v=a5b3107c"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">pedata documentation</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../index.html#pedata-documentation">pedata documentation!</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.html" class="reference internal ">pedata package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.encoding.html" class="reference internal ">pedata.encoding package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.mutation.html" class="reference internal ">pedata.mutation package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../modules.html" class="reference internal ">pedata</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../index.html">Module code</a> &raquo;</li>
+    
+    <li>pedata.encoding.encoding_specs</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for pedata.encoding.encoding_specs</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot; Module for encoding specifications.</span>
+<span class="sd">This module contains the encoding specifications for the encodings that are provided by the package.</span>
+
+<span class="sd">The encodings are specified as a list `encodings` containing `EncodingSpec` or `SklEncodingSpec` objects.</span>
+
+<span class="sd">`EncodingSpec` objects contain the following attributes:</span>
+<span class="sd">    - `provides` (List): The names of the columns that the encoding will provide</span>
+<span class="sd">    - `requires` (List): The names of the columns that the encoding requires</span>
+<span class="sd">    - `func`: A function that takes a dataset and returns a dictionary of columns that the encoding provides</span>
+
+<span class="sd">SklEncodingSpec objects are slightly different and contain the following attributes:</span>
+<span class="sd">    - `provides` (str): The name of the column that the encoding will provide</span>
+<span class="sd">    - `requires` (str): The name of the column that the encoding requires</span>
+<span class="sd">    - `func`: A sklearn Transformer (sklearn.TransformerMixin) object that will be fit and transformed on the dataset</span>
+
+<span class="sd">The `encodings` list contains all the encodings that are provided by the package and is used by </span>
+<span class="sd">the `add_encodings` function, which takes a dataset or a dataset dictionary and adds the specified encodings to it.</span>
+<span class="sd">Encodings are applied in a specific order based on their dependencies.</span>
+
+<span class="sd">`provided_encodings` is a list of all the encodings that are provided by the package.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">..encoding</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">EncodingSpec</span><span class="p">,</span>
+    <span class="n">SklEncodingSpec</span><span class="p">,</span>
+    <span class="n">NGramFeat</span><span class="p">,</span>
+    <span class="n">Ankh</span><span class="p">,</span>
+    <span class="n">ESM</span><span class="p">,</span>
+    <span class="n">SeqStrOneHot</span><span class="p">,</span>
+    <span class="n">SeqStrLen</span><span class="p">,</span>
+    <span class="n">unirep</span><span class="p">,</span>
+    <span class="n">translate_dna_to_aa_seq</span><span class="p">,</span>
+    <span class="n">return_prob_feat</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..encoding</span> <span class="kn">import</span> <span class="n">transforms_graph</span> <span class="k">as</span> <span class="n">tg</span>
+<span class="kn">from</span> <span class="nn">.alphabets</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">dna_alphabet</span><span class="p">,</span>
+    <span class="n">aa_alphabet</span><span class="p">,</span>
+    <span class="n">valid_smiles_alphabet</span><span class="p">,</span>
+    <span class="n">padding_value_enc</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="n">encodings</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">EncodingSpec</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># EncodingSpec([&quot;list&quot;, &quot;of&quot;, &quot;provided&quot;, &quot;encodings&quot;], [&quot;list_of&quot;,&quot;required_encodings&quot;], function_taking_dataset_and_returning_dict),</span>
+    <span class="n">EncodingSpec</span><span class="p">([</span><span class="s2">&quot;atm_count&quot;</span><span class="p">,</span> <span class="s2">&quot;bnd_count&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;bnd_idcs&quot;</span><span class="p">],</span> <span class="n">tg</span><span class="o">.</span><span class="n">bnd_count_atm_count</span><span class="p">),</span>
+    <span class="n">EncodingSpec</span><span class="p">([</span><span class="s2">&quot;atm_adj&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;atm_count&quot;</span><span class="p">,</span> <span class="s2">&quot;bnd_count&quot;</span><span class="p">],</span> <span class="n">tg</span><span class="o">.</span><span class="n">atm_adj</span><span class="p">),</span>
+    <span class="n">EncodingSpec</span><span class="p">([</span><span class="s2">&quot;atm_bnd_incid&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;atm_count&quot;</span><span class="p">,</span> <span class="s2">&quot;bnd_count&quot;</span><span class="p">],</span> <span class="n">tg</span><span class="o">.</span><span class="n">atm_bnd_incid</span><span class="p">),</span>
+    <span class="n">EncodingSpec</span><span class="p">(</span>
+        <span class="p">[</span><span class="s2">&quot;atm_retprob100&quot;</span><span class="p">],</span>  <span class="c1"># shape: (atm_count, atm_count)</span>
+        <span class="p">[</span><span class="s2">&quot;atm_adj&quot;</span><span class="p">],</span>  <span class="c1"># shape: (2, atm_count)</span>
+        <span class="n">partial</span><span class="p">(</span>
+            <span class="n">return_prob_feat</span><span class="p">,</span>
+            <span class="mi">100</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">),</span>
+    <span class="n">EncodingSpec</span><span class="p">([</span><span class="s2">&quot;aa_unirep_1900&quot;</span><span class="p">,</span> <span class="s2">&quot;aa_unirep_final&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;aa_seq&quot;</span><span class="p">],</span> <span class="n">unirep</span><span class="p">),</span>
+    <span class="n">EncodingSpec</span><span class="p">([</span><span class="s2">&quot;aa_seq&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;dna_seq&quot;</span><span class="p">],</span> <span class="n">translate_dna_to_aa_seq</span><span class="p">),</span>
+    <span class="n">EncodingSpec</span><span class="p">(</span>
+        <span class="p">[</span><span class="s2">&quot;aa_ankh_avg&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;aa_ankh_base&quot;</span><span class="p">],</span>
+        <span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;aa_ankh_avg&quot;</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">with_format</span><span class="p">(</span><span class="s2">&quot;numpy&quot;</span><span class="p">)[</span><span class="s2">&quot;aa_ankh_base&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="p">},</span>
+    <span class="p">),</span>
+    <span class="n">EncodingSpec</span><span class="p">(</span>
+        <span class="p">[</span><span class="s2">&quot;aa_esm2_avg&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;aa_esm2_t6_8M&quot;</span><span class="p">],</span>
+        <span class="k">lambda</span> <span class="n">df</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;aa_esm2_avg&quot;</span><span class="p">:</span> <span class="n">df</span><span class="o">.</span><span class="n">with_format</span><span class="p">(</span><span class="s2">&quot;numpy&quot;</span><span class="p">)[</span><span class="s2">&quot;aa_esm2_t6_8M&quot;</span><span class="p">]</span>
+            <span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="p">},</span>
+    <span class="p">),</span>
+    <span class="n">EncodingSpec</span><span class="p">(</span>
+        <span class="p">[</span><span class="s2">&quot;aa_1hot&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;aa_seq&quot;</span><span class="p">],</span>
+        <span class="n">SeqStrOneHot</span><span class="p">(</span><span class="s2">&quot;aa_1hot&quot;</span><span class="p">,</span> <span class="s2">&quot;aa_seq&quot;</span><span class="p">,</span> <span class="n">padding_value_enc</span><span class="p">,</span> <span class="n">aa_alphabet</span><span class="p">),</span>
+    <span class="p">),</span>
+    <span class="n">EncodingSpec</span><span class="p">(</span>
+        <span class="p">[</span><span class="s2">&quot;dna_1hot&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;dna_seq&quot;</span><span class="p">],</span>
+        <span class="n">SeqStrOneHot</span><span class="p">(</span><span class="s2">&quot;dna_1hot&quot;</span><span class="p">,</span> <span class="s2">&quot;dna_seq&quot;</span><span class="p">,</span> <span class="n">padding_value_enc</span><span class="p">,</span> <span class="n">dna_alphabet</span><span class="p">),</span>
+    <span class="p">),</span>
+    <span class="n">EncodingSpec</span><span class="p">(</span>
+        <span class="p">[</span><span class="s2">&quot;smiles_1hot&quot;</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">&quot;smiles_seq&quot;</span><span class="p">],</span>
+        <span class="n">SeqStrOneHot</span><span class="p">(</span>
+            <span class="s2">&quot;smiles_1hot&quot;</span><span class="p">,</span> <span class="s2">&quot;smiles_seq&quot;</span><span class="p">,</span> <span class="n">padding_value_enc</span><span class="p">,</span> <span class="n">valid_smiles_alphabet</span>
+        <span class="p">),</span>
+    <span class="p">),</span>
+    <span class="c1"># Deprecated API below, only allows a single provided and single required encoding</span>
+    <span class="c1"># SklEncodingSpec(&quot;provided&quot;, &quot;required&quot;, sklearn.TransformerMixin),</span>
+    <span class="c1"># This is not too much of an issue</span>
+    <span class="n">SklEncodingSpec</span><span class="p">(</span><span class="s2">&quot;aa_len&quot;</span><span class="p">,</span> <span class="s2">&quot;aa_seq&quot;</span><span class="p">,</span> <span class="n">SeqStrLen</span><span class="p">()),</span>  <span class="c1"># aa_len shape: (1,)</span>
+    <span class="n">SklEncodingSpec</span><span class="p">(</span><span class="s2">&quot;aa_1gram&quot;</span><span class="p">,</span> <span class="s2">&quot;aa_seq&quot;</span><span class="p">,</span> <span class="n">NGramFeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">aa_alphabet</span><span class="p">)),</span>
+    <span class="n">SklEncodingSpec</span><span class="p">(</span><span class="s2">&quot;aa_ankh_base&quot;</span><span class="p">,</span> <span class="s2">&quot;aa_seq&quot;</span><span class="p">,</span> <span class="n">Ankh</span><span class="p">()),</span>
+    <span class="n">SklEncodingSpec</span><span class="p">(</span><span class="s2">&quot;aa_esm2_t6_8M&quot;</span><span class="p">,</span> <span class="s2">&quot;aa_seq&quot;</span><span class="p">,</span> <span class="n">ESM</span><span class="p">()),</span>
+    <span class="n">SklEncodingSpec</span><span class="p">(</span><span class="s2">&quot;dna_len&quot;</span><span class="p">,</span> <span class="s2">&quot;dna_seq&quot;</span><span class="p">,</span> <span class="n">SeqStrLen</span><span class="p">()),</span>
+<span class="p">]</span>
+
+
+<span class="n">provided_encodings</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">encodings</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">provides</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="find_function_order">
+<a class="viewcode-back" href="../../../pedata.encoding.html#pedata.encoding.encoding_specs.find_function_order">[docs]</a>
+<span class="k">def</span> <span class="nf">find_function_order</span><span class="p">(</span>
+    <span class="n">encoders</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">EncodingSpec</span><span class="p">],</span>
+    <span class="n">provided_encodings</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">required_encodings</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">satisfy_all</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Callable</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Find the order in which to call encoding functions such that the required encodings can be computed.</span>
+<span class="sd">    If the requirements are not satisfiable, throw an exception.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        encoders (List[EncodingSpec]): List of encoding specifications.</span>
+<span class="sd">        provided_encodings (List[str]): List of globally provided encodings.</span>
+<span class="sd">        required_encodings (List[str]): List of required encodings.</span>
+<span class="sd">        satisfy_all (bool, optional): If True, all encodings in `required_encodings` must be satisfied.</span>
+<span class="sd">            If False, satisfy those that are satisfiable. Defaults to True.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List[Callable]: A list of encoder functions in the order they should be called to satisfy the requirements.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If the requirements cannot be satisfied.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; from pedata.encoding import base</span>
+<span class="sd">        &gt;&gt;&gt; f1 = lambda x: x</span>
+<span class="sd">        &gt;&gt;&gt; f2 = lambda x: None</span>
+<span class="sd">        &gt;&gt;&gt; f3 = lambda x: 1</span>
+<span class="sd">        &gt;&gt;&gt; encoders = [</span>
+<span class="sd">        ...     base.EncodingSpec([&quot;aa_len&quot;], [&quot;aa_seq&quot;], f1),</span>
+<span class="sd">        ...     base.EncodingSpec([&quot;aa_1hot&quot;], [&quot;aa_seq&quot;], f2),</span>
+<span class="sd">        ...     base.EncodingSpec([&quot;dna_len&quot;], [&quot;dna_seq&quot;], f3)</span>
+<span class="sd">        ... ]</span>
+<span class="sd">        &gt;&gt;&gt; provided_encodings = [&quot;aa_seq&quot;]</span>
+<span class="sd">        &gt;&gt;&gt; required_encodings = [&quot;aa_len&quot;]</span>
+<span class="sd">        &gt;&gt;&gt; satisfy_all = True</span>
+<span class="sd">        &gt;&gt;&gt; result = find_function_order(encoders, provided_encodings, required_encodings, satisfy_all)</span>
+<span class="sd">        &gt;&gt;&gt; print(result) # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE</span>
+<span class="sd">        [EncodingSpec(provides=[&#39;aa_len&#39;], requires=[&#39;aa_seq&#39;], ...)]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">encoding_functions</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Stores encoding functions for each encoder</span>
+    <span class="n">encodings_provided</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Stores all avaialble encodings</span>
+    <span class="n">encodings_required</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Stores all required/needed encodings</span>
+    <span class="n">encoding_specs</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Stores all encoders</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">satisfy_all</span><span class="p">:</span>
+        <span class="n">encodings</span> <span class="o">=</span> <span class="n">required_encodings</span>
+        <span class="n">required_encodings</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">encoding</span> <span class="ow">in</span> <span class="n">encodings</span><span class="p">:</span>
+            <span class="c1"># Skip encodings that require &#39;bnd_idcs&#39; when it&#39;s not provided</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">encoding</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;atm&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">encoding</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;bnd&quot;</span><span class="p">)</span>
+            <span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;bnd_idcs&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">provided_encodings</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Skip encodings that require &#39;smiles_seq&#39; when it&#39;s not provided</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">encoding</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;smiles&quot;</span><span class="p">)</span>
+            <span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;smiles_seq&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">provided_encodings</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span>
+                <span class="n">provided_enc</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;aa&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">provided_enc</span> <span class="ow">in</span> <span class="n">provided_encodings</span>
+            <span class="p">):</span>
+                <span class="c1"># If any Amino Acid encoding exists in provided_encodings, exclude DNA encodings</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">encoding</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;dna&quot;</span><span class="p">):</span>
+                    <span class="n">required_encodings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">encoding</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="nb">any</span><span class="p">(</span>
+                <span class="n">provided_enc</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;dna&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">provided_enc</span> <span class="ow">in</span> <span class="n">provided_encodings</span>
+            <span class="p">):</span>
+                <span class="c1"># If any DNA encoding exists in provided_encodings, exclude AA encodings</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">encoding</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;aa&quot;</span><span class="p">):</span>
+                    <span class="n">required_encodings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">encoding</span><span class="p">)</span>
+
+    <span class="c1"># Collect all necessary details from encoders</span>
+    <span class="k">for</span> <span class="n">encoder</span> <span class="ow">in</span> <span class="n">encoders</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">encoding</span> <span class="ow">in</span> <span class="n">encoder</span><span class="o">.</span><span class="n">provides</span><span class="p">:</span>
+            <span class="n">encoding_functions</span><span class="p">[</span><span class="n">encoding</span><span class="p">]</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">func</span>
+        <span class="n">encodings_provided</span><span class="p">[</span><span class="n">encoder</span><span class="o">.</span><span class="n">func</span><span class="p">]</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">provides</span>
+        <span class="n">encodings_required</span><span class="p">[</span><span class="n">encoder</span><span class="o">.</span><span class="n">func</span><span class="p">]</span> <span class="o">=</span> <span class="n">encoder</span><span class="o">.</span><span class="n">requires</span>
+        <span class="n">encoding_specs</span><span class="p">[</span><span class="n">encoder</span><span class="o">.</span><span class="n">func</span><span class="p">]</span> <span class="o">=</span> <span class="n">encoder</span>
+
+    <span class="c1"># Topological sort using depth-first search</span>
+    <span class="n">sorted_list</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Store sorted list of functions</span>
+    <span class="n">checked</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>  <span class="c1"># Stores encoding functions that have already been sorted</span>
+
+    <span class="k">def</span> <span class="nf">check_encoding</span><span class="p">(</span><span class="n">required_encodings</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check the providers of the required encodings.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            required_encodings (List[str]): A list of required encodings.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If the requirements cannot be satisfied.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">encoding</span> <span class="ow">in</span> <span class="n">required_encodings</span><span class="p">:</span>
+            <span class="c1"># Check if encoding doesn&#39;t already exist</span>
+            <span class="k">if</span> <span class="n">encoding</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">provided_encodings</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">satisfy_all</span> <span class="ow">and</span> <span class="n">encoding</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">encoding_functions</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Requirements cannot be satisfied. Lacking function for encoding: </span><span class="si">{</span><span class="n">encoding</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+
+                <span class="n">check_function</span><span class="p">(</span><span class="n">encoding_functions</span><span class="p">[</span><span class="n">encoding</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">check_function</span><span class="p">(</span><span class="n">function</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if all function&#39;s encodings meet their requirements.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            func (Callable): The function to check.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">function</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">checked</span><span class="p">:</span>
+            <span class="n">checked</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">function</span><span class="p">)</span>
+            <span class="n">check_encoding</span><span class="p">(</span><span class="n">encodings_required</span><span class="p">[</span><span class="n">function</span><span class="p">])</span>
+            <span class="n">provided_encodings</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">encodings_provided</span><span class="p">[</span><span class="n">function</span><span class="p">])</span>
+            <span class="n">sorted_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">function</span><span class="p">)</span>
+
+    <span class="n">check_encoding</span><span class="p">(</span><span class="n">required_encodings</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">satisfy_all</span><span class="p">:</span>
+        <span class="c1"># Check if all required encodings are in the sorted_list</span>
+        <span class="n">unsatisfied_requirements</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">required_encodings</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">provided_encodings</span><span class="p">)</span>
+
+        <span class="c1"># Throw an exception if there are unsatisfied requirements</span>
+        <span class="k">if</span> <span class="n">unsatisfied_requirements</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Requirements cannot be satisfied: </span><span class="si">{</span><span class="n">unsatisfied_requirements</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="n">encoding_specs</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">sorted_list</span><span class="p">]</span></div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, Exazyme.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

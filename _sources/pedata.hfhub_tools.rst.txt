@@ -1,0 +1,69 @@
+pedata.hfhub\_tools package
+===========================
+
+Submodules
+----------
+
+pedata.hfhub\_tools.add\_src\_split\_col module
+-----------------------------------------------
+
+.. automodule:: pedata.hfhub_tools.add_src_split_col
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pedata.hfhub\_tools.constants module
+------------------------------------
+
+.. automodule:: pedata.hfhub_tools.constants
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pedata.hfhub\_tools.explore module
+----------------------------------
+
+.. automodule:: pedata.hfhub_tools.explore
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pedata.hfhub\_tools.readme\_update module
+-----------------------------------------
+
+.. automodule:: pedata.hfhub_tools.readme_update
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pedata.hfhub\_tools.rename\_columns module
+------------------------------------------
+
+.. automodule:: pedata.hfhub_tools.rename_columns
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pedata.hfhub\_tools.rename\_splits module
+-----------------------------------------
+
+.. automodule:: pedata.hfhub_tools.rename_splits
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pedata.hfhub\_tools.utils module
+--------------------------------
+
+.. automodule:: pedata.hfhub_tools.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: pedata.hfhub_tools
+   :members:
+   :undoc-members:
+   :show-inheritance:

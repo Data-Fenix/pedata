@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>pedata.mutation.mutation_converter</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../_static/documentation_options.js?v=a5b3107c"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">pedata documentation</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../index.html#pedata-documentation">pedata documentation!</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.html" class="reference internal ">pedata package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.encoding.html" class="reference internal ">pedata.encoding package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.mutation.html" class="reference internal ">pedata.mutation package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../modules.html" class="reference internal ">pedata</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../index.html">Module code</a> &raquo;</li>
+    
+    <li>pedata.mutation.mutation_converter</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for pedata.mutation.mutation_converter</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot; The mutation_converter module contains functions for converting a mutation object type into another type.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">..integrity</span> <span class="kn">import</span> <span class="n">check_mutation_namedtuple</span>
+<span class="kn">from</span> <span class="nn">..constants</span> <span class="kn">import</span> <span class="n">Mut</span>
+<span class="kn">from</span> <span class="nn">.mutation</span> <span class="kn">import</span> <span class="n">Mutation</span>
+<span class="kn">from</span> <span class="nn">.mutation_util</span> <span class="kn">import</span> <span class="n">convert_tuple_to_valid_namedtuple</span>
+
+
+<div class="viewcode-block" id="convert_variant_mutation_to_str">
+<a class="viewcode-back" href="../../../pedata.mutation.html#pedata.mutation.mutation_converter.convert_variant_mutation_to_str">[docs]</a>
+<span class="k">def</span> <span class="nf">convert_variant_mutation_to_str</span><span class="p">(</span>
+    <span class="n">mut</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Mut</span><span class="p">],</span>
+    <span class="n">delimiting_char</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span>
+    <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">empty_is_wt</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a list of mutations into a mutation code.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mut: Mutations in the format (position, source, target)</span>
+<span class="sd">        delimiting_char: Character used to connect the mutations (default is &quot;_&quot;)</span>
+<span class="sd">        offset: Offset value to adjust mutation positions (default is 0)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Mutation code encoded with delimiting character</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">            &gt;&gt;&gt; mutations = [Mut(12, &quot;A&quot;, &quot;T&quot;), Mut(23, &quot;T&quot;, &quot;G&quot;), Mut(34, &quot;C&quot;, &quot;A&quot;)]</span>
+<span class="sd">            &gt;&gt;&gt; convert_variant_mutation_to_str(mutations)</span>
+<span class="sd">            &#39;A13T_T24G_C35A&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Check if mut is a list</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mut</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Invalid input: Expected a list of mutations but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">mut</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Check if mut is not an empty list</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mut</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">empty_is_wt</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;wt&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Invalid input: Expected a non-empty list of mutations&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Verify mutations</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mut</span><span class="p">:</span>
+        <span class="n">check_mutation_namedtuple</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+    <span class="c1"># Collect src &amp; targ attributes from mutations</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">sources</span> <span class="o">=</span> <span class="p">[</span><span class="n">mutation</span><span class="o">.</span><span class="n">src</span> <span class="k">for</span> <span class="n">mutation</span> <span class="ow">in</span> <span class="n">mut</span><span class="p">]</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">mutation</span><span class="o">.</span><span class="n">targ</span> <span class="k">for</span> <span class="n">mutation</span> <span class="ow">in</span> <span class="n">mut</span><span class="p">]</span>
+
+    <span class="c1"># Convert mutation tuples to mutation namedtuples before sorting</span>
+    <span class="n">mut</span> <span class="o">=</span> <span class="p">[</span><span class="n">convert_tuple_to_valid_namedtuple</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mut</span><span class="p">]</span>
+
+    <span class="n">sorted_mutations</span> <span class="o">=</span> <span class="n">Mutation</span><span class="o">.</span><span class="n">sort_mutations_by_pos</span><span class="p">(</span><span class="n">mut</span><span class="p">)</span>
+
+    <span class="c1"># Loop over sorted positions</span>
+    <span class="n">sorted_positions</span> <span class="o">=</span> <span class="p">[</span><span class="n">mutation</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">mutation</span> <span class="ow">in</span> <span class="n">sorted_mutations</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pos</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sorted_positions</span><span class="p">):</span>
+        <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">sources</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pos</span> <span class="o">-</span> <span class="n">offset</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">targets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="p">)</span>  <span class="c1"># Add the mutated base to the str</span>
+
+    <span class="k">return</span> <span class="n">delimiting_char</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="convert_all_variant_mutations_to_str">
+<a class="viewcode-back" href="../../../pedata.mutation.html#pedata.mutation.mutation_converter.convert_all_variant_mutations_to_str">[docs]</a>
+<span class="k">def</span> <span class="nf">convert_all_variant_mutations_to_str</span><span class="p">(</span>
+    <span class="n">mut</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Mut</span><span class="p">]],</span>
+    <span class="n">delimiting_char</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span>
+    <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">empty_is_wt</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Turn a sequence of mutation sequences into a list of string encodings.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mut: Sequence of mutation sequences, one for each variant.</span>
+<span class="sd">        delimiting_char: Character used to connect the mutations for one variant (default is &quot;_&quot;)</span>
+<span class="sd">        offset: Offset value to adjust mutation positions (default is 0)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Returns all mutations converted to string encodings only when the mutation has valid sequences of namedtuples, otherwise raise ValuesError</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">    &gt;&gt;&gt; mutation = [</span>
+<span class="sd">    ...    [Mut(12, &quot;A&quot;, &quot;T&quot;), Mut(23, &quot;T&quot;, &quot;G&quot;)],</span>
+<span class="sd">    ...    [Mut(15, &quot;M&quot;, &quot;K&quot;), Mut(23, &quot;G&quot;, &quot;A&quot;)],</span>
+<span class="sd">    ... ]</span>
+<span class="sd">    &gt;&gt;&gt; convert_all_variant_mutations_to_str(mutation)</span>
+<span class="sd">    [&#39;A13T_T24G&#39;, &#39;M16K_G24A&#39;]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Check if mut is a list</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mut</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mut</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">empty_is_wt</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Invalid input: Expected a list of mutation but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">mut</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">str_encoding</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># List to store strings of mutations</span>
+
+    <span class="c1"># Check if mut contains lists of namedtuples</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mut</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Invalid input: The input list should also contain only lists of mutations but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Validate mutation namedtuples</span>
+        <span class="k">for</span> <span class="n">mut_tuple</span> <span class="ow">in</span> <span class="n">m</span><span class="p">:</span>
+            <span class="n">check_mutation_namedtuple</span><span class="p">(</span><span class="n">mut_tuple</span><span class="p">)</span>
+
+        <span class="c1"># Convert each mutation sequence to string</span>
+        <span class="n">encoded_mut</span> <span class="o">=</span> <span class="n">convert_variant_mutation_to_str</span><span class="p">(</span>
+            <span class="n">m</span><span class="p">,</span>
+            <span class="n">delimiting_char</span><span class="o">=</span><span class="n">delimiting_char</span><span class="p">,</span>
+            <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span>
+            <span class="n">empty_is_wt</span><span class="o">=</span><span class="n">empty_is_wt</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">str_encoding</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">encoded_mut</span><span class="p">)</span>  <span class="c1"># Add the string encoding to the list</span>
+
+    <span class="k">return</span> <span class="n">str_encoding</span></div>
+
+
+
+<div class="viewcode-block" id="dict_to_namedtuple_mut">
+<a class="viewcode-back" href="../../../pedata.mutation.html#pedata.mutation.mutation_converter.dict_to_namedtuple_mut">[docs]</a>
+<span class="k">def</span> <span class="nf">dict_to_namedtuple_mut</span><span class="p">(</span><span class="n">mut</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Mut</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a list of dictionaries with &#39;position&#39;, &#39;source&#39;, and &#39;target&#39; keys</span>
+<span class="sd">    into a list of namedtuples &#39;Mut&#39; with attributes &#39;pos&#39;, &#39;src&#39;, and &#39;targ&#39;.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dicts: List of dictionaries containing &#39;position&#39;, &#39;source&#39;, and &#39;target&#39; keys.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List of namedtuples &#39;Mut&#39;.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        input_dicts = [{&#39;source&#39;: [&#39;A&#39;], &#39;target&#39;: [&#39;C&#39;], &#39;position&#39;: [1]}, {&#39;source&#39;: [&#39;A&#39;], &#39;target&#39;: [&#39;D&#39;], &#39;position&#39;: [1]}]</span>
+<span class="sd">        resultant_namedtuples = dict_to_mut(input_dicts)</span>
+
+<span class="sd">        Output:</span>
+<span class="sd">        [ Mut(1, &#39;A&#39;, &#39;C&#39;), Mut(1, &#39;A&#39;, &#39;D&#39;) ]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">mut_list</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Stores a list of namedtuples</span>
+
+    <span class="c1"># Extract namedtuples from input dictionary</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">mut</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">Mut</span><span class="p">):</span>
+            <span class="n">mut_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;position&quot;</span><span class="p">]</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>  <span class="c1"># Assuming &#39;position&#39; contains a single element array</span>
+        <span class="n">src</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Assuming &#39;source&#39; contains a single element array</span>
+        <span class="n">targ</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Assuming &#39;target&#39; contains a single element array</span>
+
+        <span class="c1"># Add extracted attributes to the list</span>
+        <span class="n">mut_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Mut</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">targ</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">mut_list</span></div>
+
+
+
+<div class="viewcode-block" id="namedtuple_to_dict_mut">
+<a class="viewcode-back" href="../../../pedata.mutation.html#pedata.mutation.mutation_converter.namedtuple_to_dict_mut">[docs]</a>
+<span class="k">def</span> <span class="nf">namedtuple_to_dict_mut</span><span class="p">(</span><span class="n">mut_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Mut</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a list of namedtuples &#39;Mut(pos, src, targ)&#39; back into a Dictionary with &#39;position&#39;, &#39;source&#39;, and &#39;target&#39; keys.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mut_list: List of namedtuples &#39;Mut&#39;.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Dictionary containing &#39;position&#39;, &#39;source&#39;, and &#39;target&#39; keys.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        dict_mut = namedtuple_to_dict_mut([ Mut(1, &#39;A&#39;, &#39;C&#39;), Mut(2, &#39;A&#39;, &#39;D&#39;) ])</span>
+
+<span class="sd">        Output:</span>
+<span class="sd">        {&#39;position&#39;: [1, 2], &#39;source&#39;: [&#39;A&#39;, &#39;A&#39;], &#39;target&#39;: [&#39;C&#39;, &#39;D&#39;]}</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">dict_mut</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;target&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+
+    <span class="c1"># Extract data from namedtuples and create dictionaries</span>
+    <span class="k">for</span> <span class="n">mut</span> <span class="ow">in</span> <span class="n">mut_list</span><span class="p">:</span>
+        <span class="n">dict_mut</span><span class="p">[</span><span class="s2">&quot;position&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mut</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+        <span class="n">dict_mut</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mut</span><span class="o">.</span><span class="n">src</span><span class="p">)</span>
+        <span class="n">dict_mut</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mut</span><span class="o">.</span><span class="n">targ</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">dict_mut</span></div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, Exazyme.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

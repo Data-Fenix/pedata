@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>pedata.static.example_data.data</title>
+    
+          <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../../_static/documentation_options.js?v=a5b3107c"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../../index.html" class="home-link">
+    
+      <span class="site-name">pedata documentation</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../../index.html#pedata-documentation">pedata documentation!</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../pedata.html" class="reference internal ">pedata package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../pedata.encoding.html" class="reference internal ">pedata.encoding package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../pedata.mutation.html" class="reference internal ">pedata.mutation package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../../modules.html" class="reference internal ">pedata</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../../index.html">Module code</a> &raquo;</li>
+    
+    <li>pedata.static.example_data.data</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for pedata.static.example_data.data</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">from</span> <span class="nn">...preprocessing</span> <span class="kn">import</span> <span class="n">preprocessing_pipeline</span>
+<span class="kn">from</span> <span class="nn">...encoding</span> <span class="kn">import</span> <span class="n">add_encodings</span>
+
+<span class="c1"># =========== DNA ===========</span>
+<span class="n">dna_example_1_missing_val</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;dna_mut&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;wildtype&quot;</span><span class="p">,</span> <span class="s2">&quot;G6T&quot;</span><span class="p">,</span> <span class="s2">&quot;T3G&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;dna_seq&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;GCTCCG&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span>
+    <span class="s2">&quot;target foo&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="p">}</span>
+
+<span class="n">dna_example_1_no_missing_val</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;dna_mut&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;wildtype&quot;</span><span class="p">,</span> <span class="s2">&quot;G6T&quot;</span><span class="p">,</span> <span class="s2">&quot;T3G&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;dna_seq&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;GCTCCG&quot;</span><span class="p">,</span> <span class="s2">&quot;GCTCCT&quot;</span><span class="p">,</span> <span class="s2">&quot;GCGCCG&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;target foo&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="p">}</span>
+
+<span class="n">dna_example_1_missing_target</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;dna_mut&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;wildtype&quot;</span><span class="p">,</span> <span class="s2">&quot;G6T&quot;</span><span class="p">,</span> <span class="s2">&quot;T3G&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;dna_seq&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;GCTCCG&quot;</span><span class="p">,</span> <span class="s2">&quot;GCTCCT&quot;</span><span class="p">,</span> <span class="s2">&quot;GCGCCG&quot;</span><span class="p">],</span>
+<span class="p">}</span>
+
+
+<span class="n">dna_example_2_missing_val</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;dna_mut&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;WT&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;A_977_G&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G_1147_T&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C_1572_T&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;T_255_C&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;T_1446_A&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;T_495_A&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;A_759_T&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;T_1017_C&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G_1247_A&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;A_1644_G&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;A_1644_T&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;T_1206_A&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;T_1317_C&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G_1466_T&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C_1577_T&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;A_332_G&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G_765_A&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;A_1193_T&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;A_1580_G&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;A_840_T&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C_559_A&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;T_1053_C&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;dna_seq&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;ATGGGCAGCAGCCATCATCATCATCATCACAGCAGCGGCCTGGTGCCGCGCGGCAGCCATATGAAGGACATCCTCGAGAAGCTTGAGGAGCGTCGCGCACAGGCCCGTCTCGGCGGCGGGGAAAAGCGGCTCGAGGCGCAGCACAAGCGCGGCAAGCTCACGGCGCGCGAGCGCATCGAACTCCTGCTCGACCACGGGTCGTTCGAGGAGTTCGACATGTTCGTGCAGCACCGCTCCACCGATTTCGGCATGGAGAAGCAGAAGATCCCCGGCGACGGCGTCGTCACCGGCTGGGGCACCGTGAACGGGCGCACCGTCTTCCTGTTCTCGAAGGACTTCACGGTGTTCGGCGGCTCGTCCTCCGAGGCGCACGCAGCCAAGATCGTTAAGGTCCAGGACATGGCGCTGAAGATGCGCGCCCCGATCATCGGCATCTTCGATGCCGGCGGTGCGCGCATCCAGGAGGGCGTGGCCGCGCTCGGCGGCCACGGCGAGGTGTTCCGCCGCAACGTCGCTGCCTCCGGCGTGATCCCGCAGATCTCGGTCATCATGGGGCCGTGCGCGGGCGGCGACGTGTACTCGCCGGCCATGACCGACTTCATCTTCATGGTGCGTGACACGAGCTACATGTTCGTGACCGGCCCCGACGTGGTGAAGACCGTCACCAACGAGGTCGTGACCGCCGAGGAACTCGGCGGCGCCAAGGTCCACACCTCGAAATCCTCGATCGCCGACGGCTCGTTCGAGAACGACGTCGAGGCGATCCTCCAGATCCGCCGCCTGCTCGACTTCCTGCCCGCGAACAACATCGAGGGCGTGCCGGAGATCGAGAGCTTCGACGACGTCAACCGCCTCGACAAGTCGCTCGACACGCTGATCCCGGACAACCCGAACAAGCCCTACGACATGGGCGAGCTGATCCGCCGGGTCGTGGACGAAGGCGACTTCTTCGAGATCCAGGCGGCTTACGCCCGCAATATTATCACCGGCTTCGGCCGCGTCGAGGGCCGCACCGTCGGTTTCGTCGCCAACCAGCCGCTGGTGCTGGCCGGCGTGCTTGATTCGGACGCCTCCCGGAAGGCGGCCCGCTTCGTGCGCTTCTGCAACGCCTTCTCGATCCCGATCGTCACCTTCGTGGACGTGCCGGGCTTCCTGCCGGGCACGGCGCAGGAATATGGCGGCCTGATCAAGCACGGCGCCAAGCTGCTCTTCGCCTACAGCCAAGCCACCGTGCCGCTCGTGACCATCATCACCCGCAAGGCCTTCGGCGGCGCCTACATCGTCATGGCCTCCAAGCATGTCGGCGCCGACCTGAACTACGCGTGGCCGACGGCGCAGATCGCGGTGATGGGCGCCAAGGGCGCTGTCGAGATCATCTTCCGCGCCGAGATCGGCGATGCGGACAAGGTCGCCGAGCGGACCAAAGAATACGAGGACCGCTTCCTCTCGCCCTTCGTGGCGGCGGAGCGCGGCTACATCGACGAGGTGATCATGCCCCACTCCACCCGCAAGCGGATCGCGCGGGCGCTCGGGATGCTGCGCACCAAGGAGATGGAGCAGCCCAGGAAGAAGCACGACAACATCCCGCTCTGA&quot;</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+    <span class="p">],</span>
+<span class="p">}</span>
+
+<span class="n">dna_example_regression</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;dna_mut&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;WT&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;A 977 G&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G 1147 T&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C 1572 T&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;T 255 C&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;T 1446 A&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;T 495 A&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;A 759 T&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;T 1017 C&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G 1247 A&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;A 1644 G&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;T 1206 A&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;T 1317 C&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G 1466 T&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C 1577 T&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;A 332 G&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G 765 A&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;A 1193 T&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;A 1580 G&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;A 840 T&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C 559 A&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;T 1053 C&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;dna_seq&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;ATGGGCAGCAGCCATCATCATCATCATCACAGCAGCGGCCTGGTGCCGCGCGGCAGCCATATGAAGGACATCCTCGAGAAGCTTGAGGAGCGTCGCGCACAGGCCCGTCTCGGCGGCGGGGAAAAGCGGCTCGAGGCGCAGCACAAGCGCGGCAAGCTCACGGCGCGCGAGCGCATCGAACTCCTGCTCGACCACGGGTCGTTCGAGGAGTTCGACATGTTCGTGCAGCACCGCTCCACCGATTTCGGCATGGAGAAGCAGAAGATCCCCGGCGACGGCGTCGTCACCGGCTGGGGCACCGTGAACGGGCGCACCGTCTTCCTGTTCTCGAAGGACTTCACGGTGTTCGGCGGCTCGTCCTCCGAGGCGCACGCAGCCAAGATCGTTAAGGTCCAGGACATGGCGCTGAAGATGCGCGCCCCGATCATCGGCATCTTCGATGCCGGCGGTGCGCGCATCCAGGAGGGCGTGGCCGCGCTCGGCGGCCACGGCGAGGTGTTCCGCCGCAACGTCGCTGCCTCCGGCGTGATCCCGCAGATCTCGGTCATCATGGGGCCGTGCGCGGGCGGCGACGTGTACTCGCCGGCCATGACCGACTTCATCTTCATGGTGCGTGACACGAGCTACATGTTCGTGACCGGCCCCGACGTGGTGAAGACCGTCACCAACGAGGTCGTGACCGCCGAGGAACTCGGCGGCGCCAAGGTCCACACCTCGAAATCCTCGATCGCCGACGGCTCGTTCGAGAACGACGTCGAGGCGATCCTCCAGATCCGCCGCCTGCTCGACTTCCTGCCCGCGAACAACATCGAGGGCGTGCCGGAGATCGAGAGCTTCGACGACGTCAACCGCCTCGACAAGTCGCTCGACACGCTGATCCCGGACAACCCGAACAAGCCCTACGACATGGGCGAGCTGATCCGCCGGGTCGTGGACGAAGGCGACTTCTTCGAGATCCAGGCGGCTTACGCCCGCAATATTATCACCGGCTTCGGCCGCGTCGAGGGCCGCACCGTCGGTTTCGTCGCCAACCAGCCGCTGGTGCTGGCCGGCGTGCTTGATTCGGACGCCTCCCGGAAGGCGGCCCGCTTCGTGCGCTTCTGCAACGCCTTCTCGATCCCGATCGTCACCTTCGTGGACGTGCCGGGCTTCCTGCCGGGCACGGCGCAGGAATATGGCGGCCTGATCAAGCACGGCGCCAAGCTGCTCTTCGCCTACAGCCAAGCCACCGTGCCGCTCGTGACCATCATCACCCGCAAGGCCTTCGGCGGCGCCTACATCGTCATGGCCTCCAAGCATGTCGGCGCCGACCTGAACTACGCGTGGCCGACGGCGCAGATCGCGGTGATGGGCGCCAAGGGCGCTGTCGAGATCATCTTCCGCGCCGAGATCGGCGATGCGGACAAGGTCGCCGAGCGGACCAAAGAATACGAGGACCGCTTCCTCTCGCCCTTCGTGGCGGCGGAGCGCGGCTACATCGACGAGGTGATCATGCCCCACTCCACCCGCAAGCGGATCGCGCGGGCGCTCGGGATGCTGCGCACCAAGGAGATGGAGCAGCCCAGGAAGAAGCACGACAACATCCCGCTCTGA&quot;</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;target_needles_per_haystack&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="mf">837.0</span><span class="p">,</span>
+        <span class="mf">6389.4</span><span class="p">,</span>
+        <span class="mf">3804.3</span><span class="p">,</span>
+        <span class="mf">2222.22</span><span class="p">,</span>
+        <span class="mf">2394.44</span><span class="p">,</span>
+        <span class="mf">1999.0</span><span class="p">,</span>
+        <span class="mf">2938.0</span><span class="p">,</span>
+        <span class="mf">8923.0</span><span class="p">,</span>
+        <span class="mf">0.0</span><span class="p">,</span>
+        <span class="mf">0.0</span><span class="p">,</span>
+        <span class="mf">823.0</span><span class="p">,</span>
+        <span class="mf">2389.0</span><span class="p">,</span>
+        <span class="mf">9823.0</span><span class="p">,</span>
+        <span class="mf">8923.0</span><span class="p">,</span>
+        <span class="mf">0.5</span><span class="p">,</span>
+        <span class="mf">0.5</span><span class="p">,</span>
+        <span class="mf">0.5</span><span class="p">,</span>
+        <span class="mf">0.5</span><span class="p">,</span>
+        <span class="mf">0.5</span><span class="p">,</span>
+        <span class="mf">0.5</span><span class="p">,</span>
+        <span class="mf">0.0</span><span class="p">,</span>
+        <span class="mf">0.0</span><span class="p">,</span>
+        <span class="mf">0.0</span><span class="p">,</span>
+    <span class="p">],</span>
+<span class="p">}</span>
+
+<span class="c1"># =========== AA ===========</span>
+<span class="n">aa_example_0_invalid_alphabet</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;aa_mut&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;wildtype&quot;</span><span class="p">,</span> <span class="s2">&quot;T8M&quot;</span><span class="p">,</span> <span class="s2">&quot;P3G&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;aa_seq&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;XMPBSOFT&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span>  <span class="c1"># X,B, AND O are invalid aa alphabets</span>
+    <span class="s2">&quot;target foo&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="p">}</span>
+<span class="n">aa_example_0_missing_val</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;aa_mut&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;wildtype&quot;</span><span class="p">,</span> <span class="s2">&quot;T8M&quot;</span><span class="p">,</span> <span class="s2">&quot;P3G&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;aa_seq&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;GMPKSEFTHC&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span>
+    <span class="s2">&quot;target foo&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="p">}</span>
+<span class="n">aa_example_0_no_missing_val</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;aa_mut&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;wildtype&quot;</span><span class="p">,</span> <span class="s2">&quot;T8M&quot;</span><span class="p">,</span> <span class="s2">&quot;P3G&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;aa_seq&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;GMPKSEFTHC&quot;</span><span class="p">,</span> <span class="s2">&quot;GMPKSEFMHC&quot;</span><span class="p">,</span> <span class="s2">&quot;GMGKSEFTHC&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;target foo&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="p">}</span>
+<span class="n">aa_example_0_missing_target</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;aa_mut&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;wildtype&quot;</span><span class="p">,</span> <span class="s2">&quot;T8M&quot;</span><span class="p">,</span> <span class="s2">&quot;P3G&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;aa_seq&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;GMPKSEFTHC&quot;</span><span class="p">,</span> <span class="s2">&quot;GMPKSEFMHC&quot;</span><span class="p">,</span> <span class="s2">&quot;GMGKSEFTHC&quot;</span><span class="p">],</span>
+<span class="p">}</span>
+<span class="n">aa_example_1_missing_val</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;aa_mut&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;wildtype (WT)&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;R227G_G425E&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G172S_R227C&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G172P_R227K_G425H&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;T226V_R227A&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;R227E&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G172T&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G172R_R227E&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;R227L&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;R227M&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G172F&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;R227T&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C170P&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C170A&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C170V&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C225I&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C225Y&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;K228Y&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;E231V&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;E231I&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;H482I_H484Y&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;target_kcat_per_kmol&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="mf">837.0</span><span class="p">,</span>
+        <span class="mf">6389.4</span><span class="p">,</span>
+        <span class="mf">3804.3</span><span class="p">,</span>
+        <span class="mf">2222.22</span><span class="p">,</span>
+        <span class="mf">2394.44</span><span class="p">,</span>
+        <span class="mf">1999.0</span><span class="p">,</span>
+        <span class="mf">2938.0</span><span class="p">,</span>
+        <span class="mf">8923.0</span><span class="p">,</span>
+        <span class="mf">823.0</span><span class="p">,</span>
+        <span class="mf">2389.0</span><span class="p">,</span>
+        <span class="mf">9823.0</span><span class="p">,</span>
+        <span class="mf">8923.0</span><span class="p">,</span>
+        <span class="mf">0.5</span><span class="p">,</span>
+        <span class="mf">0.5</span><span class="p">,</span>
+        <span class="mf">0.5</span><span class="p">,</span>
+        <span class="mf">0.5</span><span class="p">,</span>
+        <span class="mf">0.5</span><span class="p">,</span>
+        <span class="mf">0.5</span><span class="p">,</span>
+        <span class="mf">0.0</span><span class="p">,</span>
+        <span class="mf">0.0</span><span class="p">,</span>
+        <span class="mf">0.0</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;aa_seq&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+    <span class="p">],</span>
+<span class="p">}</span>
+
+<span class="n">aa_example_1_seqs</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTGKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGEGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPSWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTCKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPPWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTKKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGHGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCVAKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTEKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPTWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPRWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTEKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTLKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTMKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPFWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTTKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCPPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCAPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCVPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPITRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPYTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRYQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSVADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSIADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLITYYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">aa_example_2_missing_val</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;aa_mut&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;wildtype (WT)&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;R227D_G425D&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G172D_R227D&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G172D_R227D_G425D&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;T226D_R227D&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;R227E&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G172D&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G172D_R227E&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;R227D&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;R227A&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G172V&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;R227S&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Y181K&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;A175K_Y181K&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;A416D&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G172W&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;D432K&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;T226K&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;A94S&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;K179Y&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;K397D&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;H156N_H158N&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;H152A&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;H475N_H478N&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;A92S&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;aa_seq&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+    <span class="p">],</span>
+<span class="p">}</span>
+<span class="n">aa_example_2_missing_val_seqs</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTDKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGDGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPDWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTDKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPDWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTDKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGDGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCDDKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTEKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPDWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPDWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTEKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTDKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTAKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPVWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTSKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSKPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIKMLEKSKPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMDCPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPWWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTKKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCKRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPSVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEYSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKDLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEANPNSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEALEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGNKANELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVSPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="c1">## ==== For RegressionToyDataset Class</span>
+<span class="n">dataset_dict_regression</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;aa_mut&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;wildtype (WT)&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;R227G_G425E&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G172S_R227C&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G172P_R227K_G425H&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;T226V_R227A&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;R227E&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G172T&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G172R_R227E&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;R227L&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;R227M&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G172F&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;R227T&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C170P&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C170A&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C170V&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C225I&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C225Y&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;K228Y&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;E231V&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;E231I&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;H482I_H484Y&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;target_kcat_per_kmol&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="mf">837.0</span><span class="p">,</span>
+        <span class="mf">6389.4</span><span class="p">,</span>
+        <span class="mf">3804.3</span><span class="p">,</span>
+        <span class="mf">2222.22</span><span class="p">,</span>
+        <span class="mf">2394.44</span><span class="p">,</span>
+        <span class="mf">1999.0</span><span class="p">,</span>
+        <span class="mf">2938.0</span><span class="p">,</span>
+        <span class="mf">8923.0</span><span class="p">,</span>
+        <span class="mf">823.0</span><span class="p">,</span>
+        <span class="mf">2389.0</span><span class="p">,</span>
+        <span class="mf">9823.0</span><span class="p">,</span>
+        <span class="mf">8923.0</span><span class="p">,</span>
+        <span class="mf">0.5</span><span class="p">,</span>
+        <span class="mf">0.5</span><span class="p">,</span>
+        <span class="mf">0.5</span><span class="p">,</span>
+        <span class="mf">0.5</span><span class="p">,</span>
+        <span class="mf">0.5</span><span class="p">,</span>
+        <span class="mf">0.5</span><span class="p">,</span>
+        <span class="mf">0.0</span><span class="p">,</span>
+        <span class="mf">0.0</span><span class="p">,</span>
+        <span class="mf">0.0</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;aa_seq&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+    <span class="p">],</span>
+<span class="p">}</span>
+
+<span class="c1">## ==== For ClassificationToyDataset Class</span>
+<span class="n">dataset_dict_class</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;aa_mut&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;wildtype (WT)&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;R227G_G425E&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G172S_R227C&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G172P_R227K_G425H&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;T226V_R227A&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;R227E&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G172T&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G172R_R227E&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;R227L&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;R227M&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;G172F&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;R227T&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C170P&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C170A&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C170V&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C225I&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C225Y&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;K228Y&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;E231V&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;E231I&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;H482I_H484Y&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;target_high_low&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="mi">1</span><span class="p">,</span>
+        <span class="mi">1</span><span class="p">,</span>
+        <span class="mi">1</span><span class="p">,</span>
+        <span class="mi">1</span><span class="p">,</span>
+        <span class="mi">1</span><span class="p">,</span>
+        <span class="mi">1</span><span class="p">,</span>
+        <span class="mi">1</span><span class="p">,</span>
+        <span class="mi">1</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;aa_seq&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;MAAPAAEAPLSHVQQALAELAKPKDDPTRKHVCVQVAPAVRVAIAETLGLAPGATTPKQLAEGLRRLGFDEVFDTLFGADLTIMEEGSELLHRLTEHLEAHPHSDEPLPMFTSCCPGWIAMLEKSYPDLIPYVSSCKSPQMMLAAMVKSYLAEKKGIAPKDMVMVSIMPCTRKQSEADRDWFCVDADPTLRQLDHVITTVELGNIFKERGINLAELPEGEWDNPMGVGSGAGVLFGTTGGVMEAALRTAYELFTGTPLPRLSLSEVRGMDGIKETNITMVPAPGSKFEELLKHRAAARAEAAAHGTPGPLAWDGGAGFTSEDGRGGITLRVAVANGLGNAKKLITKMQAGEAKYDFVEIMACPAGCVGGGGQPRSTDKAITQKRQAALYNLDEKSTLRRSHENPSIRELYDTYLGEPLGHKAHELLHTHYVAGGVEEKDEKK&quot;</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="kc">None</span><span class="p">,</span>
+    <span class="p">],</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="RegressionToyDataset">
+<a class="viewcode-back" href="../../../../pedata.static.example_data.html#pedata.static.example_data.data.RegressionToyDataset">[docs]</a>
+<span class="k">class</span> <span class="nc">RegressionToyDataset</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Toy dataset for regression with the needed encodings&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RegressionToyDataset.__init__">
+<a class="viewcode-back" href="../../../../pedata.static.example_data.html#pedata.static.example_data.data.RegressionToyDataset.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">needed_encodings</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes a toy dataset for regression with the needed encodings and splits it into train and test splits</span>
+<span class="sd">        Args:</span>
+<span class="sd">            needed_encodings (list[str], optional): list of encodings needed for the model.</span>
+<span class="sd">                Defaults to [] -&gt; all encodings are used (see `add_encodings`).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">needed_encodings</span> <span class="o">=</span> <span class="n">needed_encodings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unsplit_dataset</span> <span class="o">=</span> <span class="n">preprocessing_pipeline</span><span class="p">(</span>
+            <span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">dataset_dict_regression</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unsplit_dataset</span> <span class="o">=</span> <span class="n">add_encodings</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_unsplit_dataset</span><span class="p">,</span> <span class="n">needed_encodings</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unsplit_dataset</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;RegressionToyDataset(needed_encodings=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">needed_encodings</span><span class="si">}</span><span class="s2">) </span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Full_dataset = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">full_dataset</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Train split = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Test split = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">full_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the full dataset&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unsplit_dataset</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">train_test_split_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the split dataset&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the train split of the dataset&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;returns the test split of the dataset&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="ClassificationToyDataset">
+<a class="viewcode-back" href="../../../../pedata.static.example_data.html#pedata.static.example_data.data.ClassificationToyDataset">[docs]</a>
+<span class="k">class</span> <span class="nc">ClassificationToyDataset</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Toy dataset for regression with the needed encodings&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ClassificationToyDataset.__init__">
+<a class="viewcode-back" href="../../../../pedata.static.example_data.html#pedata.static.example_data.data.ClassificationToyDataset.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">needed_encodings</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes a toy dataset for regression with the needed encodings and splits it into train and test splits</span>
+<span class="sd">        Args:</span>
+<span class="sd">            needed_encodings (list[str], optional): list of encodings needed for the model.</span>
+<span class="sd">                Defaults to [] -&gt; all encodings are used (see `add_encodings`).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">needed_encodings</span> <span class="o">=</span> <span class="n">needed_encodings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unsplit_dataset</span> <span class="o">=</span> <span class="n">preprocessing_pipeline</span><span class="p">(</span>
+            <span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">dataset_dict_class</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unsplit_dataset</span> <span class="o">=</span> <span class="n">add_encodings</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_unsplit_dataset</span><span class="p">,</span> <span class="n">needed_encodings</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unsplit_dataset</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;ClassificationToyDataset(needed_encodings=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">needed_encodings</span><span class="si">}</span><span class="s2">) </span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Full_dataset = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">full_dataset</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Train split = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Test split = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">full_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the full dataset&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unsplit_dataset</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">train_test_split_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the split dataset&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the train split of the dataset&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;returns the test split of the dataset&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="RegressionDNAToyDataset">
+<a class="viewcode-back" href="../../../../pedata.static.example_data.html#pedata.static.example_data.data.RegressionDNAToyDataset">[docs]</a>
+<span class="k">class</span> <span class="nc">RegressionDNAToyDataset</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Toy dataset for regression with the needed encodings&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RegressionDNAToyDataset.__init__">
+<a class="viewcode-back" href="../../../../pedata.static.example_data.html#pedata.static.example_data.data.RegressionDNAToyDataset.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">needed_encodings</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes a toy dataset for regression with the needed encodings and splits it into train and test splits</span>
+<span class="sd">        Args:</span>
+<span class="sd">            needed_encodings (list[str], optional): list of encodings needed for the model.</span>
+<span class="sd">                Defaults to [] -&gt; all encodings are used (see `add_encodings`).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">needed_encodings</span> <span class="o">=</span> <span class="n">needed_encodings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unsplit_dataset</span> <span class="o">=</span> <span class="n">preprocessing_pipeline</span><span class="p">(</span>
+            <span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">dna_example_regression</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unsplit_dataset</span> <span class="o">=</span> <span class="n">add_encodings</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_unsplit_dataset</span><span class="p">,</span> <span class="n">needed_encodings</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unsplit_dataset</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;RegressionToyDataset(needed_encodings=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">needed_encodings</span><span class="si">}</span><span class="s2">) </span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Full_dataset = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">full_dataset</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Train split = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Test split = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">full_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the full dataset&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unsplit_dataset</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">train_test_split_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the split dataset&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the train split of the dataset&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;returns the test split of the dataset&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">]</span></div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, Exazyme.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

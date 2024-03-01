@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>pedata.hfhub_tools.add_src_split_col</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../_static/documentation_options.js?v=a5b3107c"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">pedata documentation</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../index.html#pedata-documentation">pedata documentation!</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.html" class="reference internal ">pedata package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.encoding.html" class="reference internal ">pedata.encoding package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.mutation.html" class="reference internal ">pedata.mutation package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../modules.html" class="reference internal ">pedata</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../index.html">Module code</a> &raquo;</li>
+    
+    <li>pedata.hfhub_tools.add_src_split_col</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for pedata.hfhub_tools.add_src_split_col</h1><div class="highlight"><pre>
+<span></span><span class="c1"># setting setting the __package__ attribute to solve the relative import proplem when running the scripts in the command line</span>
+<span class="n">__package__</span> <span class="o">=</span> <span class="s2">&quot;pedata.hfhub_tools&quot;</span>
+
+<span class="c1"># imports</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">..preprocessing</span> <span class="kn">import</span> <span class="n">add_source_split_column</span><span class="p">,</span> <span class="n">rename_splits</span><span class="p">,</span> <span class="n">split_col_histogram</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">get_dataset</span><span class="p">,</span> <span class="n">clear_hub_ds_files_and_metadata</span>
+
+<span class="c1"># method</span>
+<div class="viewcode-block" id="add_src_split_col">
+<a class="viewcode-back" href="../../../pedata.hfhub_tools.html#pedata.hfhub_tools.add_src_split_col.add_src_split_col">[docs]</a>
+<span class="k">def</span> <span class="nf">add_src_split_col</span><span class="p">(</span><span class="n">repo_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">merge_split</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">split_name_map</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{})</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add the source_split column to the dataset, which correspond to the splits used for the dataset by previous works on the dataset (referenced in the dataset card)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        repo_id: The id of the repo to rename the column in</span>
+<span class="sd">        merge_split: boolean to merge the split columns into one column.</span>
+<span class="sd">            Defaults to False because it has the least consequences on the structure of the dataset</span>
+<span class="sd">        split_name_map: A dictionary mapping the original split names to the new split names. </span>
+<span class="sd">            Example: {&quot;DatasetDict&quot;:{&quot;training&quot;: &quot;train&quot;, &quot;val&quot;: &quot;validation&quot;},&quot;random split&quot;: {&quot;training&quot;: &quot;train&quot;, &quot;val&quot;: &quot;validation&quot;}, &quot;source&quot;: {&quot;testing&quot;: &quot;test&quot;}}</span>
+<span class="sd">            &quot;DatasetDict&quot; is the default key for the DatasetDict object split maps</span>
+<span class="sd">            Split names similar to train, validation and test will be automatically mapped to the new split names.</span>
+<span class="sd">    Notes:</span>
+<span class="sd">        This function pulls from the hub, renames add the source split column name, optionally merge splits into one (merge_split=True) and pushes it back to the hub</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        Exception: If the source split column was not added correctly</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># # pull dataset from hub</span>
+    <span class="n">cache_root_dir</span> <span class="o">=</span> <span class="s2">&quot;.cache&quot;</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">get_dataset</span><span class="p">(</span>
+        <span class="n">repo_id</span><span class="p">,</span> <span class="n">cache_root_dir</span><span class="o">=</span><span class="n">cache_root_dir</span><span class="p">,</span> <span class="n">delete_cache</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">as_DatasetDict</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="n">dataset_histogram</span> <span class="o">=</span> <span class="n">split_col_histogram</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+    <span class="n">dataset</span><span class="p">,</span> <span class="n">split_name_map</span> <span class="o">=</span> <span class="n">rename_splits</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">split_name_map</span><span class="o">=</span><span class="n">split_name_map</span><span class="p">)</span>
+    <span class="n">renamed_dataset_histogram</span> <span class="o">=</span> <span class="n">split_col_histogram</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">dataset_histogram</span><span class="p">:</span>
+        <span class="n">sub_split_name_map</span> <span class="o">=</span> <span class="n">split_name_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">dataset_histogram</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">split</span><span class="p">]</span><span class="o">==</span><span class="n">renamed_dataset_histogram</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">sub_split_name_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">split</span><span class="p">,</span> <span class="n">split</span><span class="p">)]</span> <span class="k">for</span> <span class="n">split</span> <span class="ow">in</span> <span class="n">dataset_histogram</span><span class="p">[</span><span class="n">key</span><span class="p">]),</span> <span class="sa">f</span><span class="s2">&quot;The split column </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> was not renamed correctly&quot;</span>
+
+    <span class="c1"># add source split column</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">add_source_split_column</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">merge_split</span><span class="o">=</span><span class="n">merge_split</span><span class="p">)</span>
+    <span class="n">source_split_histogram</span> <span class="o">=</span> <span class="n">split_col_histogram</span><span class="p">(</span><span class="n">dataset</span><span class="p">)[</span><span class="s2">&quot;source_split&quot;</span><span class="p">]</span>
+
+    <span class="c1"># check that the source split column was added and contains the correct keys</span>
+    <span class="c1"># using an assert because a condition with a raise(Exception) if not testable unless we make a small function for it</span>
+    <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">renamed_dataset_histogram</span><span class="p">[</span><span class="s2">&quot;DatasetDict&quot;</span><span class="p">][</span><span class="n">split</span><span class="p">]</span><span class="o">==</span><span class="n">source_split_histogram</span><span class="p">[</span><span class="n">split</span><span class="p">]</span> <span class="k">for</span> <span class="n">split</span> <span class="ow">in</span> <span class="n">source_split_histogram</span><span class="p">]</span>
+    <span class="p">),</span> <span class="s2">&quot;The source_split column was not added correctly&quot;</span>
+
+
+    <span class="c1"># clear hub data and metadata</span>
+    <span class="n">clear_hub_ds_files_and_metadata</span><span class="p">(</span><span class="n">repo_id</span><span class="p">)</span>
+
+    <span class="c1"># push to hub</span>
+    <span class="n">dataset</span><span class="o">.</span><span class="n">push_to_hub</span><span class="p">(</span><span class="n">repo_id</span><span class="p">,</span> <span class="n">private</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># clear cache</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cache_root_dir</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">repo_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># parse arguments</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Add the source_split column to the dataset, which correspond to the splits used for the dataset by previous works on the dataset (referenced in the dataset card)&quot;&quot;&quot;</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="c1"># required arguments</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--repo&quot;</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The id of the repo to rename the column in&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--merge_split&quot;</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;boolean to merge the split columns into one column&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="c1"># # create dataset upload object</span>
+    <span class="n">add_src_split_col</span><span class="p">(</span><span class="n">repo_id</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">repo</span><span class="p">,</span> <span class="n">merge_split</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">merge_split</span><span class="p">)</span>
+
+    <span class="c1"># # Example usage:</span>
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, Exazyme.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

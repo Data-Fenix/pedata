@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>pedata.disk_cache</title>
+    
+          <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../_static/documentation_options.js?v=a5b3107c"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../_static/theme-vendors.js"></script> -->
+      <script src="../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../genindex.html" />
+  <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../index.html" class="home-link">
+    
+      <span class="site-name">pedata documentation</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../index.html#pedata-documentation">pedata documentation!</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../pedata.html" class="reference internal ">pedata package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../pedata.encoding.html" class="reference internal ">pedata.encoding package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../pedata.mutation.html" class="reference internal ">pedata.mutation package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../modules.html" class="reference internal ">pedata</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../index.html">Module code</a> &raquo;</li>
+    
+    <li>pedata.disk_cache</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for pedata.disk_cache</h1><div class="highlight"><pre>
+<span></span><span class="c1"># system</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="c1"># maths</span>
+<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">np</span>  <span class="c1"># FIXME can we use only numpy or is jax.numpy fully necessary here?</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">onp</span>
+
+<span class="c1"># peadata</span>
+<span class="kn">from</span> <span class="nn">.encoding</span> <span class="kn">import</span> <span class="n">alphabets</span>
+
+<span class="n">path_simil</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__loader__</span><span class="o">.</span><span class="n">path</span><span class="p">),</span> <span class="s2">&quot;.&quot;</span><span class="p">)))</span>
+    <span class="o">/</span> <span class="s2">&quot;static&quot;</span>
+    <span class="o">/</span> <span class="s2">&quot;similarity_matrices&quot;</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="data_exists">
+<a class="viewcode-back" href="../../pedata.html#pedata.disk_cache.data_exists">[docs]</a>
+<span class="k">def</span> <span class="nf">data_exists</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if a file exists.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename (str): name of the file</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: True if file exists</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="load_similarity">
+<a class="viewcode-back" href="../../pedata.html#pedata.disk_cache.load_similarity">[docs]</a>
+<span class="k">def</span> <span class="nf">load_similarity</span><span class="p">(</span>
+    <span class="n">alphabet_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">similarity_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">replace_existing</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load similarity matrices.</span>
+<span class="sd">        Loads similarity matrices based on the specified alphabet type and similarity names. It provides the capability to load</span>
+<span class="sd">        multiple similarity matrices simultaneously and preprocesses them into usable similarity matrices. The function also supports</span>
+<span class="sd">        optional caching of the loaded matrices for improved performance in subsequent operations.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        alphabet_type: Specifies the type of alphabet used in the similarity calculation. It can be either &quot;aa&quot; for amino acids or &quot;dna&quot; for DNA sequences.</span>
+<span class="sd">        similarity_name: The name or list of names of the similarity matrix/matrixes to be loaded.</span>
+<span class="sd">        replace_existing: Determines if an existing matrix should be overwritten. Defaults to False.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A tuple containing the alphabet used for the similarity calculation and the preprocessed similarity matrix.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">    &gt;&gt;&gt; similarity_names = [&#39;name1&#39;, &#39;name2&#39;]</span>
+<span class="sd">    &gt;&gt;&gt; alphabet, similarity_matrix = load_similarity(&#39;aa&#39;, similarity_names)</span>
+<span class="sd">    &gt;&gt;&gt; print(similarity_matrix)</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If the specified alphabet type is invalid</span>
+<span class="sd">        ValueError: If the similarity matrix dimensions are not valid. FIXME not tested</span>
+<span class="sd">        ValueError: If the similarity matrix contains superfluous entries.</span>
+<span class="sd">        Exception: If the similarity matrix is missing entries. FIXME not tested</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># check which alphabet to use</span>
+    <span class="k">if</span> <span class="n">alphabet_type</span> <span class="o">==</span> <span class="s2">&quot;aa&quot;</span><span class="p">:</span>
+        <span class="n">alph</span> <span class="o">=</span> <span class="n">onp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">alphabets</span><span class="o">.</span><span class="n">aa_alphabet</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">alphabet_type</span> <span class="o">==</span> <span class="s2">&quot;dna&quot;</span><span class="p">:</span>
+        <span class="n">alph</span> <span class="o">=</span> <span class="n">onp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">alphabets</span><span class="o">.</span><span class="n">dna_alphabet</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid alphabet type: </span><span class="si">{</span><span class="n">alphabet_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">rval</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Stores preprocessed similarity matrix as return value</span>
+
+    <span class="c1"># Ensure similarity_name is a list</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">similarity_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">similarity_name</span> <span class="o">=</span> <span class="p">[</span><span class="n">similarity_name</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">similarity_name</span><span class="p">:</span>
+        <span class="c1"># Prepare file paths</span>
+        <span class="n">similarity_filename</span><span class="p">,</span> <span class="n">file_extension</span> <span class="o">=</span> <span class="n">alphabet_type</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">s</span><span class="p">,</span> <span class="s2">&quot;.txt&quot;</span>
+        <span class="n">output_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">path_simil</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">similarity_filename</span><span class="si">}</span><span class="s2">_ordered.csv&quot;</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">data_exists</span><span class="p">(</span><span class="n">output_file_path</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">replace_existing</span><span class="p">:</span>
+            <span class="c1"># Load the similarity matrix from cache</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- Existing disk cache ---</span><span class="se">\n</span><span class="s2">File: </span><span class="si">{</span><span class="n">output_file_path</span><span class="si">}</span><span class="se">\n</span><span class="s2">Status: Existing file will not be replaced</span><span class="se">\n</span><span class="s2">---</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">rval</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">onp</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">output_file_path</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">))</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Open the similarity matrix file and read its lines</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path_simil</span><span class="p">,</span> <span class="n">similarity_filename</span> <span class="o">+</span> <span class="n">file_extension</span><span class="p">)</span>
+            <span class="p">)</span> <span class="k">as</span> <span class="n">matrix_file</span><span class="p">:</span>
+                <span class="n">lines</span> <span class="o">=</span> <span class="n">matrix_file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+            <span class="n">header</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Variable to store the header of the similarity matrix</span>
+            <span class="n">col_header</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># List to store the column header of the similarity matrix</span>
+            <span class="n">similarity_matrix</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># List to store the similarity matrix entries</span>
+
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
+                <span class="c1"># Skip commented lines and empty lines</span>
+                <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;#&quot;</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># Strip leading and trailing whitespace from the row</span>
+                <span class="n">row</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+                <span class="c1"># Split the row into individual entries</span>
+                <span class="n">entries</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="n">header</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="c1"># First non-comment and non-empty line represents the header</span>
+                    <span class="n">header</span> <span class="o">=</span> <span class="n">entries</span>
+                    <span class="k">continue</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># The first entry in each subsequent line is the column header</span>
+                    <span class="n">col_header</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entries</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+
+                    <span class="c1"># Convert the remaining entries to floats and append them to the similarity matrix</span>
+                    <span class="n">similarity_matrix</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">entries</span><span class="p">)))</span>
+
+            <span class="c1"># Convert the header and column header to numpy arrays</span>
+            <span class="n">header</span><span class="p">,</span> <span class="n">col_header</span> <span class="o">=</span> <span class="n">onp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">header</span><span class="p">),</span> <span class="n">onp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">col_header</span><span class="p">)</span>
+
+            <span class="c1"># Convert the similarity matrix to a jax numpy array</span>
+            <span class="n">similarity_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">similarity_matrix</span><span class="p">)</span>
+
+            <span class="c1"># Check the dimensions and consistency of the matrix</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">header</span> <span class="o">==</span> <span class="n">col_header</span><span class="p">):</span>  <span class="c1"># FIXME: missing test</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Inconsistent header and column header in the similarity matrix: &quot;</span>
+                    <span class="s2">&quot;The values in the header and column header do not match.&quot;</span>
+                <span class="p">)</span>
+
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">header</span><span class="p">)</span> <span class="o">!=</span> <span class="n">similarity_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="ow">or</span> <span class="n">similarity_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">similarity_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Dimensions of the similarity matrix are not valid.&quot;</span><span class="p">)</span>
+
+            <span class="c1"># ?? Replace the missing value placeholder in the header if present</span>
+            <span class="k">if</span> <span class="n">header</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span><span class="p">:</span>
+                <span class="n">header</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">alphabets</span><span class="o">.</span><span class="n">stop_codon_enc</span>
+
+            <span class="c1"># Check for superfluous entries in the similarity matrix</span>
+            <span class="n">superfluous_entries</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">header</span><span class="p">)</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">alph</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">superfluous_entries</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Similarity matrix contains superfluous entries </span><span class="si">{</span><span class="n">superfluous_entries</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
+            <span class="c1"># Check for missing entries in the similarity matrix</span>
+            <span class="n">missing_entries</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">alph</span><span class="p">)</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing_entries</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># FIXME: missing test</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Similarity matrix doesn&#39;t contain </span><span class="si">{</span><span class="n">missing_entries</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Reorder the similarity matrix based on the alphabet order</span>
+            <span class="n">reorder</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">header</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">==</span> <span class="n">alph</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:],</span> <span class="mi">0</span><span class="p">)</span>
+
+            <span class="c1"># Append the reordered similarity matrix to the result list</span>
+            <span class="n">rval</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">similarity_matrix</span><span class="p">[</span><span class="n">reorder</span><span class="p">,</span> <span class="p">:][:,</span> <span class="n">reorder</span><span class="p">])</span>
+
+            <span class="c1"># Save the reordered similarity matrix to disk for future use</span>
+            <span class="n">onp</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span>
+                <span class="n">output_file_path</span><span class="p">,</span>
+                <span class="n">rval</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span>
+                <span class="n">header</span><span class="o">=</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">alph</span><span class="p">),</span>
+                <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.2f</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">alph</span><span class="p">,</span>
+        <span class="n">onp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rval</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(),</span>
+    <span class="p">)</span>  <span class="c1"># Return the alphabet and the preprocessed similarity matrix</span></div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, Exazyme.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

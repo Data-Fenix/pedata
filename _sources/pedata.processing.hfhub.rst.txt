@@ -1,0 +1,37 @@
+pedata.processing.hfhub package
+===============================
+
+Submodules
+----------
+
+pedata.processing.hfhub.base module
+-----------------------------------
+
+.. automodule:: pedata.processing.hfhub.base
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pedata.processing.hfhub.update module
+-------------------------------------
+
+.. automodule:: pedata.processing.hfhub.update
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pedata.processing.hfhub.upload module
+-------------------------------------
+
+.. automodule:: pedata.processing.hfhub.upload
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: pedata.processing.hfhub
+   :members:
+   :undoc-members:
+   :show-inheritance:

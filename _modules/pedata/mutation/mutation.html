@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>pedata.mutation.mutation</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../_static/documentation_options.js?v=a5b3107c"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">pedata documentation</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../index.html#pedata-documentation">pedata documentation!</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.html" class="reference internal ">pedata package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.encoding.html" class="reference internal ">pedata.encoding package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.mutation.html" class="reference internal ">pedata.mutation package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../modules.html" class="reference internal ">pedata</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../index.html">Module code</a> &raquo;</li>
+    
+    <li>pedata.mutation.mutation</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for pedata.mutation.mutation</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot; The mutation module contains a Mutation class containing methods for applying mutations to sequences. </span>
+
+<span class="sd">The different methods allow to return the mutation saved as Named Tuple objects `Mut`.</span>
+
+<span class="sd">The `Mut` objects are defined in `pedata.constants` module and contain information about the mutation (position, source, target).</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># tools</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="c1"># data</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">datasets</span> <span class="k">as</span> <span class="nn">ds</span>
+<span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">Dataset</span>
+
+<span class="c1"># maths</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># pedata</span>
+<span class="kn">from</span> <span class="nn">..integrity</span> <span class="kn">import</span> <span class="n">check_dataset_format</span><span class="p">,</span> <span class="n">check_mutation_namedtuple</span>
+<span class="kn">from</span> <span class="nn">..constants</span> <span class="kn">import</span> <span class="n">Mut</span>
+<span class="kn">from</span> <span class="nn">.mutation_util</span> <span class="kn">import</span> <span class="n">convert_tuple_to_valid_namedtuple</span>
+
+
+<div class="viewcode-block" id="Mutation">
+<a class="viewcode-back" href="../../../pedata.mutation.html#pedata.mutation.mutation.Mutation">[docs]</a>
+<span class="k">class</span> <span class="nc">Mutation</span><span class="p">:</span>
+<div class="viewcode-block" id="Mutation.sort_mutations_by_pos">
+<a class="viewcode-back" href="../../../pedata.mutation.html#pedata.mutation.mutation.Mutation.sort_mutations_by_pos">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">sort_mutations_by_pos</span><span class="p">(</span><span class="n">mut</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Mut</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sort a list of mutations by position</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            mut List of mutations to be sorted. Each mutation should be a tuple with three elements: (position, source, target).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Sorted list of mutations based on position.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            TypeError: If any mutation is invalid or does not match the expected format.</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">        &gt;&gt;&gt; mutations = [Mut(2, &quot;A&quot;, &quot;C&quot;),Mut(1, &quot;G&quot;, &quot;T&quot;), Mut(3, &quot;C&quot;, &quot;G&quot;)]</span>
+<span class="sd">        &gt;&gt;&gt; Mutation.sort_mutations_by_pos(mutations)</span>
+<span class="sd">        [Mut(pos=1, src=&#39;G&#39;, targ=&#39;T&#39;), Mut(pos=2, src=&#39;A&#39;, targ=&#39;C&#39;), Mut(pos=3, src=&#39;C&#39;, targ=&#39;G&#39;)]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Check if mutations is a list</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mut</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">mut</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Input a non-empty list of mutations&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Verify mutations</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mut</span><span class="p">:</span>
+            <span class="n">check_mutation_namedtuple</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+        <span class="c1"># Check if mutations are not already ordered</span>
+        <span class="k">if</span> <span class="n">mut</span> <span class="o">!=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">mut</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">pos</span><span class="p">):</span>
+            <span class="c1"># Sort mutations by position</span>
+            <span class="n">sorted_mutations</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">mut</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+
+            <span class="c1"># Change tuple with no target to be Mut_with_no_tart(pos, src)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sorted_mutations</span><span class="p">):</span>
+                <span class="n">sorted_mutations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">convert_tuple_to_valid_namedtuple</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">sorted_mutations</span>
+
+        <span class="k">return</span> <span class="n">mut</span>  <span class="c1"># Mutations are already ordered, return the original list</span></div>
+
+
+<div class="viewcode-block" id="Mutation.parse_variant_mutations">
+<a class="viewcode-back" href="../../../pedata.mutation.html#pedata.mutation.mutation.Mutation.parse_variant_mutations">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">parse_variant_mutations</span><span class="p">(</span>
+        <span class="n">changes</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">valid</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">Pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^[a-zA-Z]\s*[0-9]+\s*[a-zA-Z]$&quot;</span><span class="p">),</span>
+        <span class="n">extractor</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">c</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="n">delimiting_char</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span>
+        <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Mut</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse each change/mutation in a list of changes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            changes: List of mutations, typically in the format SPT where</span>
+<span class="sd">                S is the source amino acid or DNA base,</span>
+<span class="sd">                P is the position of the mutation, and</span>
+<span class="sd">                T is the target amino acid or DNA base.</span>
+<span class="sd">                Generally speaking, the format is given by the `valid` and `extractor` variables.</span>
+<span class="sd">            valid: Regexp to check if change is valid. Defaults to re.compile(r&quot;^[a-zA-Z][0-9]+[a-zA-Z]$&quot;).</span>
+<span class="sd">            extractor: Function to extract S, P, and T variables into a tuple.</span>
+<span class="sd">                Defaults to lambda c: (int(c[1:-1]), c[0], c[-1]).</span>
+<span class="sd">            delimiting_char: Delimiter character for splitting the changes. Defaults to &quot;_&quot;.</span>
+<span class="sd">            offset: Length of transport peptide i.e. offset for position/P variables. Defaults to 0.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list[Mut]: List of mutation namedtuples (pos, src, targ)</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; Mutation.parse_variant_mutations(&quot;G34C_L33T&quot;)</span>
+<span class="sd">            [Mut(pos=32, src=&#39;L&#39;, targ=&#39;T&#39;), Mut(pos=33, src=&#39;G&#39;, targ=&#39;C&#39;)]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">mutations</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="s2">&quot;wildtype&quot;</span> <span class="ow">in</span> <span class="n">changes</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">mutations</span>
+
+        <span class="c1"># Split changes into individual mutations</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">changes</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">delimiting_char</span><span class="p">):</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+            <span class="c1"># Check if the mutation format is valid</span>
+            <span class="k">if</span> <span class="n">valid</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No valid mutation found in variant &#39;</span><span class="si">{</span><span class="n">changes</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Extract position, source, and target using the provided extractor function</span>
+            <span class="n">p</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">extractor</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="n">mutations</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="nb">int</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)))</span>
+
+        <span class="c1"># Convert mutation tuples to mutation namedtuples before sorting</span>
+        <span class="n">mutations</span> <span class="o">=</span> <span class="p">[</span><span class="n">convert_tuple_to_valid_namedtuple</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mutations</span><span class="p">]</span>
+
+        <span class="c1"># Sort mutations by position</span>
+        <span class="n">mutations</span> <span class="o">=</span> <span class="n">Mutation</span><span class="o">.</span><span class="n">sort_mutations_by_pos</span><span class="p">(</span><span class="n">mutations</span><span class="p">)</span>
+
+        <span class="c1"># Adjust positions according to offset</span>
+        <span class="n">mutations</span> <span class="o">=</span> <span class="p">[(</span><span class="n">p</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">mutations</span><span class="p">]</span>
+
+        <span class="c1"># Convert mutation tuples to mutation namedtuples again before returning</span>
+        <span class="n">mutations</span> <span class="o">=</span> <span class="p">[</span><span class="n">convert_tuple_to_valid_namedtuple</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mutations</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">mutations</span></div>
+
+
+<div class="viewcode-block" id="Mutation.parse_all_mutations">
+<a class="viewcode-back" href="../../../pedata.mutation.html#pedata.mutation.mutation.Mutation.parse_all_mutations">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">parse_all_mutations</span><span class="p">(</span>
+        <span class="n">dataset</span><span class="p">:</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
+        <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">valid</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">Pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^[a-zA-Z]\s*[0-9]+\s*[a-zA-Z]$&quot;</span><span class="p">),</span>
+        <span class="n">extractor</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">c</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="n">delimiting_char</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Mut</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse all mutations for all variants, where single mutations are delimited by the delimiting_character.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dataset: Data set containing all mutation codes in a `aa_mut` or `dna_mut` column.</span>
+<span class="sd">            offset: Offset of positions in mutation codes.</span>
+<span class="sd">                Defaults to 0.</span>
+<span class="sd">            valid: Regular expression checking for the validity of a mutation string.</span>
+<span class="sd">                Defaults to `re.compile(r&quot;^[a-zA-Z]\s*[0-9]+\s*[a-zA-Z]$&quot;)`.</span>
+<span class="sd">            extractor: Function for extracting a mutation triple containing `(position, source, target)`.</span>
+<span class="sd">                Defaults to `lambda c: (int(c[1:-1]), c[0], c[-1])`.</span>
+<span class="sd">            delimiting_char: Character that delimits individual mutations.</span>
+<span class="sd">                Defaults to &quot;_&quot;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (list[Mut], list[int]): A list of parsed mutations and a list of indexes representing non-parsed mutations.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; import datasets as ds</span>
+<span class="sd">            &gt;&gt;&gt; dataset = ds.Dataset.from_dict({&quot;aa_mut&quot;: [&quot;G34C_L33T&quot;, &quot;K14M_A69G&quot;], &quot;aa_seq&quot;: [None, None], &quot;target foo&quot;: [1, 2]})</span>
+<span class="sd">            &gt;&gt;&gt; parsed_mutations, non_parsed_idx = Mutation.parse_all_mutations(dataset)</span>
+<span class="sd">            &gt;&gt;&gt; print(parsed_mutations)</span>
+<span class="sd">            [[Mut(pos=32, src=&#39;L&#39;, targ=&#39;T&#39;), Mut(pos=33, src=&#39;G&#39;, targ=&#39;C&#39;)], [Mut(pos=13, src=&#39;K&#39;, targ=&#39;M&#39;), Mut(pos=68, src=&#39;A&#39;, targ=&#39;G&#39;)]]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Validate input dataset</span>
+        <span class="n">check_dataset_format</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="n">feature_keys</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="s2">&quot;aa_seq&quot;</span> <span class="ow">in</span> <span class="n">feature_keys</span><span class="p">:</span>
+            <span class="n">seq_column</span> <span class="o">=</span> <span class="s2">&quot;aa_seq&quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;aa_mut&quot;</span> <span class="ow">in</span> <span class="n">feature_keys</span><span class="p">:</span>
+                <span class="n">mut_column</span> <span class="o">=</span> <span class="s2">&quot;aa_mut&quot;</span>
+
+        <span class="k">if</span> <span class="s2">&quot;dna_seq&quot;</span> <span class="ow">in</span> <span class="n">feature_keys</span><span class="p">:</span>
+            <span class="n">seq_column</span> <span class="o">=</span> <span class="s2">&quot;dna_seq&quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;dna_mut&quot;</span> <span class="ow">in</span> <span class="n">feature_keys</span><span class="p">:</span>
+                <span class="n">mut_column</span> <span class="o">=</span> <span class="s2">&quot;dna_mut&quot;</span>
+
+        <span class="n">parsed</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># List to store parsed mutations</span>
+        <span class="n">non_parsed_idx</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># List to store indexes representing non-parsed mutations</span>
+
+        <span class="c1"># If &quot;aa_mut&quot; or &quot;dna_mut&quot; is missing, no parsing mutations needed</span>
+        <span class="k">if</span> <span class="s2">&quot;mut_column&quot;</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">():</span>
+            <span class="c1"># Iterate over each amino acide or dna mutation</span>
+            <span class="k">for</span> <span class="n">row_idx</span><span class="p">,</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="n">mut_column</span><span class="p">]):</span>
+                <span class="c1"># Check if the aa_mut or dna_mut is not wildtype or empty</span>
+                <span class="k">if</span> <span class="n">var</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">var</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span>
+                    <span class="s2">&quot;wildtype (wt)&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;wildtype&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;wt&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;-&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+                <span class="p">]:</span>
+                    <span class="n">non_parsed_idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row_idx</span><span class="p">)</span>
+                    <span class="c1"># Skip this row</span>
+                    <span class="k">continue</span>
+
+                <span class="n">var</span> <span class="o">=</span> <span class="n">var</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="c1"># Parse the variant using the provided extractor function</span>
+                <span class="n">parsed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">Mutation</span><span class="o">.</span><span class="n">parse_variant_mutations</span><span class="p">(</span>
+                        <span class="n">var</span><span class="p">,</span>
+                        <span class="n">delimiting_char</span><span class="o">=</span><span class="n">delimiting_char</span><span class="p">,</span>
+                        <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span>
+                        <span class="n">valid</span><span class="o">=</span><span class="n">valid</span><span class="p">,</span>
+                        <span class="n">extractor</span><span class="o">=</span><span class="n">extractor</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">parsed</span><span class="p">,</span> <span class="n">non_parsed_idx</span></div>
+
+
+<div class="viewcode-block" id="Mutation.combine_variant_mutations">
+<a class="viewcode-back" href="../../../pedata.mutation.html#pedata.mutation.mutation.Mutation.combine_variant_mutations">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">combine_variant_mutations</span><span class="p">(</span>
+        <span class="n">mut1</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Mut</span><span class="p">],</span> <span class="n">mut2</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Mut</span><span class="p">],</span> <span class="n">check_validity</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Mut</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Combine the mutations of one variant (represented as lists of Mut namedtuples) with those of another variant.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            mut1: Mutations list representing all mutations in one variant.</span>
+<span class="sd">            mut2: Mutations list representing all mutations in another variant.</span>
+<span class="sd">            check_validity: Whether to check if `mut1` and `mut2` assume the same parent sequence.</span>
+<span class="sd">                Defaults to True.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[Mut]: Combined mutations list.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; from pedata.constants import Mut</span>
+<span class="sd">            &gt;&gt;&gt; mut1 = [Mut(32, &#39;L&#39;, &#39;T&#39;), Mut(33, &#39;G&#39;, &#39;C&#39;)]</span>
+<span class="sd">            &gt;&gt;&gt; mut2 = [Mut(13, &#39;K&#39;, &#39;M&#39;), Mut(68, &#39;A&#39;, &#39;G&#39;)]</span>
+<span class="sd">            &gt;&gt;&gt; results = Mutation.combine_variant_mutations(mut1, mut2)</span>
+<span class="sd">            &gt;&gt;&gt; print(results) # doctest: +ELLIPSIS</span>
+<span class="sd">            [Mut(pos=13, src=&#39;K&#39;, targ=&#39;M&#39;), Mut(pos=32, src=&#39;L&#39;, targ=&#39;T&#39;), ...]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Validate mutations</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mut1</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mut2</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Both mut1 and mut2 should be lists&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mut1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">mut2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Both mut1 and mut2 should not be empty&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Validate mutation namedtuples in each list</span>
+        <span class="k">for</span> <span class="n">mut_tuple</span> <span class="ow">in</span> <span class="n">mut1</span><span class="p">:</span>
+            <span class="n">check_mutation_namedtuple</span><span class="p">(</span><span class="n">mut_tuple</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">mut_tuple</span> <span class="ow">in</span> <span class="n">mut2</span><span class="p">:</span>
+            <span class="n">check_mutation_namedtuple</span><span class="p">(</span><span class="n">mut_tuple</span><span class="p">)</span>
+
+        <span class="n">combined_mutations</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># List to store the combined mutations</span>
+
+        <span class="c1"># Combine mutations from mut1 and mut2</span>
+        <span class="k">for</span> <span class="n">m1</span> <span class="ow">in</span> <span class="n">mut1</span><span class="p">:</span>
+            <span class="n">found_match</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">for</span> <span class="n">m2</span> <span class="ow">in</span> <span class="n">mut2</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">m1</span><span class="o">.</span><span class="n">pos</span> <span class="o">==</span> <span class="n">m2</span><span class="o">.</span><span class="n">pos</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">check_validity</span> <span class="ow">and</span> <span class="n">m1</span><span class="o">.</span><span class="n">src</span> <span class="o">!=</span> <span class="n">m2</span><span class="o">.</span><span class="n">src</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                            <span class="s2">&quot;Combined mutations at the same position contain different source characters&quot;</span>
+                        <span class="p">)</span>
+
+                    <span class="n">new_mut</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">m1</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">check_validity</span> <span class="ow">and</span> <span class="n">m1</span><span class="o">.</span><span class="n">src</span> <span class="o">!=</span> <span class="n">m2</span><span class="o">.</span><span class="n">src</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">m2</span><span class="o">.</span><span class="n">src</span><span class="p">:</span>
+                            <span class="n">new_mut</span> <span class="o">=</span> <span class="n">new_mut</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="n">new_mut</span><span class="o">.</span><span class="n">src</span> <span class="o">+</span> <span class="n">s</span><span class="p">)</span>
+
+                    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">m2</span><span class="o">.</span><span class="n">targ</span><span class="p">:</span>
+                        <span class="n">combined_mutations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="n">new_mut</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span><span class="n">targ</span><span class="o">=</span><span class="n">new_mut</span><span class="o">.</span><span class="n">targ</span> <span class="o">+</span> <span class="n">t</span><span class="p">)</span>
+                        <span class="p">)</span>
+
+                    <span class="n">found_match</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">found_match</span><span class="p">:</span>
+                <span class="n">combined_mutations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m1</span><span class="p">)</span>
+
+        <span class="c1"># Add mutations from mut2 that are not present in mut1</span>
+        <span class="k">for</span> <span class="n">m2</span> <span class="ow">in</span> <span class="n">mut2</span><span class="p">:</span>
+            <span class="n">found_match</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">for</span> <span class="n">m1</span> <span class="ow">in</span> <span class="n">mut1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">m2</span><span class="o">.</span><span class="n">pos</span> <span class="o">==</span> <span class="n">m1</span><span class="o">.</span><span class="n">pos</span><span class="p">:</span>
+                    <span class="n">found_match</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">found_match</span><span class="p">:</span>
+                <span class="n">combined_mutations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m2</span><span class="p">)</span>
+
+        <span class="c1"># Sort combined mutations by position</span>
+        <span class="n">combined_mutations</span> <span class="o">=</span> <span class="n">Mutation</span><span class="o">.</span><span class="n">sort_mutations_by_pos</span><span class="p">(</span><span class="n">combined_mutations</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">combined_mutations</span></div>
+
+
+<div class="viewcode-block" id="Mutation.generate_variant_mutation_combinations">
+<a class="viewcode-back" href="../../../pedata.mutation.html#pedata.mutation.mutation.Mutation.generate_variant_mutation_combinations">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">generate_variant_mutation_combinations</span><span class="p">(</span><span class="o">*</span><span class="n">variants</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Mut</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Mut</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate all possible combinations of mutations from multiple sets of variants.</span>
+<span class="sd">        The function pairs each variant from one set with every variant from the other sets.</span>
+<span class="sd">        The resulting combined mutations are returned as a list of Mut namedtuples.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            *variants (list[Mut]): Variable number of lists of mutations representing different sets of variants.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list[list[Mut]]: List of combined mutations representing all possible combinations.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; from pedata.constants import Mut</span>
+<span class="sd">            &gt;&gt;&gt; variants1 = [Mut(32, &#39;L&#39;, &#39;T&#39;), Mut(33, &#39;G&#39;, &#39;C&#39;)]</span>
+<span class="sd">            &gt;&gt;&gt; variants2 = [Mut(13, &#39;K&#39;, &#39;M&#39;)]</span>
+<span class="sd">            &gt;&gt;&gt; variants3 = [Mut(45, &#39;A&#39;, &#39;G&#39;)]</span>
+<span class="sd">            &gt;&gt;&gt; results = generate_variant_mutation_combinations(variants1, variants2, variants3)</span>
+<span class="sd">            &gt;&gt;&gt; print(results) # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">            [[Mut(pos=32, src=&#39;L&#39;, targ=&#39;T&#39;), Mut(pos=13, src=&#39;K&#39;, targ=&#39;M&#39;), Mut(pos=45, src=&#39;A&#39;, targ=&#39;G&#39;)], #FIXME CHECKTHAT</span>
+<span class="sd">            [Mut(pos=33, src=&#39;G&#39;, targ=&#39;C&#39;), Mut(pos=13, src=&#39;K&#39;, targ=&#39;M&#39;), Mut(pos=45, src=&#39;A&#39;, targ=&#39;G&#39;)]]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Check for valid lists</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">variant_list</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">for</span> <span class="n">variant_list</span> <span class="ow">in</span> <span class="n">variants</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Invalid input: Expected valid lists for variants&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Check for non-empty lists</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">variant_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">variant_list</span> <span class="ow">in</span> <span class="n">variants</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Invalid input: Expected non-empty lists of variant mutations&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Initialize the combined mutations with the Cartesian product of the sets</span>
+        <span class="n">combined_mutations</span> <span class="o">=</span> <span class="p">[[]]</span>
+
+        <span class="c1"># Generate combinations of mutations from the sets of variants</span>
+        <span class="k">for</span> <span class="n">variant_list</span> <span class="ow">in</span> <span class="n">variants</span><span class="p">:</span>
+            <span class="n">combined_mutations</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">combination</span> <span class="o">+</span> <span class="p">[</span><span class="n">variant</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">combination</span> <span class="ow">in</span> <span class="n">combined_mutations</span>
+                <span class="k">for</span> <span class="n">variant</span> <span class="ow">in</span> <span class="n">variant_list</span>
+            <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">combined_mutations</span></div>
+
+
+<div class="viewcode-block" id="Mutation.generate_variant_mutation_combinations_within_dataset">
+<a class="viewcode-back" href="../../../pedata.mutation.html#pedata.mutation.mutation.Mutation.generate_variant_mutation_combinations_within_dataset">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">generate_variant_mutation_combinations_within_dataset</span><span class="p">(</span>
+        <span class="n">mut</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Mut</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Mut</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate all possible combinations of mutations within the same dataset.</span>
+
+<span class="sd">            This static method takes a list of mutations occurring in the dataset, where each variant mutation is represented as a named tuple &#39;Mut&#39;.</span>
+<span class="sd">            It combines the mutations from different variants in all possible ways and returns a list of lists representing the combined mutations.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            mut (List[Mut]): A list of named tuples representing variant mutations in the dataset.</span>
+<span class="sd">                            Each named tuple &#39;Mut&#39; must have &#39;position&#39;, &#39;source&#39;, and &#39;target&#39; attributes.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[List[Mut]]: A list of lists representing combined mutations.</span>
+<span class="sd">                            Each inner list contains named tuples &#39;Mut&#39; with &#39;position&#39;, &#39;source&#39;, and &#39;target&#39; attributes.</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; from pedata.constants import Mut</span>
+<span class="sd">            &gt;&gt;&gt; mutations = [Mut(1, &#39;A&#39;, &#39;G&#39;), Mut(2, &#39;C&#39;, &#39;T&#39;), Mut(3, &#39;G&#39;, &#39;C&#39;), Mut(4, &#39;T&#39;, &#39;A&#39;), Mut(5, &#39;C&#39;, &#39;G&#39;)]</span>
+<span class="sd">            &gt;&gt;&gt; Mutation.generate_variant_mutation_combinations_within_dataset(mutations) # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">            [[Mut(pos=1, src=&#39;A&#39;, targ=&#39;G&#39;), Mut(pos=2, src=&#39;C&#39;, targ=&#39;T&#39;)],</span>
+<span class="sd">            [Mut(pos=1, src=&#39;A&#39;, targ=&#39;G&#39;), Mut(pos=3, src=&#39;G&#39;, targ=&#39;C&#39;)],</span>
+<span class="sd">            [Mut(pos=1, src=&#39;A&#39;, targ=&#39;G&#39;), Mut(pos=4, src=&#39;T&#39;, targ=&#39;A&#39;)],</span>
+<span class="sd">            [Mut(pos=1, src=&#39;A&#39;, targ=&#39;G&#39;), Mut(pos=5, src=&#39;C&#39;, targ=&#39;G&#39;)],</span>
+<span class="sd">            [Mut(pos=2, src=&#39;C&#39;, targ=&#39;T&#39;), Mut(pos=3, src=&#39;G&#39;, targ=&#39;C&#39;)],</span>
+<span class="sd">            [Mut(pos=2, src=&#39;C&#39;, targ=&#39;T&#39;), Mut(pos=4, src=&#39;T&#39;, targ=&#39;A&#39;)],</span>
+<span class="sd">            [Mut(pos=2, src=&#39;C&#39;, targ=&#39;T&#39;), Mut(pos=5, src=&#39;C&#39;, targ=&#39;G&#39;)],</span>
+<span class="sd">            [Mut(pos=3, src=&#39;G&#39;, targ=&#39;C&#39;), Mut(pos=4, src=&#39;T&#39;, targ=&#39;A&#39;)],</span>
+<span class="sd">            [Mut(pos=3, src=&#39;G&#39;, targ=&#39;C&#39;), Mut(pos=5, src=&#39;C&#39;, targ=&#39;G&#39;)],</span>
+<span class="sd">            [Mut(pos=4, src=&#39;T&#39;, targ=&#39;A&#39;), Mut(pos=5, src=&#39;C&#39;, targ=&#39;G&#39;)]]</span>
+
+
+<span class="sd">        Note:</span>
+<span class="sd">            The input mutations are expected to be valid and have the &#39;position&#39;, &#39;source&#39;, and &#39;target&#39; attributes.</span>
+<span class="sd">            The resulting combined mutations maintain the original order of positions for each variant mutation.</span>
+<span class="sd">            The function uses combine_variant_mutations() function to check for the validity of the mutations and combines them.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Check for valid list</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mut</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid input: Expected a valid list but got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">mut</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Check for non-empty list</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mut</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid input: Expected non empty list of mutations&quot;</span><span class="p">)</span>
+
+        <span class="c1"># If a single mutation is the input</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mut</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">check_mutation_namedtuple</span><span class="p">(</span><span class="n">mut</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">mut</span>
+
+        <span class="n">rval</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Initialize an empty list to store the resulting combined mutations</span>
+
+        <span class="c1"># Iterate through each mutation in the dataset to form all possible combinations</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mut</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">mut</span><span class="p">)):</span>
+                <span class="c1"># Combine the current two mutations using the combine_variant_mutations() method</span>
+                <span class="n">combined_mutations</span> <span class="o">=</span> <span class="n">Mutation</span><span class="o">.</span><span class="n">combine_variant_mutations</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">mut</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="p">[</span><span class="n">mut</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Append the combined mutations to the result list</span>
+                <span class="n">rval</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">combined_mutations</span><span class="p">)</span>
+
+        <span class="c1"># check if the mutations are valid ##FIXME this is not a good way to check for validity  -</span>
+        <span class="k">for</span> <span class="n">mut</span> <span class="ow">in</span> <span class="n">rval</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mut</span><span class="p">:</span>
+                <span class="n">check_mutation_namedtuple</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">rval</span>  <span class="c1"># Return the final list containing all possible combinations</span></div>
+
+
+<div class="viewcode-block" id="Mutation.concat_mutations">
+<a class="viewcode-back" href="../../../pedata.mutation.html#pedata.mutation.mutation.Mutation.concat_mutations">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">concat_mutations</span><span class="p">(</span><span class="n">mut</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Mut</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Mut</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Combine multiple mutation lists into a single list of Mut namedtuples.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            mut (List[List[Mut]]): A list of mutation lists, where each inner list contains Mut namedtuples.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[Mut]: A single list of Mut namedtuples combining all the mutation lists.</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; mut = [[(32, &#39;L&#39;, &#39;T&#39;), (33, &#39;G&#39;, &#39;C&#39;)], [(13, &#39;K&#39;, &#39;M&#39;), (68, &#39;A&#39;, &#39;G&#39;)]]</span>
+<span class="sd">            &gt;&gt;&gt; Mutation.concat_mutations(mut)</span>
+<span class="sd">            [(32, &#39;L&#39;, &#39;T&#39;), (33, &#39;G&#39;, &#39;C&#39;), (13, &#39;K&#39;, &#39;M&#39;), (68, &#39;A&#39;, &#39;G&#39;)]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">rval</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># List to store the combined mutations</span>
+
+        <span class="c1"># Add mutation namedtuples to a single list</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mut</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                    <span class="s2">&quot;Mutations should be a list of lists before concatenating&quot;</span>
+                <span class="p">)</span>
+            <span class="n">rval</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">rval</span></div>
+
+
+<div class="viewcode-block" id="Mutation.get_parent_aa_seq">
+<a class="viewcode-back" href="../../../pedata.mutation.html#pedata.mutation.mutation.Mutation.get_parent_aa_seq">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_parent_aa_seq</span><span class="p">(</span>
+        <span class="n">dataset</span><span class="p">:</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span> <span class="n">return_bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_idx</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the parent amino acid sequence from a dataset (identified by the variant name &#39;wildtype&#39; or &#39;wt&#39;).</span>
+<span class="sd">        By default returns the sequence as a string, but can also return the index of the parent sequence.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dataset: Dataset containing the parent sequence</span>
+<span class="sd">            return_bool: Return a boolean array indicating the position(s) of the parent sequence in `dataset`. Defaults to False.</span>
+<span class="sd">            return_idx: Return the index of the parent sequence. Defaults to False.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Parent sequence as a string, boolean array, index integer</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            TODO: write Raises</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; data = {&quot;aa_mut&quot;: [&quot;wildtype&quot;,&quot;R227D&quot;, &quot;K762M&quot;], &quot;aa_seq&quot;: [&quot;ABCDEF&quot;, None, None], &quot;target foo&quot;: [1, 2, 3]}</span>
+<span class="sd">            &gt;&gt;&gt; parent_seq = Mutation.get_parent_aa_seq(ds.Dataset.from_dict(data))</span>
+<span class="sd">            &gt;&gt;&gt; print(parent_seq)</span>
+<span class="sd">            ABCDEF</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Validate dataset</span>
+        <span class="n">check_dataset_format</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+        <span class="c1"># Find all existig columns</span>
+        <span class="n">existing_columns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="s2">&quot;aa_seq&quot;</span> <span class="ow">in</span> <span class="n">existing_columns</span><span class="p">:</span>
+            <span class="n">seq_column</span> <span class="o">=</span> <span class="s2">&quot;aa_seq&quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;aa_mut&quot;</span> <span class="ow">in</span> <span class="n">existing_columns</span><span class="p">:</span>
+                <span class="n">mut_column</span> <span class="o">=</span> <span class="s2">&quot;aa_mut&quot;</span>
+
+        <span class="k">if</span> <span class="s2">&quot;dna_seq&quot;</span> <span class="ow">in</span> <span class="n">existing_columns</span><span class="p">:</span>
+            <span class="n">seq_column</span> <span class="o">=</span> <span class="s2">&quot;dna_seq&quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;dna_mut&quot;</span> <span class="ow">in</span> <span class="n">existing_columns</span><span class="p">:</span>
+                <span class="n">mut_column</span> <span class="o">=</span> <span class="s2">&quot;dna_mut&quot;</span>
+
+        <span class="c1"># Check if they&#39;re any missing required columns</span>
+        <span class="k">if</span> <span class="s2">&quot;mut_column&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Neither &#39;aa_mut&#39; nor &#39;dna_mut&#39; column found in dataset: </span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Check if there is one &quot;wildtype (WT)&quot; value in &quot;aa_mut&quot; or &quot;dna_mut&quot; column</span>
+        <span class="n">wildtypes</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">i</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="n">mut_column</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="s2">&quot;wildtype&quot;</span> <span class="ow">in</span> <span class="n">v</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;wt&quot;</span> <span class="ow">in</span> <span class="n">v</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wildtypes</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Dataset contains </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">wildtypes</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead of exactly one &#39;wildtype&#39; entry in the &#39;</span><span class="si">{</span><span class="n">mut_column</span><span class="si">}</span><span class="s2">&#39; column.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">wildtype_idx</span> <span class="o">=</span> <span class="n">wildtypes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Store wildtype_idx as an int</span>
+
+        <span class="c1"># Return as it was specified in arguments</span>
+        <span class="k">if</span> <span class="n">return_bool</span><span class="p">:</span>
+            <span class="n">wildtype_bool</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="n">mut_column</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+            <span class="n">wildtype_bool</span><span class="p">[</span><span class="n">wildtype_idx</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">return</span> <span class="n">wildtype_bool</span>
+        <span class="k">elif</span> <span class="n">return_idx</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">wildtype_idx</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">dataset</span><span class="p">[</span><span class="n">seq_column</span><span class="p">][</span><span class="n">wildtype_idx</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Mutation.get_parent_sketch_from_mutations">
+<a class="viewcode-back" href="../../../pedata.mutation.html#pedata.mutation.mutation.Mutation.get_parent_sketch_from_mutations">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_parent_sketch_from_mutations</span><span class="p">(</span>
+        <span class="n">mut</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Mut</span><span class="p">],</span> <span class="n">fill_character</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;*&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;Sketch&quot;</span><span class="p">,</span> <span class="s2">&quot;pos str&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sketch out the parent sequence from a list of mutations. This is useful, for example, to then estimate the offset of the position encoding.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            mut: List of namedtuples representing mutations. Each namedtuple should contain at least the position (int) and source (str) respectively.</span>
+<span class="sd">            fill_character: Character used to fill positions that do not occur in `mut`.</span>
+<span class="sd">                Defaults to &quot;*&quot;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Number of positions filled and resulting parent sketch string.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If `mut` is not a sequence of tuples.</span>
+
+<span class="sd">        Examples:</span>
+
+<span class="sd">            &gt;&gt;&gt; from pedata.constants import Mut</span>
+<span class="sd">            &gt;&gt;&gt; mutations = [Mut(3, &quot;A&quot;, &quot;C&quot;), Mut(2, &quot;B&quot;, &quot;D&quot;)]</span>
+<span class="sd">            &gt;&gt;&gt; Mutation.get_parent_sketch_from_mutations(mutations)</span>
+<span class="sd">            (2, &#39;**BA&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Check if mutations is a list</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mut</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">mut</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Input a non-empty list of mutations&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Verify mutations</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mut</span><span class="p">:</span>
+            <span class="n">check_mutation_namedtuple</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+        <span class="c1"># Extract the positions from the mutations</span>
+        <span class="n">positions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mut</span><span class="p">:</span>
+            <span class="n">positions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+
+        <span class="c1"># Find the maximum position</span>
+        <span class="n">max_pos</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span>
+
+        <span class="c1"># Calculate the number of unique positions in the mutations</span>
+        <span class="n">num_mut_pos</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">positions</span><span class="p">))</span>
+
+        <span class="c1"># Create a list of fill characters with the length equal to the maximum position + 1</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="p">[</span><span class="n">fill_character</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">max_pos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Fill the parent sequence with the source characters at their respective positions</span>
+        <span class="n">multiple_source_characters</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mut</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">parent</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">pos</span><span class="p">]</span> <span class="o">!=</span> <span class="n">fill_character</span> <span class="ow">and</span> <span class="n">parent</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">pos</span><span class="p">]</span> <span class="o">!=</span> <span class="n">m</span><span class="o">.</span><span class="n">src</span><span class="p">:</span>
+                <span class="c1"># collect all source character conflicts</span>
+                <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">pos</span> <span class="ow">in</span> <span class="n">multiple_source_characters</span><span class="p">:</span>
+                    <span class="c1"># we already had conflicts – add the new source characters to the old</span>
+                    <span class="n">multiple_source_characters</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">multiple_source_characters</span><span class="p">[</span>
+                        <span class="n">m</span><span class="o">.</span><span class="n">pos</span>
+                    <span class="p">]</span><span class="o">.</span><span class="n">union</span><span class="p">({</span><span class="n">parent</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">pos</span><span class="p">],</span> <span class="n">m</span><span class="o">.</span><span class="n">src</span><span class="p">})</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># first conflict for this position</span>
+                    <span class="n">multiple_source_characters</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">parent</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">pos</span><span class="p">],</span> <span class="n">m</span><span class="o">.</span><span class="n">src</span><span class="p">}</span>
+            <span class="n">parent</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">src</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">multiple_source_characters</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># sort the dictionary by key (position) and make a string for the error message</span>
+            <span class="n">multiple_source_characters</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="sa">f</span><span class="s2">&quot;pos </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">multiple_source_characters</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+            <span class="p">]</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Multiple source characters found at the same position: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">multiple_source_characters</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Join the parent list into a single string</span>
+        <span class="n">parent_sketch</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+
+        <span class="c1"># Return the number of positions filled and the resulting parent sketch string</span>
+        <span class="k">return</span> <span class="n">num_mut_pos</span><span class="p">,</span> <span class="n">parent_sketch</span></div>
+
+
+<div class="viewcode-block" id="Mutation.estimate_offset">
+<a class="viewcode-back" href="../../../pedata.mutation.html#pedata.mutation.mutation.Mutation.estimate_offset">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">estimate_offset</span><span class="p">(</span>
+        <span class="n">mut</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Mut</span><span class="p">]</span> <span class="o">|</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span>
+        <span class="n">parent</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">delimiting_char</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span>
+        <span class="n">most_likely</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">only_perfect_matches</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span> <span class="o">|</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return offsets in rank order of likelihood between a parent string and mutated sequences.</span>
+
+<span class="sd">        This function estimates the offsets by trying out different offsets and computing the matching ratio</span>
+<span class="sd">        between the parent sequence and the sketch of the parent sequence. The sketch is computed from the</span>
+<span class="sd">        mutation codes provided. The offset with the highest matching ratio is considered the most likely offset.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            mut: Mutations information represented as a namedtuple with atleast &quot;source&quot; and &quot;position&quot; attributes, or a DaDataset containing a &quot;aa_mut&quot; or &quot;dna_mut&quot; column. If a Dataset is provided, the `delimiting_char` is used to parse the mutations.</span>
+<span class="sd">            parent: The parent string for which to find the offset.</span>
+<span class="sd">            delimiting_char: The string delimiting individual mutations when parsing mutations from a Dataset.</span>
+<span class="sd">                Defaults to &quot;_&quot;.</span>
+<span class="sd">            most_likely: If True, returns the most likely offset if the matching ratio is 100%; otherwise, raises an Exception.</span>
+<span class="sd">                Defaults to False.</span>
+<span class="sd">            only_perfect_matches: If True, only returns offsets with a matching ratio of 100%; otherwise, returns all offsets.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            If `most_likely` is False, returns a Dataset with the offsets in rank order of likelihood, including the matching ratio.</span>
+<span class="sd">            If `most_likely` is True, returns the most likely offset as an integer.</span>
+<span class="sd">            If the matching ratio is not 100% and `most_likely` is True, an Exception is raised.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            TODO: write Raises</span>
+
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; import datasets as ds</span>
+<span class="sd">            &gt;&gt;&gt; parent_seq = &quot;MEAPLSHV&quot;</span>
+<span class="sd">            &gt;&gt;&gt; dataset = ds.Dataset.from_dict({&quot;aa_mut&quot;: [&quot;A3C_L5D&quot;, &quot;S6K_M1A&quot;], &quot;aa_seq&quot;: [None, None], &quot;target foo&quot;: [1, 2]})</span>
+<span class="sd">            &gt;&gt;&gt; result = Mutation.estimate_offset(dataset, parent=parent_seq)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">input_mut</span> <span class="o">=</span> <span class="n">mut</span>  <span class="c1"># Stores the original dataset before further modifications</span>
+
+        <span class="c1"># Handle Dataset input</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mut</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="p">):</span>
+            <span class="c1"># Find all existig columns</span>
+            <span class="n">existing_columns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">mut</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="k">if</span> <span class="s2">&quot;aa_seq&quot;</span> <span class="ow">in</span> <span class="n">existing_columns</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;aa_mut&quot;</span> <span class="ow">in</span> <span class="n">existing_columns</span><span class="p">:</span>
+                    <span class="n">mut_column</span> <span class="o">=</span> <span class="s2">&quot;aa_mut&quot;</span>
+
+            <span class="k">if</span> <span class="s2">&quot;dna_seq&quot;</span> <span class="ow">in</span> <span class="n">existing_columns</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;dna_mut&quot;</span> <span class="ow">in</span> <span class="n">existing_columns</span><span class="p">:</span>
+                    <span class="n">mut_column</span> <span class="o">=</span> <span class="s2">&quot;dna_mut&quot;</span>
+
+            <span class="c1"># Validate dataset</span>
+            <span class="n">check_dataset_format</span><span class="p">(</span><span class="n">mut</span><span class="p">)</span>
+            <span class="n">parsed_mut</span><span class="p">,</span> <span class="n">non_parsed_idx</span> <span class="o">=</span> <span class="n">Mutation</span><span class="o">.</span><span class="n">parse_all_mutations</span><span class="p">(</span>
+                <span class="n">mut</span><span class="p">,</span> <span class="n">delimiting_char</span><span class="o">=</span><span class="n">delimiting_char</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Check if parsed mutation is empty</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parsed_mut</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No parsed mutations found in dataset: </span><span class="se">\n</span><span class="si">{</span><span class="n">input_mut</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="n">mut</span> <span class="o">=</span> <span class="n">Mutation</span><span class="o">.</span><span class="n">concat_mutations</span><span class="p">(</span><span class="n">parsed_mut</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mut</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">Mut</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mut</span><span class="p">):</span>
+            <span class="c1"># Validate mutation namedtuples</span>
+            <span class="p">[</span><span class="n">check_mutation_namedtuple</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mut</span><span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Input a valid list of mutation namedtuples or a dataset&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Initialize variables and arrays</span>
+        <span class="n">fill_character</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
+        <span class="n">num_mut</span><span class="p">,</span> <span class="n">sketch</span> <span class="o">=</span> <span class="n">Mutation</span><span class="o">.</span><span class="n">get_parent_sketch_from_mutations</span><span class="p">(</span>
+            <span class="n">mut</span><span class="p">,</span> <span class="n">fill_character</span><span class="o">=</span><span class="n">fill_character</span>
+        <span class="p">)</span>
+        <span class="n">sketch</span> <span class="o">=</span> <span class="n">sketch</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+        <span class="n">off</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sketch</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">sketch</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+        <span class="n">sketch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">sketch</span><span class="o">.</span><span class="n">strip</span><span class="p">()),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">parent</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">not_fill</span> <span class="o">=</span> <span class="n">sketch</span> <span class="o">!=</span> <span class="n">fill_character</span>
+        <span class="n">num_matching_pos</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">non_matching_pos</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">non_matching_src</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">non_matching_par</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Calculate the max_offset and raise an error is it&#39;s a negative number</span>
+        <span class="n">max_offset</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">sketch</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">max_offset</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;The length of the parent sequence (</span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parent</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">))</span><span class="si">}</span><span class="s2">) is smaller than the sketch derived from its mutations: </span><span class="si">{</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sketch</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">))</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Compare parent sequences with the sketch</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_offset</span><span class="p">):</span>
+            <span class="n">parent_window</span> <span class="o">=</span> <span class="n">parent</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">sketch</span><span class="p">)]</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="p">(</span><span class="n">parent_window</span><span class="p">[</span><span class="n">not_fill</span><span class="p">]</span> <span class="o">==</span> <span class="n">sketch</span><span class="p">[</span><span class="n">not_fill</span><span class="p">])</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+            <span class="n">no_match</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bitwise_not</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
+            <span class="n">num_matching_pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+            <span class="n">non_matching_pos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">off</span><span class="p">,</span> <span class="n">off</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">sketch</span><span class="p">))[</span><span class="n">not_fill</span><span class="p">][</span><span class="n">no_match</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="p">)</span>
+            <span class="n">non_matching_src</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sketch</span><span class="p">[</span><span class="n">not_fill</span><span class="p">][</span><span class="n">no_match</span><span class="p">])</span>
+            <span class="n">non_matching_par</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parent_window</span><span class="p">[</span><span class="n">not_fill</span><span class="p">][</span><span class="n">no_match</span><span class="p">])</span>
+
+        <span class="c1"># Convert arrays to NumPy arrays and perform sorting</span>
+        <span class="n">num_matching_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">num_matching_pos</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">())</span>
+        <span class="n">non_matching_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">non_matching_pos</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">rank_order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">num_matching_pos</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">rval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">rank_order</span> <span class="o">-</span> <span class="n">off</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="p">)</span>  <span class="c1"># Adjust the ranked order of offsets</span>
+
+        <span class="c1"># Check if all mutations match the parent sequence</span>
+        <span class="k">if</span> <span class="n">num_mut</span> <span class="o">==</span> <span class="n">num_matching_pos</span><span class="o">.</span><span class="n">max</span><span class="p">():</span>
+            <span class="n">rval</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;offset&quot;</span><span class="p">:</span> <span class="n">rval</span><span class="p">,</span>
+                    <span class="s2">&quot;matching_ratio&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span>
+                        <span class="n">num_matching_pos</span><span class="p">[</span><span class="n">rank_order</span><span class="p">]</span> <span class="o">/</span> <span class="n">num_mut</span>
+                    <span class="p">),</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Handle case when mutations don&#39;t match parent sequence</span>
+            <span class="n">rval</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;offset&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">rval</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                    <span class="s2">&quot;matching_ratio&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">num_matching_pos</span><span class="p">[</span><span class="n">rank_order</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">num_mut</span><span class="p">],</span>
+                    <span class="s2">&quot;non_match_pos&quot;</span><span class="p">:</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">non_matching_pos</span><span class="p">[</span><span class="n">rank_order</span><span class="p">[</span><span class="mi">0</span><span class="p">]])],</span>
+                    <span class="s2">&quot;non_match_mutation_src&quot;</span><span class="p">:</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">non_matching_src</span><span class="p">[</span><span class="n">rank_order</span><span class="p">[</span><span class="mi">0</span><span class="p">]])],</span>
+                    <span class="s2">&quot;non_match_parent_character&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="nb">str</span><span class="p">(</span><span class="n">non_matching_par</span><span class="p">[</span><span class="n">rank_order</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+                    <span class="p">],</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">only_perfect_matches</span> <span class="ow">or</span> <span class="n">most_likely</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">rval</span><span class="p">[</span><span class="s2">&quot;matching_ratio&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">rval</span> <span class="o">=</span> <span class="n">rval</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;matching_ratio&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Position values of mutation codes are inconsistent.&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;The most likely offset (</span><span class="si">{</span><span class="n">rval</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">) has inconsistencies at positions </span><span class="si">{</span><span class="n">rval</span><span class="p">[</span><span class="s1">&#39;non_match_pos&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="p">)</span>
+
+        <span class="c1"># Check if most_likely flag is set</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">most_likely</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">rval</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rval</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;When processing mutation codes, multiple offsets seem to be plausible: </span><span class="si">{</span><span class="n">rval</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">. Cannot automatically decide for an offset.&quot;</span>
+                <span class="p">)</span>
+            <span class="k">return</span> <span class="n">rval</span><span class="p">[</span><span class="s2">&quot;offset&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Mutation.apply_variant_mutations">
+<a class="viewcode-back" href="../../../pedata.mutation.html#pedata.mutation.mutation.Mutation.apply_variant_mutations">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">apply_variant_mutations</span><span class="p">(</span>
+        <span class="n">mutations</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Mut</span><span class="p">],</span> <span class="n">parent</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">check_validity</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute mutated sequences from parent sequence and mutations list.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            mutations: List of namedtuples representing mutations.</span>
+<span class="sd">                Each namedtuple should contain three attributes: (pos, src, targ).</span>
+<span class="sd">            parent: Parent sequence to be mutated.</span>
+<span class="sd">            offset: Offset of the mutation position to the parent sequence (default is 0).</span>
+<span class="sd">            check_validity: True if validity of mutations is to be checked (default is False).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Mutated sequence.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; from pedata.constants import Mut</span>
+<span class="sd">            &gt;&gt;&gt; mutations = [Mut(2, &quot;A&quot;, &quot;G&quot;), Mut(4, &quot;C&quot;, &quot;T&quot;)]</span>
+<span class="sd">            &gt;&gt;&gt; parent_sequence = &quot;TGAACC&quot;</span>
+<span class="sd">            &gt;&gt;&gt; Mutation.apply_variant_mutations(</span>
+<span class="sd">            ... mutations, parent_sequence, offset=1, check_validity=True</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &#39;TGAGCT&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Parent sequence should be a string and not empty&quot;</span><span class="p">)</span>
+
+        <span class="n">seq</span> <span class="o">=</span> <span class="n">parent</span>  <span class="c1"># Initialize the mutated sequence as the parent sequence</span>
+
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mutations</span><span class="p">:</span>
+            <span class="c1"># Calculate the position of the mutation by adding the offset</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">pos</span> <span class="o">+</span> <span class="n">offset</span>
+
+            <span class="c1"># Raise an error if the source character at specific position in a mutation</span>
+            <span class="c1"># does not match the character at the same position in the parent sequence</span>
+            <span class="k">if</span> <span class="n">check_validity</span> <span class="ow">and</span> <span class="n">m</span><span class="o">.</span><span class="n">src</span> <span class="o">!=</span> <span class="n">seq</span><span class="p">[</span><span class="n">pos</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Mutation assumes &#39;</span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">src</span><span class="si">}</span><span class="s2">&#39; at position </span><span class="si">{</span><span class="n">pos</span><span class="si">}</span><span class="s2"> in parent, found &#39;</span><span class="si">{</span><span class="n">seq</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+                <span class="p">)</span>
+
+            <span class="c1"># Apply the mutation: Replace the character at the mutation position in the sequence parent with the target character</span>
+            <span class="n">seq</span> <span class="o">=</span> <span class="n">seq</span><span class="p">[:</span><span class="n">pos</span><span class="p">]</span> <span class="o">+</span> <span class="n">m</span><span class="o">.</span><span class="n">targ</span> <span class="o">+</span> <span class="n">seq</span><span class="p">[</span><span class="n">pos</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>
+
+        <span class="k">return</span> <span class="n">seq</span>  <span class="c1"># Return the mutated sequence</span></div>
+
+
+<div class="viewcode-block" id="Mutation.apply_all_mutations">
+<a class="viewcode-back" href="../../../pedata.mutation.html#pedata.mutation.mutation.Mutation.apply_all_mutations">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">apply_all_mutations</span><span class="p">(</span>
+        <span class="n">mutations</span><span class="p">:</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Mut</span><span class="p">]],</span>
+        <span class="n">parent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">check_validity</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">valid</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">Pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^[a-zA-Z]\s*[0-9]+\s*[a-zA-Z]$&quot;</span><span class="p">),</span>
+        <span class="n">extractor</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">c</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="n">delimiting_char</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply all mutations to a dataset and return the mutated sequences</span>
+<span class="sd">        This method applies mutations to a dataset by iterating over each variant and applying the specified mutations.</span>
+<span class="sd">        The resulting mutated sequences are returned as a list.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            mutations: Dataset containing atleast an aa_mut or a dna_mut column.</span>
+<span class="sd">            parent: Parent sequence.</span>
+<span class="sd">                If not provided, it is assumed to be contained in the dataset,</span>
+<span class="sd">                in the unique row where the &#39;variant&#39; column contains the string &#39;wildtype&#39;.</span>
+<span class="sd">                Defaults to None.</span>
+<span class="sd">            offset: Offset of the mutation position in relation to the parent sequence.</span>
+<span class="sd">                If not provided, it is estimated.</span>
+<span class="sd">                Defaults to None.</span>
+<span class="sd">            check_validity: Whether to perform a validity check for the contained mutations.</span>
+<span class="sd">                Defaults to False.</span>
+<span class="sd">            valid: Regular expression to check the validity of a mutation string.</span>
+<span class="sd">                Defaults to `re.compile(r&quot;^[a-zA-Z]\s*[0-9]+\s*[a-zA-Z]$&quot;)`.</span>
+<span class="sd">            extractor: Function to extract a mutation triple containing `(position, source, target)`.</span>
+<span class="sd">                Defaults to `lambda c: (int(c[1:-1]), c[0], c[-1])`.</span>
+<span class="sd">            delimiting_char: Delimiting character for the mutations.</span>
+<span class="sd">                Defaults to &quot;_&quot;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of all mutated sequences.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            TypeError: If the input is not a Dataset.</span>
+<span class="sd">            ValueError: If more than one variant without mutations is found.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; import datasets as ds</span>
+<span class="sd">            &gt;&gt;&gt; dataset = ds.Dataset.from_dict(</span>
+<span class="sd">            ...     {</span>
+<span class="sd">            ...         &quot;aa_mut&quot;: [&quot;wildtype&quot;, &quot;C2X_E4Y&quot;, &quot;F5T&quot;],</span>
+<span class="sd">            ...         &quot;aa_seq&quot;: [&quot;ABCDEFGH&quot;, None, None],</span>
+<span class="sd">            ...         &quot;target foo&quot;: [1, 2, 3]</span>
+<span class="sd">            ...     }</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt; mutated_sequences = Mutation.apply_all_mutations(dataset)</span>
+<span class="sd">            &gt;&gt;&gt; print(mutated_sequences)</span>
+<span class="sd">            [&#39;ABCDEFGH&#39;, &#39;ABXDYFGH&#39;, &#39;ABCDETGH&#39;]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">rval</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># List to store the resulting mutated sequences.</span>
+        <span class="n">no_mutation</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Counter for the number of variants without mutations found.</span>
+        <span class="n">parsed_mutations</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># Check if the input is a Dataset</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mutations</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mutations</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Input either a dataset or a list of namedtuple mutations&quot;</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">mutations</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The input dataset should not be empty&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mutations</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="p">):</span>
+            <span class="c1"># ======# FIXME create a function fo this, it is used in multiple places</span>
+            <span class="n">existing_columns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">mutations</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+            <span class="k">if</span> <span class="s2">&quot;aa_seq&quot;</span> <span class="ow">in</span> <span class="n">existing_columns</span><span class="p">:</span>
+                <span class="n">seq_column</span> <span class="o">=</span> <span class="s2">&quot;aa_seq&quot;</span>
+                <span class="k">if</span> <span class="s2">&quot;aa_mut&quot;</span> <span class="ow">in</span> <span class="n">existing_columns</span><span class="p">:</span>
+                    <span class="n">mut_column</span> <span class="o">=</span> <span class="s2">&quot;aa_mut&quot;</span>
+
+            <span class="k">if</span> <span class="s2">&quot;dna_seq&quot;</span> <span class="ow">in</span> <span class="n">existing_columns</span><span class="p">:</span>
+                <span class="n">seq_column</span> <span class="o">=</span> <span class="s2">&quot;dna_seq&quot;</span>
+                <span class="k">if</span> <span class="s2">&quot;dna_mut&quot;</span> <span class="ow">in</span> <span class="n">existing_columns</span><span class="p">:</span>
+                    <span class="n">mut_column</span> <span class="o">=</span> <span class="s2">&quot;dna_mut&quot;</span>
+            <span class="c1"># ======= FIXME</span>
+            <span class="n">dataset</span> <span class="o">=</span> <span class="n">mutations</span>
+
+            <span class="c1"># Parse mutations if the parsed_mutations column/feature is not present</span>
+            <span class="n">parsed_mutations</span><span class="p">,</span> <span class="n">no_mutation</span> <span class="o">=</span> <span class="n">Mutation</span><span class="o">.</span><span class="n">parse_all_mutations</span><span class="p">(</span>
+                <span class="n">dataset</span><span class="p">,</span>
+                <span class="n">delimiting_char</span><span class="o">=</span><span class="n">delimiting_char</span><span class="p">,</span>
+                <span class="n">valid</span><span class="o">=</span><span class="n">valid</span><span class="p">,</span>
+                <span class="n">extractor</span><span class="o">=</span><span class="n">extractor</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="c1"># If no parsed mutations found</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parsed_mutations</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">rval</span>
+
+            <span class="c1"># If parent is not provided, assume it is contained in the dataset</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="p">):</span>  <span class="c1"># FIXME this will break in case of dna dataset without parent sequence</span>
+                <span class="n">parent</span> <span class="o">=</span> <span class="n">Mutation</span><span class="o">.</span><span class="n">get_parent_aa_seq</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mutations</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">parsed_mutations</span> <span class="o">=</span> <span class="n">mutations</span>
+            <span class="k">if</span> <span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input a parent sequence&quot;</span><span class="p">)</span>
+
+        <span class="c1"># If offset is not provided, estimate it based on the mutations</span>
+        <span class="k">if</span> <span class="n">offset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">offset</span> <span class="o">=</span> <span class="n">Mutation</span><span class="o">.</span><span class="n">estimate_offset</span><span class="p">(</span>
+                <span class="n">Mutation</span><span class="o">.</span><span class="n">concat_mutations</span><span class="p">(</span><span class="n">parsed_mutations</span><span class="p">),</span> <span class="n">parent</span><span class="p">,</span> <span class="n">most_likely</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Iterate over each variant and apply the mutations</span>
+        <span class="k">for</span> <span class="n">row_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mutations</span><span class="p">)):</span>
+            <span class="c1"># Append whatever is in the aa_seq column when there are no mutations:</span>
+            <span class="c1"># - this is the case when the mutation column is empty but the sequence column is filled</span>
+            <span class="c1"># - this is the case for the wildtype line</span>
+            <span class="k">if</span> <span class="n">row_idx</span> <span class="ow">in</span> <span class="n">no_mutation</span><span class="p">:</span>
+                <span class="n">rval</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="n">seq_column</span><span class="p">][</span><span class="n">row_idx</span><span class="p">])</span>
+
+            <span class="c1"># Apply variant mutations to the parent sequence</span>
+            <span class="c1"># FIXME IS: But this is probably incorrect in general now that we allow more than one sequence without a mutation code.</span>
+            <span class="k">if</span> <span class="n">row_idx</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">parsed_mutations</span><span class="p">):</span>
+                <span class="n">mut</span> <span class="o">=</span> <span class="n">parsed_mutations</span><span class="p">[</span><span class="n">row_idx</span><span class="p">]</span>
+                <span class="n">rval</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">Mutation</span><span class="o">.</span><span class="n">apply_variant_mutations</span><span class="p">(</span>
+                        <span class="n">mut</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">check_validity</span><span class="o">=</span><span class="n">check_validity</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">rval</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="fill_all_missing_sequences">
+<a class="viewcode-back" href="../../../pedata.mutation.html#pedata.mutation.mutation.fill_all_missing_sequences">[docs]</a>
+<span class="k">def</span> <span class="nf">fill_all_missing_sequences</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">mutation_code_offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dataset</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;fill all fillable missing sequences in the dataset</span>
+<span class="sd">    Args:</span>
+<span class="sd">        dataset: dataset to check</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        Dataset: dataset with filled missing values</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s2">&quot;aa_seq&quot;</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">column_names</span><span class="p">:</span>
+        <span class="c1"># Check for missing values in the &#39;aa_seq&#39; column</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">fill_missing_sequences</span><span class="p">(</span>
+            <span class="n">dataset</span><span class="p">,</span> <span class="s2">&quot;aa_seq&quot;</span><span class="p">,</span> <span class="n">mutation_code_offset</span><span class="o">=</span><span class="n">mutation_code_offset</span>
+        <span class="p">)</span>
+
+    <span class="k">elif</span> <span class="s2">&quot;dna_seq&quot;</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">column_names</span><span class="p">:</span>
+        <span class="c1"># Check for missing values in the &#39;dna_seq&#39; column</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">fill_missing_sequences</span><span class="p">(</span>
+            <span class="n">dataset</span><span class="p">,</span> <span class="s2">&quot;dna_seq&quot;</span><span class="p">,</span> <span class="n">mutation_code_offset</span><span class="o">=</span><span class="n">mutation_code_offset</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">dataset</span></div>
+
+
+
+<div class="viewcode-block" id="fill_missing_sequences">
+<a class="viewcode-back" href="../../../pedata.mutation.html#pedata.mutation.mutation.fill_missing_sequences">[docs]</a>
+<span class="k">def</span> <span class="nf">fill_missing_sequences</span><span class="p">(</span>
+    <span class="n">dataset</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">feature</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mutation_code_offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dataset</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fill missing values in the `feature` column</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dataset: dataset to check</span>
+<span class="sd">        feature: which column to fill for missing values</span>
+<span class="sd">        mutation_code_offset: offset to apply to the missing values</span>
+<span class="sd">            Defaults to None, meaning that the mutation_code_offset will be determined automatically through the mutation code.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Dataset: dataset with filled missing values</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">missing_values</span> <span class="o">=</span> <span class="n">get_missing_values</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">feature</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">missing_values</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># Apply mutations to fill in missing values in &#39;dna_seq&#39; column</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">missing_values</span><span class="p">,</span> <span class="n">feature</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="n">feature</span><span class="p">:</span> <span class="n">Mutation</span><span class="o">.</span><span class="n">apply_all_mutations</span><span class="p">(</span>
+                    <span class="n">dataset</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">mutation_code_offset</span>
+                <span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">missing_values</span><span class="p">,</span> <span class="n">feature</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">df</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_missing_values">
+<a class="viewcode-back" href="../../../pedata.mutation.html#pedata.mutation.mutation.get_missing_values">[docs]</a>
+<span class="k">def</span> <span class="nf">get_missing_values</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">feature</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;get missing values in the `feature` column</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dataset: dataset to check</span>
+<span class="sd">        feature: which column to check for missing values</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        True for the indices corresponding to the missing values</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">feature</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span> <span class="o">|</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">feature</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span></div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, Exazyme.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

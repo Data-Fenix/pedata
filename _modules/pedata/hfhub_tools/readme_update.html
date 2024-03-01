@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>pedata.hfhub_tools.readme_update</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../_static/documentation_options.js?v=a5b3107c"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">pedata documentation</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../index.html#pedata-documentation">pedata documentation!</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.html" class="reference internal ">pedata package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.encoding.html" class="reference internal ">pedata.encoding package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.mutation.html" class="reference internal ">pedata.mutation package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../modules.html" class="reference internal ">pedata</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../index.html">Module code</a> &raquo;</li>
+    
+    <li>pedata.hfhub_tools.readme_update</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for pedata.hfhub_tools.readme_update</h1><div class="highlight"><pre>
+<span></span><span class="c1"># setting setting the __package__ attribute to solve the relative import proplem when runningn the scripts in the command line</span>
+<span class="n">__package__</span> <span class="o">=</span> <span class="s2">&quot;pedata.hfhub_tools&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">huggingface_hub</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">hf_hub_download</span><span class="p">,</span>
+    <span class="n">upload_file</span><span class="p">,</span>
+    <span class="n">upload_folder</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">README_FORMATTING</span>
+
+
+<div class="viewcode-block" id="ReadMe">
+<a class="viewcode-back" href="../../../pedata.hfhub_tools.html#pedata.hfhub_tools.readme_update.ReadMe">[docs]</a>
+<span class="k">class</span> <span class="nc">ReadMe</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class to handle the readme file&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ReadMe.__init__">
+<a class="viewcode-back" href="../../../pedata.hfhub_tools.html#pedata.hfhub_tools.readme_update.ReadMe.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">local_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the class</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            local_dir (str): The local folder containing the readme file.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: readme_path must be specified</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">local_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;readme_path must be specified&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_local_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">local_dir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_readme_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">local_dir</span><span class="p">,</span> <span class="s2">&quot;README.md&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_readme_content</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">readme_content</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The content of the readme&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_readme_content</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">readme_path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The path to the readme file&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_readme_path</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">figure_path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The path to the figures&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_figure_path</span>
+
+<div class="viewcode-block" id="ReadMe.insert_section">
+<a class="viewcode-back" href="../../../pedata.hfhub_tools.html#pedata.hfhub_tools.readme_update.ReadMe.insert_section">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">insert_section</span><span class="p">(</span>
+        <span class="n">section_start</span><span class="p">,</span> <span class="n">section_end</span><span class="p">,</span> <span class="n">updated_section</span><span class="p">,</span> <span class="n">readme_content</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Insert the updated section in the readme</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            section_start: The start of the section to update</span>
+<span class="sd">            section_end: The end of the section to update</span>
+<span class="sd">            updated_section: The updated section</span>
+<span class="sd">            readme_content: The content of the readme</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The updated content of the readme</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">readme_content</span><span class="p">[:</span><span class="n">section_start</span><span class="p">]</span>
+            <span class="o">+</span> <span class="n">updated_section</span>
+            <span class="o">+</span> <span class="n">readme_content</span><span class="p">[</span><span class="n">section_end</span><span class="p">:]</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ReadMe.write_readme">
+<a class="viewcode-back" href="../../../pedata.hfhub_tools.html#pedata.hfhub_tools.readme_update.ReadMe.write_readme">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">write_readme</span><span class="p">(</span><span class="n">readme_path</span><span class="p">,</span> <span class="n">updated_readme_content</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write the updated readme content to the readme file</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            readme_path: The path to the readme file</span>
+<span class="sd">            updated_readme_content: The updated content of the readme</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">readme_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">updated_readme_content</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ReadMe.create_readme">
+<a class="viewcode-back" href="../../../pedata.hfhub_tools.html#pedata.hfhub_tools.readme_update.ReadMe.create_readme">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_readme</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># TODO</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="ReadMe.pull_readme_from_hub">
+<a class="viewcode-back" href="../../../pedata.hfhub_tools.html#pedata.hfhub_tools.readme_update.ReadMe.pull_readme_from_hub">[docs]</a>
+    <span class="k">def</span> <span class="nf">pull_readme_from_hub</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">repo_type</span><span class="o">=</span><span class="s2">&quot;dataset&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Pulls the readme file from the hub into the local directory</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            repo_id: The id of the repo to pull the readme from</span>
+<span class="sd">            repo_type: The type of repo to pull the readme from. Defaults to &quot;dataset&quot;</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">repo_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;repo_id must be provided&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">repo_id</span> <span class="o">=</span> <span class="n">repo_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repo_type</span> <span class="o">=</span> <span class="n">repo_type</span>
+
+        <span class="n">_</span> <span class="o">=</span> <span class="n">hf_hub_download</span><span class="p">(</span>
+            <span class="n">repo_id</span><span class="o">=</span><span class="n">repo_id</span><span class="p">,</span>
+            <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;README.md&quot;</span><span class="p">,</span>
+            <span class="n">repo_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">repo_type</span><span class="p">,</span>
+            <span class="n">local_dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_local_dir</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># return the path to the readme file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_readme_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_local_dir</span><span class="p">,</span> <span class="s2">&quot;README.md&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">readme_path</span></div>
+
+
+<div class="viewcode-block" id="ReadMe.update_readme">
+<a class="viewcode-back" href="../../../pedata.hfhub_tools.html#pedata.hfhub_tools.readme_update.ReadMe.update_readme">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_readme</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">section_elements</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+        <span class="n">section_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;features&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the section of the readme with the updated information</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            section_list (list): The updated features section</span>
+<span class="sd">            section_name (str): The name of the section to update.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">readme_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">readme_content</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="c1"># Create the new section</span>
+        <span class="n">element_info</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">element</span><span class="si">}{</span><span class="n">README_FORMATTING</span><span class="p">[</span><span class="s1">&#39;in_section_sep&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">section_elements</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Find and replace the element section with the updated information</span>
+        <span class="n">section_start</span> <span class="o">=</span> <span class="n">readme_content</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">README_FORMATTING</span><span class="p">[</span><span class="n">section_name</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">section_end</span> <span class="o">=</span> <span class="n">readme_content</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">section_start</span><span class="p">)</span>
+        <span class="n">updated_section</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">README_FORMATTING</span><span class="p">[</span><span class="n">section_name</span><span class="p">]</span><span class="si">}{</span><span class="n">README_FORMATTING</span><span class="p">[</span><span class="s1">&#39;section_end&#39;</span><span class="p">]</span><span class="si">}{</span><span class="n">element_info</span><span class="si">}{</span><span class="n">README_FORMATTING</span><span class="p">[</span><span class="s1">&#39;section_end&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_readme_content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">insert_section</span><span class="p">(</span>
+            <span class="n">section_start</span><span class="p">,</span> <span class="n">section_end</span><span class="p">,</span> <span class="n">updated_section</span><span class="p">,</span> <span class="n">readme_content</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_readme</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">readme_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_readme_content</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ReadMe.push_readme_to_hub">
+<a class="viewcode-back" href="../../../pedata.hfhub_tools.html#pedata.hfhub_tools.readme_update.ReadMe.push_readme_to_hub">[docs]</a>
+    <span class="k">def</span> <span class="nf">push_readme_to_hub</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">repo_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Pushes the readme file to the hub</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            readme_path: The path to the readme file. If None, defaults to</span>
+<span class="sd">                the README.md file in the current directory</span>
+<span class="sd">            repo_id: The id of the repo to push the readme to</span>
+<span class="sd">                default to None, which sets it to the repo_id used to pull the readme</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">repo_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">repo_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">repo_id</span>
+
+        <span class="n">upload_file</span><span class="p">(</span>
+            <span class="n">path_or_fileobj</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">readme_path</span><span class="p">,</span>
+            <span class="n">path_in_repo</span><span class="o">=</span><span class="s2">&quot;README.md&quot;</span><span class="p">,</span>
+            <span class="n">repo_id</span><span class="o">=</span><span class="n">repo_id</span><span class="p">,</span>
+            <span class="n">repo_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">repo_type</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pushed </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">readme_path</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">repo_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ReadMe.update_readme_figures">
+<a class="viewcode-back" href="../../../pedata.hfhub_tools.html#pedata.hfhub_tools.readme_update.ReadMe.update_readme_figures">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_readme_figures</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">figure_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the figures section of the readme with the updated information</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            figure_path: The directory containing the figures to add to the readme</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: figure_path must be specified</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">make_relative_path</span><span class="p">(</span><span class="n">base_path</span><span class="p">,</span> <span class="n">target_path</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">target_path</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">base_path</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">figure_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;readme_path must be specified&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_figure_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">figure_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure_rel_path</span> <span class="o">=</span> <span class="n">make_relative_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">readme_path</span><span class="p">,</span> <span class="n">figure_path</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">readme_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">readme_content</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="c1"># Create the new section</span>
+        <span class="n">figure_names</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">figure_path</span><span class="p">)</span>
+        <span class="n">figure_info</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="sa">f</span><span class="s1">&#39;&lt;img src=&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">figure_rel_path</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">figure_name</span><span class="si">}</span><span class="s1">&quot;&gt; </span><span class="si">{</span><span class="n">README_FORMATTING</span><span class="p">[</span><span class="s2">&quot;in_section_sep&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span>
+                <span class="k">for</span> <span class="n">figure_name</span> <span class="ow">in</span> <span class="n">figure_names</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Find and replace the element section with the updated information</span>
+        <span class="n">section_start</span> <span class="o">=</span> <span class="n">readme_content</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">README_FORMATTING</span><span class="p">[</span><span class="s1">&#39;figures&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">section_end</span> <span class="o">=</span> <span class="n">readme_content</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">section_start</span><span class="p">)</span>
+
+        <span class="n">updated_section</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">README_FORMATTING</span><span class="p">[</span><span class="s1">&#39;section_end&#39;</span><span class="p">]</span><span class="si">}{</span><span class="n">README_FORMATTING</span><span class="p">[</span><span class="s1">&#39;figures&#39;</span><span class="p">]</span><span class="si">}{</span><span class="n">README_FORMATTING</span><span class="p">[</span><span class="s1">&#39;in_section_sep&#39;</span><span class="p">]</span><span class="si">}{</span><span class="n">figure_info</span><span class="si">}{</span><span class="w"> </span><span class="n">README_FORMATTING</span><span class="p">[</span><span class="s1">&#39;section_end&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_readme_content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">insert_section</span><span class="p">(</span>
+            <span class="n">section_start</span><span class="p">,</span> <span class="n">section_end</span><span class="p">,</span> <span class="n">updated_section</span><span class="p">,</span> <span class="n">readme_content</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_readme</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">readme_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_readme_content</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ReadMe.push_figures_to_hub">
+<a class="viewcode-back" href="../../../pedata.hfhub_tools.html#pedata.hfhub_tools.readme_update.ReadMe.push_figures_to_hub">[docs]</a>
+    <span class="k">def</span> <span class="nf">push_figures_to_hub</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Pushes the figures to the hub&quot;&quot;&quot;</span>
+        <span class="n">upload_folder</span><span class="p">(</span>
+            <span class="n">folder_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_figure_path</span><span class="p">,</span>
+            <span class="n">path_in_repo</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">figure_rel_path</span><span class="p">,</span>
+            <span class="n">repo_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">repo_id</span><span class="p">,</span>
+            <span class="n">repo_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">repo_type</span><span class="p">,</span>
+        <span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>  <span class="c1"># FIXME: write command line tool for this</span>
+    <span class="k">pass</span>
+    <span class="c1"># # parse arguments</span>
+    <span class="c1"># parser = argparse.ArgumentParser(</span>
+    <span class="c1">#     description=&quot;Create and push a dataset to Hugging Face.&quot;</span>
+    <span class="c1"># )</span>
+    <span class="c1"># # required arguments</span>
+    <span class="c1"># parser.add_argument(</span>
+    <span class="c1">#     &quot;--repo&quot;,</span>
+    <span class="c1">#     required=True,</span>
+    <span class="c1">#     help=&quot;Name of the repository to pull from on Hugging Face.&quot;,</span>
+    <span class="c1"># )</span>
+
+    <span class="c1"># parser.add_argument(</span>
+    <span class="c1">#     &quot;--update_just_readme&quot;,</span>
+    <span class="c1">#     required=False,</span>
+    <span class="c1">#     help=&quot;When update - just update the readme or dataset card.&quot;,</span>
+    <span class="c1">#     default=False,</span>
+    <span class="c1"># )</span>
+
+    <span class="c1"># parser.add_argument(</span>
+    <span class="c1">#     &quot;--splits_to_combine_as_whole_ds&quot;,</span>
+    <span class="c1">#     required=False,</span>
+    <span class="c1">#     help=&quot;list: names of the split to combine as &#39;whole_dataset&#39;&quot;,</span>
+    <span class="c1">#     nargs=&quot;+&quot;,</span>
+    <span class="c1">#     default=[],</span>
+    <span class="c1"># )</span>
+
+    <span class="c1"># args = parser.parse_args()</span>
+    <span class="c1"># print(args)</span>
+    <span class="c1"># # create dataset upload object</span>
+    <span class="c1"># data_upload = DatasetUpload()</span>
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, Exazyme.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

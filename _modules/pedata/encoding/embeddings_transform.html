@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>pedata.encoding.embeddings_transform</title>
+    
+          <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="../../../_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="../../../_static/documentation_options.js?v=a5b3107c"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="../../../_static/theme-vendors.js"></script> -->
+      <script src="../../../_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="../../../genindex.html" />
+  <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="../../../index.html" class="home-link">
+    
+      <span class="site-name">pedata documentation</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="../../../index.html#pedata-documentation">pedata documentation!</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.html" class="reference internal ">pedata package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.encoding.html" class="reference internal ">pedata.encoding package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../pedata.mutation.html" class="reference internal ">pedata.mutation package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="../../../modules.html" class="reference internal ">pedata</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="../../index.html">Module code</a> &raquo;</li>
+    
+    <li>pedata.encoding.embeddings_transform</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <h1>Source code for pedata.encoding.embeddings_transform</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">fractional_matrix_power</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">KMeans</span>
+
+
+<div class="viewcode-block" id="linear_kernel">
+<a class="viewcode-back" href="../../../pedata.encoding.html#pedata.encoding.embeddings_transform.linear_kernel">[docs]</a>
+<span class="k">def</span> <span class="nf">linear_kernel</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Linear kernel</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (np.array): array of shape (n,d)</span>
+<span class="sd">        y (np.array): array of shape (m,d)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.array: kernel matrix of shape (n,m)</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; from pedata.encoding.embeddings_transform import linear_kernel</span>
+<span class="sd">        &gt;&gt;&gt; x = np.random.randn(10,5)</span>
+<span class="sd">        &gt;&gt;&gt; y = np.random.randn(20,5)</span>
+<span class="sd">        &gt;&gt;&gt; K = linear_kernel(x,y)</span>
+<span class="sd">        &gt;&gt;&gt; K.shape</span>
+<span class="sd">        (10, 20)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># FIXME: This does probably not belong here and should go into its own *.py file.</span>
+    <span class="c1"># Also to be married with the gpytorch kernels potentially.</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">@</span> <span class="n">y</span><span class="o">.</span><span class="n">T</span></div>
+
+
+
+<div class="viewcode-block" id="reshape_1hot">
+<a class="viewcode-back" href="../../../pedata.encoding.html#pedata.encoding.embeddings_transform.reshape_1hot">[docs]</a>
+<span class="k">def</span> <span class="nf">reshape_1hot</span><span class="p">(</span>
+    <span class="n">one_hot_array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">list</span><span class="p">,</span> <span class="n">len_seq</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">len_vocab</span><span class="p">:</span> <span class="nb">int</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reshape a numpy array 1hot encoding of shape (len(df),len_seq*len_vocab)</span>
+<span class="sd">    to a numpy array of shape (len(df), len_seq, len_vocab)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        one_hot_array : 1hot encoding of shape (len(df),len_seq*len_vocab)</span>
+<span class="sd">        len_seq : length of the sequence</span>
+<span class="sd">        len_vocab : number of amino acids</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.array: dataset with 1hot encoding of shape (len(df), len_seq, len_vocab)</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; from pedata.static.example_data.example_data import RegressionToyDataset</span>
+<span class="sd">        &gt;&gt;&gt; from pedata.encoding.embeddings_transform import reshape_1hot</span>
+<span class="sd">        &gt;&gt;&gt; dataset = RegressionToyDataset(needed_encodings=[&quot;aa_1hot&quot;, &quot;aa_len&quot;]).full_dataset</span>
+<span class="sd">        &gt;&gt;&gt; aa_len = np.max(dataset[&quot;aa_len&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; nb_aa = 21</span>
+<span class="sd">        &gt;&gt;&gt; emb_list_1hot = reshape_1hot(dataset[&quot;aa_1hot&quot;], aa_len, nb_aa)</span>
+<span class="sd">        &gt;&gt;&gt; emb_list_1hot.shape</span>
+<span class="sd">        (21, 442, 21)</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">        The one hot encoding is reshaped from (len(df),len_seq*len_vocab) to (len(df), len_seq, len_vocab)</span>
+<span class="sd">        This works with `df[&quot;aa_1hot&quot;].reshape(len(df), len_seq, len_vocab)` because the one hot encoding is padded with zeros.</span>
+<span class="sd">        Padding can be done when turning a string of a sequence into a numpy array of characters in `seq_strings_to_array`.</span>
+<span class="sd">        `SeqStrOneHot` uses this when turning sequences into one hot encodings and guarantees the same length. The pad character is there translated to an all-zero &quot;1hot&quot;-encoding.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">one_hot_array</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">one_hot_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">one_hot_array</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;one_hot_array should be a numpy array, a list or a compatible array type&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">one_hot_array</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">one_hot_array</span><span class="p">),</span> <span class="n">len_seq</span><span class="p">,</span> <span class="n">len_vocab</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="kmers_mean_embeddings">
+<a class="viewcode-back" href="../../../pedata.encoding.html#pedata.encoding.embeddings_transform.kmers_mean_embeddings">[docs]</a>
+<span class="k">def</span> <span class="nf">kmers_mean_embeddings</span><span class="p">(</span>
+    <span class="n">emb_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">kmer_size</span><span class="p">:</span> <span class="nb">int</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the mean of kmer embeddings of length k for each sequence</span>
+<span class="sd">    in the dataset and its l2-norm</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        emb_list (list): list of embeddings of shape (len_seq, len_aa)</span>
+<span class="sd">        kmer_size (int): length of the kmer</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        U: mean of kmer embeddings of length k for each sequence in the dataset</span>
+<span class="sd">        U_norm: normalized (l2-norm) mean of kmer embeddings of length k for each sequence in the dataset</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; from pedata.static.example_data.example_data import RegressionToyDataset</span>
+<span class="sd">        &gt;&gt;&gt; from pedata.encoding.embeddings_transform import reshape_1hot, kmers_mean_embeddings</span>
+<span class="sd">        &gt;&gt;&gt; dataset = RegressionToyDataset(needed_encodings=[&quot;aa_1hot&quot;, &quot;aa_len&quot;]).full_dataset</span>
+<span class="sd">        &gt;&gt;&gt; aa_len = np.max(dataset[&quot;aa_len&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; nb_aa = 21</span>
+<span class="sd">        &gt;&gt;&gt; emb_list_1hot = reshape_1hot(dataset[&quot;aa_1hot&quot;], aa_len, nb_aa)</span>
+<span class="sd">        &gt;&gt;&gt; U, U_norm = kmers_mean_embeddings(emb_list_1hot, kmer_size=100)</span>
+<span class="sd">        &gt;&gt;&gt; U.shape</span>
+<span class="sd">        (21, 2100)</span>
+<span class="sd">        &gt;&gt;&gt; U_norm.shape</span>
+<span class="sd">        (21, 2100)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">kmer_size</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">emb_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">emb_list</span><span class="p">),</span> <span class="n">k</span> <span class="o">*</span> <span class="n">d</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">emb_list</span><span class="p">)):</span>
+        <span class="c1"># print(i)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">emb_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span> <span class="o">-</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">k</span> <span class="o">*</span> <span class="n">d</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">X</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">emb_list</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="p">:</span> <span class="n">j</span> <span class="o">+</span> <span class="n">k</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">U</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">U_norm</span> <span class="o">=</span> <span class="n">U</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">U</span><span class="p">,</span> <span class="n">U_norm</span></div>
+
+
+
+<div class="viewcode-block" id="kmer_embeddings_centers">
+<a class="viewcode-back" href="../../../pedata.encoding.html#pedata.encoding.embeddings_transform.kmer_embeddings_centers">[docs]</a>
+<span class="k">def</span> <span class="nf">kmer_embeddings_centers</span><span class="p">(</span>
+    <span class="n">emb_list_train</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">kmer_size</span><span class="p">:</span> <span class="nb">int</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the kmer embeddings of length k for each sequence in the dataset</span>
+<span class="sd">    and the unique kmer embeddings of length k in the dataset</span>
+
+
+
+<span class="sd">    Args:</span>
+<span class="sd">        emb_list_train (list): list of embeddings of shape (len_seq, len_aa)</span>
+<span class="sd">        k (int): length of the kmer</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        kmer_list (list): list of kmer embeddings of length k for each sequence in the dataset</span>
+<span class="sd">        U1 (np.array): unique kmer embeddings of length k in the dataset</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; from pedata.static.example_data.example_data import RegressionToyDataset</span>
+<span class="sd">        &gt;&gt;&gt; from pedata.encoding.embeddings_transform import reshape_1hot, kmer_embeddings_centers</span>
+<span class="sd">        &gt;&gt;&gt; dataset = RegressionToyDataset(needed_encodings=[&quot;aa_1hot&quot;, &quot;aa_len&quot;]).full_dataset</span>
+<span class="sd">        &gt;&gt;&gt; aa_len = np.max(dataset[&quot;aa_len&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; nb_aa = 21</span>
+<span class="sd">        &gt;&gt;&gt; emb_list_1hot = reshape_1hot(dataset[&quot;aa_1hot&quot;], aa_len, nb_aa)</span>
+<span class="sd">        &gt;&gt;&gt; kmer_list, U1 = kmer_embeddings_centers(emb_list_1hot, kmer_size=100)</span>
+<span class="sd">        &gt;&gt;&gt; print(kmer_list[0]) #doctest: +ELLIPSIS +NORMALIZE_WHITESPACE</span>
+<span class="sd">        [[0. 0. 0. ... 0. 0. 0.]</span>
+<span class="sd">        [1. 0. 0. ... 0. 0. 0.]</span>
+<span class="sd">        [1. 0. 0. ... 0. 0. 0.]</span>
+<span class="sd">        ...</span>
+<span class="sd">        [0. 0. 0. ... 0. 0. 0.]</span>
+<span class="sd">        [0. 0. 0. ... 0. 0. 0.]</span>
+<span class="sd">        [0. 0. 0. ... 0. 0. 0.]]</span>
+<span class="sd">        &gt;&gt;&gt; print(U1.shape)</span>
+<span class="sd">        (2516, 2100)</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">emb_list_train</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">n_train</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">emb_list_train</span><span class="p">)</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">kmer_size</span>
+
+    <span class="n">kmer_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_train</span><span class="p">):</span>
+        <span class="n">seq_length</span> <span class="o">=</span> <span class="n">emb_list_train</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">seq_length</span> <span class="o">-</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">k</span> <span class="o">*</span> <span class="n">d</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">seq_length</span> <span class="o">-</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">X</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">emb_list_train</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="p">:</span> <span class="n">j</span> <span class="o">+</span> <span class="n">k</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">kmer_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+    <span class="n">U</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">kmer_list</span><span class="p">))),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># l2 norm</span>
+    <span class="n">U1</span> <span class="o">=</span> <span class="n">U</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">U</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">kmer_list</span><span class="p">,</span> <span class="n">U1</span></div>
+
+
+
+<div class="viewcode-block" id="rkhs_kmer_embeddings">
+<a class="viewcode-back" href="../../../pedata.encoding.html#pedata.encoding.embeddings_transform.rkhs_kmer_embeddings">[docs]</a>
+<span class="k">def</span> <span class="nf">rkhs_kmer_embeddings</span><span class="p">(</span>
+    <span class="n">kernel_fn</span><span class="p">,</span> <span class="n">emb_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">kmer_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">nystrom_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">rng_seed</span><span class="o">=</span><span class="mi">0</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the RKHS kmer embeddings of length k for each sequence in the dataset</span>
+<span class="sd">    see https://hal.science/hal-01632912/ for more details</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        kernel_fn (_type_): kernel function</span>
+<span class="sd">        emb_list (list): list of embeddings of shape (len_seq, len_aa)</span>
+<span class="sd">        k_mer_size (int): length of the kmer</span>
+<span class="sd">        nystrom_size (int): number of centers for the kmeans clustering</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        rkhs_kmer_emb_list (np.array): RKHS kmer embeddings of length k for each sequence in the dataset</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; from pedata.static.example_data.example_data import RegressionToyDataset</span>
+<span class="sd">        &gt;&gt;&gt; from pedata.encoding.embeddings_transform import linear_kernel, reshape_1hot, rkhs_kmer_embeddings</span>
+<span class="sd">        &gt;&gt;&gt; dataset = RegressionToyDataset(needed_encodings=[&quot;aa_1hot&quot;, &quot;aa_len&quot;]).full_dataset</span>
+<span class="sd">        &gt;&gt;&gt; aa_len = np.max(dataset[&quot;aa_len&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; nb_aa = 21</span>
+<span class="sd">        &gt;&gt;&gt; emb_list_1hot = reshape_1hot(dataset[&quot;aa_1hot&quot;], aa_len, nb_aa)</span>
+<span class="sd">        &gt;&gt;&gt; rkhs_kmer_emb_list = rkhs_kmer_embeddings(</span>
+<span class="sd">        ...     linear_kernel,</span>
+<span class="sd">        ...     emb_list_1hot,</span>
+<span class="sd">        ...     kmer_size=100,</span>
+<span class="sd">        ...     nystrom_size=256</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; print(rkhs_kmer_emb_list.shape)</span>
+<span class="sd">        (21, 256)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># rng instantiation</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">rng_seed</span><span class="p">)</span>
+
+    <span class="n">kmer_list_data</span><span class="p">,</span> <span class="n">kmer_embedding_unique</span> <span class="o">=</span> <span class="n">kmer_embeddings_centers</span><span class="p">(</span><span class="n">emb_list</span><span class="p">,</span> <span class="n">kmer_size</span><span class="p">)</span>
+    <span class="c1"># cluster kmer_embedding_unique</span>
+    <span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span>
+        <span class="n">n_clusters</span><span class="o">=</span><span class="n">nystrom_size</span><span class="p">,</span>
+        <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">10000</span><span class="p">),</span>
+        <span class="n">n_init</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">kmer_embedding_unique</span><span class="p">)</span>
+    <span class="c1"># normalize cluster centers</span>
+    <span class="n">l2_norm_centers</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">kmeans</span><span class="o">.</span><span class="n">cluster_centers_</span>
+        <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">kmeans</span><span class="o">.</span><span class="n">cluster_centers_</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="c1"># compute kernel matrix</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="n">kernel_fn</span><span class="p">(</span><span class="n">l2_norm_centers</span><span class="p">,</span> <span class="n">l2_norm_centers</span><span class="p">)</span>
+    <span class="n">Kn</span> <span class="o">=</span> <span class="n">fractional_matrix_power</span><span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">)</span>
+
+    <span class="c1"># compute rkhs kmer embeddings</span>
+    <span class="n">rkhs_kmer_emb_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">emb_list</span><span class="p">),</span> <span class="n">nystrom_size</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">emb_list</span><span class="p">)):</span>
+        <span class="n">rkhs_kmer_emb_list</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">Kn</span> <span class="o">@</span> <span class="n">kernel_fn</span><span class="p">(</span><span class="n">l2_norm_centers</span><span class="p">,</span> <span class="n">kmer_list_data</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rkhs_kmer_emb_list</span></div>
+
+</pre></div>
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, Exazyme.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

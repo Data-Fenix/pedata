@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+      <title>pedata.mutation package</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=a5b3107c"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="pedata.preprocessing package" href="pedata.preprocessing.html" />
+  <link rel="prev" title="pedata.hfhub_tools package" href="pedata.hfhub_tools.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">pedata documentation</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#pedata-documentation">pedata documentation!</a></span>
+      </p>
+      <ul class="current">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="pedata.html" class="reference internal ">pedata package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="pedata.encoding.html" class="reference internal ">pedata.encoding package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 current">
+            
+              <a href="#" class="reference internal current">pedata.mutation package</a>
+            
+
+            
+              <ul>
+                
+                  <li class="toctree-l2"><a href="#submodules" class="reference internal">Submodules</a></li>
+                
+                  <li class="toctree-l2"><a href="#module-pedata.mutation.mutation" class="reference internal">pedata.mutation.mutation module</a></li>
+                
+                  <li class="toctree-l2"><a href="#module-pedata.mutation.mutation_converter" class="reference internal">pedata.mutation.mutation_converter module</a></li>
+                
+                  <li class="toctree-l2"><a href="#module-pedata.mutation.mutation_extractor" class="reference internal">pedata.mutation.mutation_extractor module</a></li>
+                
+                  <li class="toctree-l2"><a href="#module-pedata.mutation.mutation_util" class="reference internal">pedata.mutation.mutation_util module</a></li>
+                
+                  <li class="toctree-l2"><a href="#module-pedata.mutation" class="reference internal">Module contents</a></li>
+                
+              </ul>
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="modules.html" class="reference internal ">pedata</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="pedata.html">pedata package</a> &raquo;</li>
+    
+    <li>pedata.mutation package</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="pedata.hfhub_tools.html"
+       title="previous chapter">← pedata.hfhub_tools package</a>
+  </li>
+  <li class="next">
+    <a href="pedata.preprocessing.html"
+       title="next chapter">pedata.preprocessing package →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="pedata-mutation-package">
+<h1>pedata.mutation package<a class="headerlink" href="#pedata-mutation-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-pedata.mutation.mutation">
+<span id="pedata-mutation-mutation-module"></span><h2>pedata.mutation.mutation module<a class="headerlink" href="#module-pedata.mutation.mutation" title="Link to this heading">¶</a></h2>
+<p>The mutation module contains a Mutation class containing methods for applying mutations to sequences.</p>
+<p>The different methods allow to return the mutation saved as Named Tuple objects <cite>Mut</cite>.</p>
+<p>The <cite>Mut</cite> objects are defined in <cite>pedata.constants</cite> module and contain information about the mutation (position, source, target).</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pedata.mutation.mutation.Mutation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pedata.mutation.mutation.</span></span><span class="sig-name descname"><span class="pre">Mutation</span></span><a class="reference internal" href="_modules/pedata/mutation/mutation.html#Mutation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.mutation.mutation.Mutation" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.mutation.mutation.Mutation.apply_all_mutations">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">apply_all_mutations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">mutations:</span> <span class="pre">~datasets.arrow_dataset.Dataset</span> <span class="pre">|</span> <span class="pre">list[list[~pedata.constants.Mut]],</span> <span class="pre">parent:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">offset:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">check_validity:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">valid:</span> <span class="pre">~re.Pattern</span> <span class="pre">=</span> <span class="pre">re.compile('^[a-zA-Z]\\s*[0-9]+\\s*[a-zA-Z]$'),</span> <span class="pre">extractor:</span> <span class="pre">~typing.Callable</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">Mutation.&lt;lambda&gt;&gt;,</span> <span class="pre">delimiting_char:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'_'</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/mutation/mutation.html#Mutation.apply_all_mutations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.mutation.mutation.Mutation.apply_all_mutations" title="Link to this definition">¶</a></dt>
+<dd><p>Apply all mutations to a dataset and return the mutated sequences
+This method applies mutations to a dataset by iterating over each variant and applying the specified mutations.
+The resulting mutated sequences are returned as a list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mutations</strong> – Dataset containing atleast an aa_mut or a dna_mut column.</p></li>
+<li><p><strong>parent</strong> – Parent sequence.
+If not provided, it is assumed to be contained in the dataset,
+in the unique row where the ‘variant’ column contains the string ‘wildtype’.
+Defaults to None.</p></li>
+<li><p><strong>offset</strong> – Offset of the mutation position in relation to the parent sequence.
+If not provided, it is estimated.
+Defaults to None.</p></li>
+<li><p><strong>check_validity</strong> – Whether to perform a validity check for the contained mutations.
+Defaults to False.</p></li>
+<li><p><strong>valid</strong> – Regular expression to check the validity of a mutation string.
+Defaults to <cite>re.compile(r”^[a-zA-Z]s*[0-9]+s*[a-zA-Z]$”)</cite>.</p></li>
+<li><p><strong>extractor</strong> – Function to extract a mutation triple containing <cite>(position, source, target)</cite>.
+Defaults to <cite>lambda c: (int(c[1:-1]), c[0], c[-1])</cite>.</p></li>
+<li><p><strong>delimiting_char</strong> – Delimiting character for the mutations.
+Defaults to “_”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of all mutated sequences.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>TypeError</strong> – If the input is not a Dataset.</p></li>
+<li><p><strong>ValueError</strong> – If more than one variant without mutations is found.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">datasets</span> <span class="k">as</span> <span class="nn">ds</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">{</span>
+<span class="gp">... </span>        <span class="s2">&quot;aa_mut&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;wildtype&quot;</span><span class="p">,</span> <span class="s2">&quot;C2X_E4Y&quot;</span><span class="p">,</span> <span class="s2">&quot;F5T&quot;</span><span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;aa_seq&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ABCDEFGH&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span>
+<span class="gp">... </span>        <span class="s2">&quot;target foo&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="p">}</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mutated_sequences</span> <span class="o">=</span> <span class="n">Mutation</span><span class="o">.</span><span class="n">apply_all_mutations</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">mutated_sequences</span><span class="p">)</span>
+<span class="go">[&#39;ABCDEFGH&#39;, &#39;ABXDYFGH&#39;, &#39;ABCDETGH&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.mutation.mutation.Mutation.apply_variant_mutations">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">apply_variant_mutations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mutations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut"><span class="pre">Mut</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_validity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/pedata/mutation/mutation.html#Mutation.apply_variant_mutations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.mutation.mutation.Mutation.apply_variant_mutations" title="Link to this definition">¶</a></dt>
+<dd><p>Compute mutated sequences from parent sequence and mutations list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mutations</strong> – List of namedtuples representing mutations.
+Each namedtuple should contain three attributes: (pos, src, targ).</p></li>
+<li><p><strong>parent</strong> – Parent sequence to be mutated.</p></li>
+<li><p><strong>offset</strong> – Offset of the mutation position to the parent sequence (default is 0).</p></li>
+<li><p><strong>check_validity</strong> – True if validity of mutations is to be checked (default is False).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Mutated sequence.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pedata.constants</span> <span class="kn">import</span> <span class="n">Mut</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mutations</span> <span class="o">=</span> <span class="p">[</span><span class="n">Mut</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">),</span> <span class="n">Mut</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parent_sequence</span> <span class="o">=</span> <span class="s2">&quot;TGAACC&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Mutation</span><span class="o">.</span><span class="n">apply_variant_mutations</span><span class="p">(</span>
+<span class="gp">... </span><span class="n">mutations</span><span class="p">,</span> <span class="n">parent_sequence</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">check_validity</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="go">&#39;TGAGCT&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.mutation.mutation.Mutation.combine_variant_mutations">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">combine_variant_mutations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mut1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut"><span class="pre">Mut</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mut2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut"><span class="pre">Mut</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_validity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut"><span class="pre">Mut</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/mutation/mutation.html#Mutation.combine_variant_mutations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.mutation.mutation.Mutation.combine_variant_mutations" title="Link to this definition">¶</a></dt>
+<dd><p>Combine the mutations of one variant (represented as lists of Mut namedtuples) with those of another variant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mut1</strong> – Mutations list representing all mutations in one variant.</p></li>
+<li><p><strong>mut2</strong> – Mutations list representing all mutations in another variant.</p></li>
+<li><p><strong>check_validity</strong> – Whether to check if <cite>mut1</cite> and <cite>mut2</cite> assume the same parent sequence.
+Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Combined mutations list.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut">Mut</a>]</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pedata.constants</span> <span class="kn">import</span> <span class="n">Mut</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mut1</span> <span class="o">=</span> <span class="p">[</span><span class="n">Mut</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">),</span> <span class="n">Mut</span><span class="p">(</span><span class="mi">33</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mut2</span> <span class="o">=</span> <span class="p">[</span><span class="n">Mut</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="s1">&#39;K&#39;</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span><span class="p">),</span> <span class="n">Mut</span><span class="p">(</span><span class="mi">68</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">Mutation</span><span class="o">.</span><span class="n">combine_variant_mutations</span><span class="p">(</span><span class="n">mut1</span><span class="p">,</span> <span class="n">mut2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> 
+<span class="go">[Mut(pos=13, src=&#39;K&#39;, targ=&#39;M&#39;), Mut(pos=32, src=&#39;L&#39;, targ=&#39;T&#39;), ...]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.mutation.mutation.Mutation.concat_mutations">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">concat_mutations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mut</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut"><span class="pre">Mut</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut"><span class="pre">Mut</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/mutation/mutation.html#Mutation.concat_mutations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.mutation.mutation.Mutation.concat_mutations" title="Link to this definition">¶</a></dt>
+<dd><p>Combine multiple mutation lists into a single list of Mut namedtuples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mut</strong> (<em>List</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut"><em>Mut</em></a><em>]</em><em>]</em>) – A list of mutation lists, where each inner list contains Mut namedtuples.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A single list of Mut namedtuples combining all the mutation lists.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut">Mut</a>]</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mut</span> <span class="o">=</span> <span class="p">[[(</span><span class="mi">32</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">),</span> <span class="p">(</span><span class="mi">33</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">)],</span> <span class="p">[(</span><span class="mi">13</span><span class="p">,</span> <span class="s1">&#39;K&#39;</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span><span class="p">),</span> <span class="p">(</span><span class="mi">68</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">)]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Mutation</span><span class="o">.</span><span class="n">concat_mutations</span><span class="p">(</span><span class="n">mut</span><span class="p">)</span>
+<span class="go">[(32, &#39;L&#39;, &#39;T&#39;), (33, &#39;G&#39;, &#39;C&#39;), (13, &#39;K&#39;, &#39;M&#39;), (68, &#39;A&#39;, &#39;G&#39;)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.mutation.mutation.Mutation.estimate_offset">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">estimate_offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mut</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut"><span class="pre">Mut</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiting_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'_'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">most_likely</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_perfect_matches</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dataset</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pedata/mutation/mutation.html#Mutation.estimate_offset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.mutation.mutation.Mutation.estimate_offset" title="Link to this definition">¶</a></dt>
+<dd><p>Return offsets in rank order of likelihood between a parent string and mutated sequences.</p>
+<p>This function estimates the offsets by trying out different offsets and computing the matching ratio
+between the parent sequence and the sketch of the parent sequence. The sketch is computed from the
+mutation codes provided. The offset with the highest matching ratio is considered the most likely offset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mut</strong> – Mutations information represented as a namedtuple with atleast “source” and “position” attributes, or a DaDataset containing a “aa_mut” or “dna_mut” column. If a Dataset is provided, the <cite>delimiting_char</cite> is used to parse the mutations.</p></li>
+<li><p><strong>parent</strong> – The parent string for which to find the offset.</p></li>
+<li><p><strong>delimiting_char</strong> – The string delimiting individual mutations when parsing mutations from a Dataset.
+Defaults to “_”.</p></li>
+<li><p><strong>most_likely</strong> – If True, returns the most likely offset if the matching ratio is 100%; otherwise, raises an Exception.
+Defaults to False.</p></li>
+<li><p><strong>only_perfect_matches</strong> – If True, only returns offsets with a matching ratio of 100%; otherwise, returns all offsets.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If <cite>most_likely</cite> is False, returns a Dataset with the offsets in rank order of likelihood, including the matching ratio.
+If <cite>most_likely</cite> is True, returns the most likely offset as an integer.
+If the matching ratio is not 100% and <cite>most_likely</cite> is True, an Exception is raised.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TODO</strong> – write Raises</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">datasets</span> <span class="k">as</span> <span class="nn">ds</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parent_seq</span> <span class="o">=</span> <span class="s2">&quot;MEAPLSHV&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="s2">&quot;aa_mut&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;A3C_L5D&quot;</span><span class="p">,</span> <span class="s2">&quot;S6K_M1A&quot;</span><span class="p">],</span> <span class="s2">&quot;aa_seq&quot;</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="s2">&quot;target foo&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">Mutation</span><span class="o">.</span><span class="n">estimate_offset</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent_seq</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.mutation.mutation.Mutation.generate_variant_mutation_combinations">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_variant_mutation_combinations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">variants</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut"><span class="pre">Mut</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut"><span class="pre">Mut</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/mutation/mutation.html#Mutation.generate_variant_mutation_combinations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.mutation.mutation.Mutation.generate_variant_mutation_combinations" title="Link to this definition">¶</a></dt>
+<dd><p>Generate all possible combinations of mutations from multiple sets of variants.
+The function pairs each variant from one set with every variant from the other sets.
+The resulting combined mutations are returned as a list of Mut namedtuples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>*variants</strong> (<em>list</em><em>[</em><a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut"><em>Mut</em></a><em>]</em>) – Variable number of lists of mutations representing different sets of variants.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of combined mutations representing all possible combinations.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[list[<a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut">Mut</a>]]</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pedata.constants</span> <span class="kn">import</span> <span class="n">Mut</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">variants1</span> <span class="o">=</span> <span class="p">[</span><span class="n">Mut</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">),</span> <span class="n">Mut</span><span class="p">(</span><span class="mi">33</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">variants2</span> <span class="o">=</span> <span class="p">[</span><span class="n">Mut</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="s1">&#39;K&#39;</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">variants3</span> <span class="o">=</span> <span class="p">[</span><span class="n">Mut</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">generate_variant_mutation_combinations</span><span class="p">(</span><span class="n">variants1</span><span class="p">,</span> <span class="n">variants2</span><span class="p">,</span> <span class="n">variants3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> 
+<span class="go">[[Mut(pos=32, src=&#39;L&#39;, targ=&#39;T&#39;), Mut(pos=13, src=&#39;K&#39;, targ=&#39;M&#39;), Mut(pos=45, src=&#39;A&#39;, targ=&#39;G&#39;)], #FIXME CHECKTHAT</span>
+<span class="go">[Mut(pos=33, src=&#39;G&#39;, targ=&#39;C&#39;), Mut(pos=13, src=&#39;K&#39;, targ=&#39;M&#39;), Mut(pos=45, src=&#39;A&#39;, targ=&#39;G&#39;)]]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.mutation.mutation.Mutation.generate_variant_mutation_combinations_within_dataset">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generate_variant_mutation_combinations_within_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mut</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut"><span class="pre">Mut</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut"><span class="pre">Mut</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/mutation/mutation.html#Mutation.generate_variant_mutation_combinations_within_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.mutation.mutation.Mutation.generate_variant_mutation_combinations_within_dataset" title="Link to this definition">¶</a></dt>
+<dd><p>Generate all possible combinations of mutations within the same dataset.</p>
+<blockquote>
+<div><p>This static method takes a list of mutations occurring in the dataset, where each variant mutation is represented as a named tuple ‘Mut’.
+It combines the mutations from different variants in all possible ways and returns a list of lists representing the combined mutations.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mut</strong> (<em>List</em><em>[</em><a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut"><em>Mut</em></a><em>]</em>) – A list of named tuples representing variant mutations in the dataset.
+Each named tuple ‘Mut’ must have ‘position’, ‘source’, and ‘target’ attributes.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A list of lists representing combined mutations.</dt><dd><p>Each inner list contains named tuples ‘Mut’ with ‘position’, ‘source’, and ‘target’ attributes.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[List[<a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut">Mut</a>]]</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pedata.constants</span> <span class="kn">import</span> <span class="n">Mut</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mutations</span> <span class="o">=</span> <span class="p">[</span><span class="n">Mut</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">),</span> <span class="n">Mut</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">),</span> <span class="n">Mut</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">),</span> <span class="n">Mut</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">),</span> <span class="n">Mut</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Mutation</span><span class="o">.</span><span class="n">generate_variant_mutation_combinations_within_dataset</span><span class="p">(</span><span class="n">mutations</span><span class="p">)</span> 
+<span class="go">[[Mut(pos=1, src=&#39;A&#39;, targ=&#39;G&#39;), Mut(pos=2, src=&#39;C&#39;, targ=&#39;T&#39;)],</span>
+<span class="go">[Mut(pos=1, src=&#39;A&#39;, targ=&#39;G&#39;), Mut(pos=3, src=&#39;G&#39;, targ=&#39;C&#39;)],</span>
+<span class="go">[Mut(pos=1, src=&#39;A&#39;, targ=&#39;G&#39;), Mut(pos=4, src=&#39;T&#39;, targ=&#39;A&#39;)],</span>
+<span class="go">[Mut(pos=1, src=&#39;A&#39;, targ=&#39;G&#39;), Mut(pos=5, src=&#39;C&#39;, targ=&#39;G&#39;)],</span>
+<span class="go">[Mut(pos=2, src=&#39;C&#39;, targ=&#39;T&#39;), Mut(pos=3, src=&#39;G&#39;, targ=&#39;C&#39;)],</span>
+<span class="go">[Mut(pos=2, src=&#39;C&#39;, targ=&#39;T&#39;), Mut(pos=4, src=&#39;T&#39;, targ=&#39;A&#39;)],</span>
+<span class="go">[Mut(pos=2, src=&#39;C&#39;, targ=&#39;T&#39;), Mut(pos=5, src=&#39;C&#39;, targ=&#39;G&#39;)],</span>
+<span class="go">[Mut(pos=3, src=&#39;G&#39;, targ=&#39;C&#39;), Mut(pos=4, src=&#39;T&#39;, targ=&#39;A&#39;)],</span>
+<span class="go">[Mut(pos=3, src=&#39;G&#39;, targ=&#39;C&#39;), Mut(pos=5, src=&#39;C&#39;, targ=&#39;G&#39;)],</span>
+<span class="go">[Mut(pos=4, src=&#39;T&#39;, targ=&#39;A&#39;), Mut(pos=5, src=&#39;C&#39;, targ=&#39;G&#39;)]]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The input mutations are expected to be valid and have the ‘position’, ‘source’, and ‘target’ attributes.
+The resulting combined mutations maintain the original order of positions for each variant mutation.
+The function uses combine_variant_mutations() function to check for the validity of the mutations and combines them.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.mutation.mutation.Mutation.get_parent_aa_seq">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_parent_aa_seq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_bool</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_idx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pedata/mutation/mutation.html#Mutation.get_parent_aa_seq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.mutation.mutation.Mutation.get_parent_aa_seq" title="Link to this definition">¶</a></dt>
+<dd><p>Get the parent amino acid sequence from a dataset (identified by the variant name ‘wildtype’ or ‘wt’).
+By default returns the sequence as a string, but can also return the index of the parent sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> – Dataset containing the parent sequence</p></li>
+<li><p><strong>return_bool</strong> – Return a boolean array indicating the position(s) of the parent sequence in <cite>dataset</cite>. Defaults to False.</p></li>
+<li><p><strong>return_idx</strong> – Return the index of the parent sequence. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Parent sequence as a string, boolean array, index integer</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TODO</strong> – write Raises</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;aa_mut&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;wildtype&quot;</span><span class="p">,</span><span class="s2">&quot;R227D&quot;</span><span class="p">,</span> <span class="s2">&quot;K762M&quot;</span><span class="p">],</span> <span class="s2">&quot;aa_seq&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;ABCDEF&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="s2">&quot;target foo&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parent_seq</span> <span class="o">=</span> <span class="n">Mutation</span><span class="o">.</span><span class="n">get_parent_aa_seq</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">parent_seq</span><span class="p">)</span>
+<span class="go">ABCDEF</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.mutation.mutation.Mutation.get_parent_sketch_from_mutations">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_parent_sketch_from_mutations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mut</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut"><span class="pre">Mut</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_character</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'*'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Sketch</span></span></span><a class="reference internal" href="_modules/pedata/mutation/mutation.html#Mutation.get_parent_sketch_from_mutations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.mutation.mutation.Mutation.get_parent_sketch_from_mutations" title="Link to this definition">¶</a></dt>
+<dd><p>Sketch out the parent sequence from a list of mutations. This is useful, for example, to then estimate the offset of the position encoding.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mut</strong> – List of namedtuples representing mutations. Each namedtuple should contain at least the position (int) and source (str) respectively.</p></li>
+<li><p><strong>fill_character</strong> – Character used to fill positions that do not occur in <cite>mut</cite>.
+Defaults to “*”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Number of positions filled and resulting parent sketch string.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If <cite>mut</cite> is not a sequence of tuples.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pedata.constants</span> <span class="kn">import</span> <span class="n">Mut</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mutations</span> <span class="o">=</span> <span class="p">[</span><span class="n">Mut</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">),</span> <span class="n">Mut</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Mutation</span><span class="o">.</span><span class="n">get_parent_sketch_from_mutations</span><span class="p">(</span><span class="n">mutations</span><span class="p">)</span>
+<span class="go">(2, &#39;**BA&#39;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.mutation.mutation.Mutation.parse_all_mutations">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_all_mutations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset:</span> <span class="pre">~datasets.arrow_dataset.Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid:</span> <span class="pre">~re.Pattern</span> <span class="pre">=</span> <span class="pre">re.compile('^[a-zA-Z]\\s*[0-9]+\\s*[a-zA-Z]$')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extractor:</span> <span class="pre">~typing.Callable</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">Mutation.&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiting_char:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'_'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut"><span class="pre">Mut</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/mutation/mutation.html#Mutation.parse_all_mutations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.mutation.mutation.Mutation.parse_all_mutations" title="Link to this definition">¶</a></dt>
+<dd><p>Parse all mutations for all variants, where single mutations are delimited by the delimiting_character.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> – Data set containing all mutation codes in a <cite>aa_mut</cite> or <cite>dna_mut</cite> column.</p></li>
+<li><p><strong>offset</strong> – Offset of positions in mutation codes.
+Defaults to 0.</p></li>
+<li><p><strong>valid</strong> – Regular expression checking for the validity of a mutation string.
+Defaults to <cite>re.compile(r”^[a-zA-Z]s*[0-9]+s*[a-zA-Z]$”)</cite>.</p></li>
+<li><p><strong>extractor</strong> – Function for extracting a mutation triple containing <cite>(position, source, target)</cite>.
+Defaults to <cite>lambda c: (int(c[1:-1]), c[0], c[-1])</cite>.</p></li>
+<li><p><strong>delimiting_char</strong> – Character that delimits individual mutations.
+Defaults to “_”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of parsed mutations and a list of indexes representing non-parsed mutations.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(list[<a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut">Mut</a>], list[int])</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">datasets</span> <span class="k">as</span> <span class="nn">ds</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">({</span><span class="s2">&quot;aa_mut&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;G34C_L33T&quot;</span><span class="p">,</span> <span class="s2">&quot;K14M_A69G&quot;</span><span class="p">],</span> <span class="s2">&quot;aa_seq&quot;</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="s2">&quot;target foo&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parsed_mutations</span><span class="p">,</span> <span class="n">non_parsed_idx</span> <span class="o">=</span> <span class="n">Mutation</span><span class="o">.</span><span class="n">parse_all_mutations</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">parsed_mutations</span><span class="p">)</span>
+<span class="go">[[Mut(pos=32, src=&#39;L&#39;, targ=&#39;T&#39;), Mut(pos=33, src=&#39;G&#39;, targ=&#39;C&#39;)], [Mut(pos=13, src=&#39;K&#39;, targ=&#39;M&#39;), Mut(pos=68, src=&#39;A&#39;, targ=&#39;G&#39;)]]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.mutation.mutation.Mutation.parse_variant_mutations">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_variant_mutations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">changes:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid:</span> <span class="pre">~re.Pattern</span> <span class="pre">=</span> <span class="pre">re.compile('^[a-zA-Z]\\s*[0-9]+\\s*[a-zA-Z]$')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extractor:</span> <span class="pre">~typing.Callable</span> <span class="pre">=</span> <span class="pre">&lt;function</span> <span class="pre">Mutation.&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiting_char:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'_'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut"><span class="pre">Mut</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/mutation/mutation.html#Mutation.parse_variant_mutations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.mutation.mutation.Mutation.parse_variant_mutations" title="Link to this definition">¶</a></dt>
+<dd><p>Parse each change/mutation in a list of changes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>changes</strong> – List of mutations, typically in the format SPT where
+S is the source amino acid or DNA base,
+P is the position of the mutation, and
+T is the target amino acid or DNA base.
+Generally speaking, the format is given by the <cite>valid</cite> and <cite>extractor</cite> variables.</p></li>
+<li><p><strong>valid</strong> – Regexp to check if change is valid. Defaults to re.compile(r”^[a-zA-Z][0-9]+[a-zA-Z]$”).</p></li>
+<li><p><strong>extractor</strong> – Function to extract S, P, and T variables into a tuple.
+Defaults to lambda c: (int(c[1:-1]), c[0], c[-1]).</p></li>
+<li><p><strong>delimiting_char</strong> – Delimiter character for splitting the changes. Defaults to “_”.</p></li>
+<li><p><strong>offset</strong> – Length of transport peptide i.e. offset for position/P variables. Defaults to 0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of mutation namedtuples (pos, src, targ)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[<a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut">Mut</a>]</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Mutation</span><span class="o">.</span><span class="n">parse_variant_mutations</span><span class="p">(</span><span class="s2">&quot;G34C_L33T&quot;</span><span class="p">)</span>
+<span class="go">[Mut(pos=32, src=&#39;L&#39;, targ=&#39;T&#39;), Mut(pos=33, src=&#39;G&#39;, targ=&#39;C&#39;)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.mutation.mutation.Mutation.sort_mutations_by_pos">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sort_mutations_by_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mut</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut"><span class="pre">Mut</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/mutation/mutation.html#Mutation.sort_mutations_by_pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.mutation.mutation.Mutation.sort_mutations_by_pos" title="Link to this definition">¶</a></dt>
+<dd><p>Sort a list of mutations by position</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>elements</strong> (<em>mut List</em><em> of </em><em>mutations to be sorted. Each mutation should be a tuple with three</em>) – (position, source, target).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Sorted list of mutations based on position.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TypeError</strong> – If any mutation is invalid or does not match the expected format.</p>
+</dd>
+</dl>
+<p>Examples:
+&gt;&gt;&gt; mutations = [Mut(2, “A”, “C”),Mut(1, “G”, “T”), Mut(3, “C”, “G”)]
+&gt;&gt;&gt; Mutation.sort_mutations_by_pos(mutations)
+[Mut(pos=1, src=’G’, targ=’T’), Mut(pos=2, src=’A’, targ=’C’), Mut(pos=3, src=’C’, targ=’G’)]</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.mutation.mutation.fill_all_missing_sequences">
+<span class="sig-prename descclassname"><span class="pre">pedata.mutation.mutation.</span></span><span class="sig-name descname"><span class="pre">fill_all_missing_sequences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mutation_code_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dataset</span></span></span><a class="reference internal" href="_modules/pedata/mutation/mutation.html#fill_all_missing_sequences"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.mutation.mutation.fill_all_missing_sequences" title="Link to this definition">¶</a></dt>
+<dd><p>fill all fillable missing sequences in the dataset
+:param dataset: dataset to check</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dataset with filled missing values</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dataset</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.mutation.mutation.fill_missing_sequences">
+<span class="sig-prename descclassname"><span class="pre">pedata.mutation.mutation.</span></span><span class="sig-name descname"><span class="pre">fill_missing_sequences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mutation_code_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dataset</span></span></span><a class="reference internal" href="_modules/pedata/mutation/mutation.html#fill_missing_sequences"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.mutation.mutation.fill_missing_sequences" title="Link to this definition">¶</a></dt>
+<dd><p>Fill missing values in the <cite>feature</cite> column</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> – dataset to check</p></li>
+<li><p><strong>feature</strong> – which column to fill for missing values</p></li>
+<li><p><strong>mutation_code_offset</strong> – offset to apply to the missing values
+Defaults to None, meaning that the mutation_code_offset will be determined automatically through the mutation code.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>dataset with filled missing values</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dataset</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.mutation.mutation.get_missing_values">
+<span class="sig-prename descclassname"><span class="pre">pedata.mutation.mutation.</span></span><span class="sig-name descname"><span class="pre">get_missing_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/mutation/mutation.html#get_missing_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.mutation.mutation.get_missing_values" title="Link to this definition">¶</a></dt>
+<dd><p>get missing values in the <cite>feature</cite> column</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> – dataset to check</p></li>
+<li><p><strong>feature</strong> – which column to check for missing values</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True for the indices corresponding to the missing values</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pedata.mutation.mutation_converter">
+<span id="pedata-mutation-mutation-converter-module"></span><h2>pedata.mutation.mutation_converter module<a class="headerlink" href="#module-pedata.mutation.mutation_converter" title="Link to this heading">¶</a></h2>
+<p>The mutation_converter module contains functions for converting a mutation object type into another type.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.mutation.mutation_converter.convert_all_variant_mutations_to_str">
+<span class="sig-prename descclassname"><span class="pre">pedata.mutation.mutation_converter.</span></span><span class="sig-name descname"><span class="pre">convert_all_variant_mutations_to_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mut</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut"><span class="pre">Mut</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiting_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'_'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_is_wt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/pedata/mutation/mutation_converter.html#convert_all_variant_mutations_to_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.mutation.mutation_converter.convert_all_variant_mutations_to_str" title="Link to this definition">¶</a></dt>
+<dd><p>Turn a sequence of mutation sequences into a list of string encodings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mut</strong> – Sequence of mutation sequences, one for each variant.</p></li>
+<li><p><strong>delimiting_char</strong> – Character used to connect the mutations for one variant (default is “_”)</p></li>
+<li><p><strong>offset</strong> – Offset value to adjust mutation positions (default is 0)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Returns all mutations converted to string encodings only when the mutation has valid sequences of namedtuples, otherwise raise ValuesError</p>
+</dd>
+</dl>
+<p>Examples:
+&gt;&gt;&gt; mutation = [
+…    [Mut(12, “A”, “T”), Mut(23, “T”, “G”)],
+…    [Mut(15, “M”, “K”), Mut(23, “G”, “A”)],
+… ]
+&gt;&gt;&gt; convert_all_variant_mutations_to_str(mutation)
+[‘A13T_T24G’, ‘M16K_G24A’]</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.mutation.mutation_converter.convert_variant_mutation_to_str">
+<span class="sig-prename descclassname"><span class="pre">pedata.mutation.mutation_converter.</span></span><span class="sig-name descname"><span class="pre">convert_variant_mutation_to_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mut</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut"><span class="pre">Mut</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiting_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'_'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_is_wt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/pedata/mutation/mutation_converter.html#convert_variant_mutation_to_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.mutation.mutation_converter.convert_variant_mutation_to_str" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a list of mutations into a mutation code.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mut</strong> – Mutations in the format (position, source, target)</p></li>
+<li><p><strong>delimiting_char</strong> – Character used to connect the mutations (default is “_”)</p></li>
+<li><p><strong>offset</strong> – Offset value to adjust mutation positions (default is 0)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Mutation code encoded with delimiting character</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mutations</span> <span class="o">=</span> <span class="p">[</span><span class="n">Mut</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">),</span> <span class="n">Mut</span><span class="p">(</span><span class="mi">23</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">),</span> <span class="n">Mut</span><span class="p">(</span><span class="mi">34</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">convert_variant_mutation_to_str</span><span class="p">(</span><span class="n">mutations</span><span class="p">)</span>
+<span class="go">&#39;A13T_T24G_C35A&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.mutation.mutation_converter.dict_to_namedtuple_mut">
+<span class="sig-prename descclassname"><span class="pre">pedata.mutation.mutation_converter.</span></span><span class="sig-name descname"><span class="pre">dict_to_namedtuple_mut</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mut</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut"><span class="pre">Mut</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/mutation/mutation_converter.html#dict_to_namedtuple_mut"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.mutation.mutation_converter.dict_to_namedtuple_mut" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a list of dictionaries with ‘position’, ‘source’, and ‘target’ keys
+into a list of namedtuples ‘Mut’ with attributes ‘pos’, ‘src’, and ‘targ’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dicts</strong> – List of dictionaries containing ‘position’, ‘source’, and ‘target’ keys.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of namedtuples ‘Mut’.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>input_dicts = [{‘source’: [‘A’], ‘target’: [‘C’], ‘position’: [1]}, {‘source’: [‘A’], ‘target’: [‘D’], ‘position’: [1]}]
+resultant_namedtuples = dict_to_mut(input_dicts)</p>
+<p>Output:
+[ Mut(1, ‘A’, ‘C’), Mut(1, ‘A’, ‘D’) ]</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.mutation.mutation_converter.namedtuple_to_dict_mut">
+<span class="sig-prename descclassname"><span class="pre">pedata.mutation.mutation_converter.</span></span><span class="sig-name descname"><span class="pre">namedtuple_to_dict_mut</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mut_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut"><span class="pre">Mut</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/mutation/mutation_converter.html#namedtuple_to_dict_mut"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.mutation.mutation_converter.namedtuple_to_dict_mut" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a list of namedtuples ‘Mut(pos, src, targ)’ back into a Dictionary with ‘position’, ‘source’, and ‘target’ keys.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mut_list</strong> – List of namedtuples ‘Mut’.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary containing ‘position’, ‘source’, and ‘target’ keys.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>dict_mut = namedtuple_to_dict_mut([ Mut(1, ‘A’, ‘C’), Mut(2, ‘A’, ‘D’) ])</p>
+<p>Output:
+{‘position’: [1, 2], ‘source’: [‘A’, ‘A’], ‘target’: [‘C’, ‘D’]}</p>
+</dd></dl>
+
+</section>
+<section id="module-pedata.mutation.mutation_extractor">
+<span id="pedata-mutation-mutation-extractor-module"></span><h2>pedata.mutation.mutation_extractor module<a class="headerlink" href="#module-pedata.mutation.mutation_extractor" title="Link to this heading">¶</a></h2>
+<p>The mutation_extractor module contains functions for extracting mutations from sequences.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.mutation.mutation_extractor.extract_mutation_namedtuples_from_sequences">
+<span class="sig-prename descclassname"><span class="pre">pedata.mutation.mutation_extractor.</span></span><span class="sig-name descname"><span class="pre">extract_mutation_namedtuples_from_sequences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variant_seq_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pedata.html#pedata.constants.Mut" title="pedata.constants.Mut"><span class="pre">Mut</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/mutation/mutation_extractor.html#extract_mutation_namedtuples_from_sequences"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.mutation.mutation_extractor.extract_mutation_namedtuples_from_sequences" title="Link to this definition">¶</a></dt>
+<dd><p>Extract mutations from sequences with respect to a parent sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variant_seq_str</strong> – List of variant sequence strings.</p></li>
+<li><p><strong>parent</strong> – Parent sequence.</p></li>
+<li><p><strong>offset</strong> – Offset of the parent sequence and the interesting part (default is 0).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing a list of all mutation namedtuples (pos, src, targ),
+and a list of invalid variant sequences found (variant sequences with different lengths from the parent sequence).</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parent_sequence</span> <span class="o">=</span> <span class="s2">&quot;ATCGATCG&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">variant_sequences</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ATCGTTCG&quot;</span><span class="p">,</span> <span class="s2">&quot;ATCGATCG&quot;</span><span class="p">,</span> <span class="s2">&quot;ATTGATCG&quot;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">extract_mutation_namedtuples_from_sequences</span><span class="p">(</span><span class="n">variant_sequences</span><span class="p">,</span> <span class="n">parent_sequence</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> 
+<span class="go">([[Mut(pos=4, src=&#39;A&#39;, targ=&#39;T&#39;)],</span>
+<span class="go">[Mut(pos=2, src=&#39;C&#39;, targ=&#39;T&#39;)]], [])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.mutation.mutation_extractor.extract_mutation_str_from_sequences">
+<span class="sig-prename descclassname"><span class="pre">pedata.mutation.mutation_extractor.</span></span><span class="sig-name descname"><span class="pre">extract_mutation_str_from_sequences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variant_seq_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiting_char</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'_'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_is_wt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/mutation/mutation_extractor.html#extract_mutation_str_from_sequences"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.mutation.mutation_extractor.extract_mutation_str_from_sequences" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a list of sequences to a list of mutations.</p>
+<blockquote>
+<div><p>This function takes a list of variant sequence strings and a parent sequence string, and converts each variant sequence into a mutation code with respect to the parent sequence.
+The mutation code represents the changes in the variant sequence compared to the parent sequence.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variant_seq_str</strong> – A list of sequence strings representing variant sequences. Each sequence can be an explicit full amino acid (AA) or DNA sequence.</p></li>
+<li><p><strong>parent</strong> – The parent sequence string relative to which the mutation codes are computed.</p></li>
+<li><p><strong>offset</strong> – The offset of the mutation position if the first position in the sequence is not 1. Defaults to 0.</p></li>
+<li><p><strong>delimiting_char</strong> – The delimiting character used to combine multiple mutations into a single code. Defaults to “_”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of mutation codes, where each code corresponds to a variant sequence in the input.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">variant_sequences</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;AAAA&quot;</span><span class="p">,</span> <span class="s2">&quot;ABBA&quot;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parent_sequence</span> <span class="o">=</span> <span class="s2">&quot;BBAA&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">extract_mutation_str_from_sequences</span><span class="p">(</span><span class="n">variant_sequences</span><span class="p">,</span> <span class="n">parent_sequence</span><span class="p">)</span>
+<span class="go">[&#39;B1A_B2A&#39;, &#39;B1A_A3B&#39;]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The function internally uses the <cite>extract_mutation_namedtuples_from_sequences</cite> function from the <cite>me</cite> module.
+The <cite>extract_mutation_namedtuples_from_sequences</cite> function takes the variant sequences, parent sequence, and offset as inputs, and returns the mutation objects.
+The <cite>convert_all_variant_mutations_to_str</cite> function is then used to convert the mutation objects into mutation codes.</p>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-pedata.mutation.mutation_util">
+<span id="pedata-mutation-mutation-util-module"></span><h2>pedata.mutation.mutation_util module<a class="headerlink" href="#module-pedata.mutation.mutation_util" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.mutation.mutation_util.convert_tuple_to_valid_namedtuple">
+<span class="sig-prename descclassname"><span class="pre">pedata.mutation.mutation_util.</span></span><span class="sig-name descname"><span class="pre">convert_tuple_to_valid_namedtuple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/mutation/mutation_util.html#convert_tuple_to_valid_namedtuple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.mutation.mutation_util.convert_tuple_to_valid_namedtuple" title="Link to this definition">¶</a></dt>
+<dd><p>Converts a tuple to a valid namedtuple representation based on certain criteria.
+This function is designed to handle cases where other methods may return mutation named tuples with unexpected attributes.
+It allows you to create the appropriate namedtuple based on the length of the input tuple, ensuring code compatibility with other parts of the program.
+Only  mutation namedtuples with atleast two attributes: (pos src) and atmost three attributes (pos src targ) are considered valid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>t</strong> (<em>tuple</em>) – The input tuple.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The appropriate named tuple based on the length of the input tuple.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>namedtuple</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the length of the input tuple is neither 2 nor 3.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">convert_tuple_to_valid_namedtuple</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">))</span>
+<span class="go">Mut(pos=3, src=&#39;A&#39;, targ=&#39;G&#39;)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">convert_tuple_to_valid_namedtuple</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">))</span>
+<span class="go">Mut(pos=7, src=&#39;K&#39;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-pedata.mutation">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pedata.mutation" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="pedata.hfhub_tools.html"
+       title="previous chapter">← pedata.hfhub_tools package</a>
+  </li>
+  <li class="next">
+    <a href="pedata.preprocessing.html"
+       title="next chapter">pedata.preprocessing package →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, Exazyme.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

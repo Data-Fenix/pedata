@@ -1,0 +1,29 @@
+pedata.static.example\_data package
+===================================
+
+Submodules
+----------
+
+pedata.static.example\_data.data module
+---------------------------------------
+
+.. automodule:: pedata.static.example_data.data
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pedata.static.example\_data.dataset\_fixtures module
+----------------------------------------------------
+
+.. automodule:: pedata.static.example_data.dataset_fixtures
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: pedata.static.example_data
+   :members:
+   :undoc-members:
+   :show-inheritance:

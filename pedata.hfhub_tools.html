@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+      <title>pedata.hfhub_tools package</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script src="_static/documentation_options.js?v=a5b3107c"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="pedata.mutation package" href="pedata.mutation.html" />
+  <link rel="prev" title="pedata.encoding package" href="pedata.encoding.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">pedata documentation</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#pedata-documentation">pedata documentation!</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="pedata.html" class="reference internal ">pedata package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="pedata.encoding.html" class="reference internal ">pedata.encoding package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="pedata.mutation.html" class="reference internal ">pedata.mutation package</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="modules.html" class="reference internal ">pedata</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="pedata.html">pedata package</a> &raquo;</li>
+    
+    <li>pedata.hfhub_tools package</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="pedata.encoding.html"
+       title="previous chapter">← pedata.encoding package</a>
+  </li>
+  <li class="next">
+    <a href="pedata.mutation.html"
+       title="next chapter">pedata.mutation package →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="pedata-hfhub-tools-package">
+<h1>pedata.hfhub_tools package<a class="headerlink" href="#pedata-hfhub-tools-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-pedata.hfhub_tools.add_src_split_col">
+<span id="pedata-hfhub-tools-add-src-split-col-module"></span><h2>pedata.hfhub_tools.add_src_split_col module<a class="headerlink" href="#module-pedata.hfhub_tools.add_src_split_col" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.add_src_split_col.add_src_split_col">
+<span class="sig-prename descclassname"><span class="pre">pedata.hfhub_tools.add_src_split_col.</span></span><span class="sig-name descname"><span class="pre">add_src_split_col</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">merge_split</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_name_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pedata/hfhub_tools/add_src_split_col.html#add_src_split_col"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.add_src_split_col.add_src_split_col" title="Link to this definition">¶</a></dt>
+<dd><p>Add the source_split column to the dataset, which correspond to the splits used for the dataset by previous works on the dataset (referenced in the dataset card)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repo_id</strong> – The id of the repo to rename the column in</p></li>
+<li><p><strong>merge_split</strong> – boolean to merge the split columns into one column.
+Defaults to False because it has the least consequences on the structure of the dataset</p></li>
+<li><p><strong>split_name_map</strong> – A dictionary mapping the original split names to the new split names.
+Example: {“DatasetDict”:{“training”: “train”, “val”: “validation”},”random split”: {“training”: “train”, “val”: “validation”}, “source”: {“testing”: “test”}}
+“DatasetDict” is the default key for the DatasetDict object split maps
+Split names similar to train, validation and test will be automatically mapped to the new split names.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This function pulls from the hub, renames add the source split column name, optionally merge splits into one (merge_split=True) and pushes it back to the hub</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Exception</strong> – If the source split column was not added correctly</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pedata.hfhub_tools.constants">
+<span id="pedata-hfhub-tools-constants-module"></span><h2>pedata.hfhub_tools.constants module<a class="headerlink" href="#module-pedata.hfhub_tools.constants" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-pedata.hfhub_tools.explore">
+<span id="pedata-hfhub-tools-explore-module"></span><h2>pedata.hfhub_tools.explore module<a class="headerlink" href="#module-pedata.hfhub_tools.explore" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.explore.TagFeaturePattern">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pedata.hfhub_tools.explore.</span></span><span class="sig-name descname"><span class="pre">TagFeaturePattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_pattern</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_patterns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/hfhub_tools/explore.html#TagFeaturePattern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.explore.TagFeaturePattern" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Correpondings between a tag and a feature pattern and whether all patterns must be present or just one of them</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.explore.TagFeaturePattern.all_patterns">
+<span class="sig-name descname"><span class="pre">all_patterns</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#pedata.hfhub_tools.explore.TagFeaturePattern.all_patterns" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.explore.TagFeaturePattern.feature_pattern">
+<span class="sig-name descname"><span class="pre">feature_pattern</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pedata.hfhub_tools.explore.TagFeaturePattern.feature_pattern" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.explore.TagFeaturePattern.tag">
+<span class="sig-name descname"><span class="pre">tag</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pedata.hfhub_tools.explore.TagFeaturePattern.tag" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.explore.explore_datasets">
+<span class="sig-prename descclassname"><span class="pre">pedata.hfhub_tools.explore.</span></span><span class="sig-name descname"><span class="pre">explore_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">working_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">author</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Exazyme'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_cache</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">just_testing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pedata/hfhub_tools/explore.html#explore_datasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.explore.explore_datasets" title="Link to this definition">¶</a></dt>
+<dd><p>Explore all datasets from a given author and save the results to a log file
+:param working_dir: directory to store the log file
+:param log_filename: name of the log file
+:param author: author to explore
+:param cache_dir: directory to store the cache
+:param delete_cache: whether to delete the cache after exploration
+:param just_testing: whether to just test the function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.explore.get_tag_list">
+<span class="sig-prename descclassname"><span class="pre">pedata.hfhub_tools.explore.</span></span><span class="sig-name descname"><span class="pre">get_tag_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tag_pattern</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pedata.hfhub_tools.explore.TagFeaturePattern" title="pedata.hfhub_tools.explore.TagFeaturePattern"><span class="pre">TagFeaturePattern</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/hfhub_tools/explore.html#get_tag_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.explore.get_tag_list" title="Link to this definition">¶</a></dt>
+<dd><p>Get a list of tags based on the features of a dataset</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.explore.save_log">
+<span class="sig-prename descclassname"><span class="pre">pedata.hfhub_tools.explore.</span></span><span class="sig-name descname"><span class="pre">save_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/hfhub_tools/explore.html#save_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.explore.save_log" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pedata.hfhub_tools.readme_update">
+<span id="pedata-hfhub-tools-readme-update-module"></span><h2>pedata.hfhub_tools.readme_update module<a class="headerlink" href="#module-pedata.hfhub_tools.readme_update" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.readme_update.ReadMe">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pedata.hfhub_tools.readme_update.</span></span><span class="sig-name descname"><span class="pre">ReadMe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">local_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/hfhub_tools/readme_update.html#ReadMe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.readme_update.ReadMe" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class to handle the readme file</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.readme_update.ReadMe.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">local_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/hfhub_tools/readme_update.html#ReadMe.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.readme_update.ReadMe.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize the class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>local_dir</strong> (<em>str</em>) – The local folder containing the readme file.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – readme_path must be specified</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.readme_update.ReadMe.create_readme">
+<span class="sig-name descname"><span class="pre">create_readme</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pedata/hfhub_tools/readme_update.html#ReadMe.create_readme"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.readme_update.ReadMe.create_readme" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.readme_update.ReadMe.figure_path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">figure_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pedata.hfhub_tools.readme_update.ReadMe.figure_path" title="Link to this definition">¶</a></dt>
+<dd><p>The path to the figures</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.readme_update.ReadMe.insert_section">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">insert_section</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">section_start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">section_end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">updated_section</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">readme_content</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pedata/hfhub_tools/readme_update.html#ReadMe.insert_section"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.readme_update.ReadMe.insert_section" title="Link to this definition">¶</a></dt>
+<dd><p>Insert the updated section in the readme</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>section_start</strong> – The start of the section to update</p></li>
+<li><p><strong>section_end</strong> – The end of the section to update</p></li>
+<li><p><strong>updated_section</strong> – The updated section</p></li>
+<li><p><strong>readme_content</strong> – The content of the readme</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The updated content of the readme</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.readme_update.ReadMe.pull_readme_from_hub">
+<span class="sig-name descname"><span class="pre">pull_readme_from_hub</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repo_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dataset'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pedata/hfhub_tools/readme_update.html#ReadMe.pull_readme_from_hub"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.readme_update.ReadMe.pull_readme_from_hub" title="Link to this definition">¶</a></dt>
+<dd><p>Pulls the readme file from the hub into the local directory</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repo_id</strong> – The id of the repo to pull the readme from</p></li>
+<li><p><strong>repo_type</strong> – The type of repo to pull the readme from. Defaults to “dataset”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.readme_update.ReadMe.push_figures_to_hub">
+<span class="sig-name descname"><span class="pre">push_figures_to_hub</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pedata/hfhub_tools/readme_update.html#ReadMe.push_figures_to_hub"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.readme_update.ReadMe.push_figures_to_hub" title="Link to this definition">¶</a></dt>
+<dd><p>Pushes the figures to the hub</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.readme_update.ReadMe.push_readme_to_hub">
+<span class="sig-name descname"><span class="pre">push_readme_to_hub</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pedata/hfhub_tools/readme_update.html#ReadMe.push_readme_to_hub"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.readme_update.ReadMe.push_readme_to_hub" title="Link to this definition">¶</a></dt>
+<dd><p>Pushes the readme file to the hub</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>readme_path</strong> – The path to the readme file. If None, defaults to
+the README.md file in the current directory</p></li>
+<li><p><strong>repo_id</strong> – The id of the repo to push the readme to
+default to None, which sets it to the repo_id used to pull the readme</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.readme_update.ReadMe.readme_content">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">readme_content</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pedata.hfhub_tools.readme_update.ReadMe.readme_content" title="Link to this definition">¶</a></dt>
+<dd><p>The content of the readme</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.readme_update.ReadMe.readme_path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">readme_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pedata.hfhub_tools.readme_update.ReadMe.readme_path" title="Link to this definition">¶</a></dt>
+<dd><p>The path to the readme file</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.readme_update.ReadMe.update_readme">
+<span class="sig-name descname"><span class="pre">update_readme</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">section_elements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">section_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'features'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pedata/hfhub_tools/readme_update.html#ReadMe.update_readme"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.readme_update.ReadMe.update_readme" title="Link to this definition">¶</a></dt>
+<dd><p>Update the section of the readme with the updated information</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>section_list</strong> (<em>list</em>) – The updated features section</p></li>
+<li><p><strong>section_name</strong> (<em>str</em>) – The name of the section to update.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.readme_update.ReadMe.update_readme_figures">
+<span class="sig-name descname"><span class="pre">update_readme_figures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figure_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pedata/hfhub_tools/readme_update.html#ReadMe.update_readme_figures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.readme_update.ReadMe.update_readme_figures" title="Link to this definition">¶</a></dt>
+<dd><p>Update the figures section of the readme with the updated information</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>figure_path</strong> – The directory containing the figures to add to the readme</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – figure_path must be specified</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.readme_update.ReadMe.write_readme">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">write_readme</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">readme_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">updated_readme_content</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pedata/hfhub_tools/readme_update.html#ReadMe.write_readme"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.readme_update.ReadMe.write_readme" title="Link to this definition">¶</a></dt>
+<dd><p>Write the updated readme content to the readme file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>readme_path</strong> – The path to the readme file</p></li>
+<li><p><strong>updated_readme_content</strong> – The updated content of the readme</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pedata.hfhub_tools.rename_columns">
+<span id="pedata-hfhub-tools-rename-columns-module"></span><h2>pedata.hfhub_tools.rename_columns module<a class="headerlink" href="#module-pedata.hfhub_tools.rename_columns" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.rename_columns.rename_hub_dataset_column">
+<span class="sig-prename descclassname"><span class="pre">pedata.hfhub_tools.rename_columns.</span></span><span class="sig-name descname"><span class="pre">rename_hub_dataset_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">repo_id:</span> <span class="pre">str,</span> <span class="pre">column_name_mapping:</span> <span class="pre">dict[slice(&lt;class</span> <span class="pre">'str'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'str'&gt;,</span> <span class="pre">None)]</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pedata/hfhub_tools/rename_columns.html#rename_hub_dataset_column"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.rename_columns.rename_hub_dataset_column" title="Link to this definition">¶</a></dt>
+<dd><p>Rename a column in a dataset on the hub
+:param repo_id: The id of the repo to rename the column in
+:param column_name_mapping: A dictionary with the old column name as key and the new column name as value</p>
+<p class="rubric">Notes</p>
+<p>This function pulls from the hub, renames the column and pushes it back to the hub</p>
+<p class="rubric">Examples</p>
+<p>THIS EXAMPLE IS NOT WRITTEN LIKE THIS BECAUSE SHOULD NOT BE RUN AS A DOCTEST - BUT IT WORKS
+from datasets import load_dataset
+from pedata.preprocessing.upload import rename_hub_dataset_column
+rename_hub_dataset_column(</p>
+<blockquote>
+<div><p>repo_id=”Exazyme/test_example_dataset_ha1”,
+column_name_mapping={</p>
+<blockquote>
+<div><p>“target kcat per kmol”: “target_kcat_per_kmol”,
+“aa_unirep_1900”: “aa unirep 1900”,</p>
+</div></blockquote>
+<p>},</p>
+</div></blockquote>
+<p>)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.rename_columns.validate_dataset_columns_names">
+<span class="sig-prename descclassname"><span class="pre">pedata.hfhub_tools.rename_columns.</span></span><span class="sig-name descname"><span class="pre">validate_dataset_columns_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pedata/hfhub_tools/rename_columns.html#validate_dataset_columns_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.rename_columns.validate_dataset_columns_names" title="Link to this definition">¶</a></dt>
+<dd><p>Check that the column names do not contain any forbidden characters</p>
+</dd></dl>
+
+</section>
+<section id="module-pedata.hfhub_tools.rename_splits">
+<span id="pedata-hfhub-tools-rename-splits-module"></span><h2>pedata.hfhub_tools.rename_splits module<a class="headerlink" href="#module-pedata.hfhub_tools.rename_splits" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.rename_splits.rename_hf_dataset_splits">
+<span class="sig-prename descclassname"><span class="pre">pedata.hfhub_tools.rename_splits.</span></span><span class="sig-name descname"><span class="pre">rename_hf_dataset_splits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_name_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pedata/hfhub_tools/rename_splits.html#rename_hf_dataset_splits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.rename_splits.rename_hf_dataset_splits" title="Link to this definition">¶</a></dt>
+<dd><p>Rename the split columns to the new split names</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repo_id</strong> – The id of the repo to rename the column in</p></li>
+<li><p><strong>split_name_map</strong> – A dictionary mapping the original split names to the new split names.
+Example: {“DatasetDict”:{“training”: “train”, “val”: “validation”},”random split”: {“training”: “train”, “val”: “validation”}, “source”: {“testing”: “test”}}
+“DatasetDict” is the default key for the DatasetDict object split maps
+Split names similar to train, validation and test will be automatically mapped to the new split names.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This function pulls from the hub, renames the split column names and pushes it back to the hub</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Exception</strong> – If the split columns were not renamed correctly</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pedata.hfhub_tools.utils">
+<span id="pedata-hfhub-tools-utils-module"></span><h2>pedata.hfhub_tools.utils module<a class="headerlink" href="#module-pedata.hfhub_tools.utils" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.utils.check_if_dataset_on_hf">
+<span class="sig-prename descclassname"><span class="pre">pedata.hfhub_tools.utils.</span></span><span class="sig-name descname"><span class="pre">check_if_dataset_on_hf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/pedata/hfhub_tools/utils.html#check_if_dataset_on_hf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.utils.check_if_dataset_on_hf" title="Link to this definition">¶</a></dt>
+<dd><p>Check if a dataset is available on the Exazyme space on HuggingFace</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataset_name</strong> – Name of the dataset.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the dataset is available, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.utils.clear_hub_dataset_files">
+<span class="sig-prename descclassname"><span class="pre">pedata.hfhub_tools.utils.</span></span><span class="sig-name descname"><span class="pre">clear_hub_dataset_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">list_of_files_to_delete</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pedata/hfhub_tools/utils.html#clear_hub_dataset_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.utils.clear_hub_dataset_files" title="Link to this definition">¶</a></dt>
+<dd><p>Delete all files in a HuggingFace dataset repository data/ folder.
+:param dataset: Dataset to save and push.
+:type dataset: ds.Dataset
+:param list_of_files_to_delete: List of files to delete from the hub.</p>
+<blockquote>
+<div><p>default: [] -&gt; delete all datafiles not corresponding to the splits present in self.dataset</p>
+</div></blockquote>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.utils.clear_hub_ds_files_and_metadata">
+<span class="sig-prename descclassname"><span class="pre">pedata.hfhub_tools.utils.</span></span><span class="sig-name descname"><span class="pre">clear_hub_ds_files_and_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">list_of_files_to_delete</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pedata/hfhub_tools/utils.html#clear_hub_ds_files_and_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.utils.clear_hub_ds_files_and_metadata" title="Link to this definition">¶</a></dt>
+<dd><p>“Delete all files in a HuggingFace dataset repository data/ folder as well as the metadata in the dataset card.
+:param repo: Hugging Face Hub repository name (format: ‘Exazyme/dataset-name’).
+:param list_of_files_to_delete: List of files to delete from the hub.</p>
+<blockquote>
+<div><p>default: None -&gt; delete all datafiles not corresponding to the splits present in self.dataset</p>
+</div></blockquote>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.utils.get_all_files_in_ds_repo">
+<span class="sig-prename descclassname"><span class="pre">pedata.hfhub_tools.utils.</span></span><span class="sig-name descname"><span class="pre">get_all_files_in_ds_repo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/hfhub_tools/utils.html#get_all_files_in_ds_repo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.utils.get_all_files_in_ds_repo" title="Link to this definition">¶</a></dt>
+<dd><p>Get all files in a HuggingFace dataset repository folder.
+:param repo_id: Hugging Face Hub repository name (format: ‘Exazyme/dataset-name’).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of files in the repository.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.utils.get_dataset">
+<span class="sig-prename descclassname"><span class="pre">pedata.hfhub_tools.utils.</span></span><span class="sig-name descname"><span class="pre">get_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_root_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_cache</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_cache</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_DatasetDict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">splits_to_load</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dataset</span></span></span><a class="reference internal" href="_modules/pedata/hfhub_tools/utils.html#get_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.utils.get_dataset" title="Link to this definition">¶</a></dt>
+<dd><p>Get dataset from huggingface hub, optionally using a cache directory, or choosing specific splits and returning a Dataset or a DatasetDict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset_name</strong> – The name of the dataset</p></li>
+<li><p><strong>cache_root_dir</strong> – The root folder for the cache directory to use</p></li>
+<li><p><strong>no_cache_dir</strong> – Whether to use a cache directory or not
+Default: False: forces to download from hub by deleting the cache directory before loading the dataset</p></li>
+<li><p><strong>delete_cache</strong> – Whether to delete the cache directory after loading the dataset</p></li>
+<li><p><strong>as_DatasetDict</strong> – Whether to return the dataset as a DatasetDict or not
+Default: False -&gt; return the dataset as a Dataset</p></li>
+<li><p><strong>splits_to_load</strong> – List of splits to load - this is useful if you only want to load a subset of the splits which are on the hub</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The full dataset</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>full_dataset</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This is just a wrapper around load_dataset.
+It uses other methods from the “datasets” package and is quite handy</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>for clearing the cache if needed</p></li>
+<li><p>returning your dataset as a Dataset and not a DatasetDict (which is the default behaviour of load_dataset)</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.utils.get_hub_data_folder_files">
+<span class="sig-prename descclassname"><span class="pre">pedata.hfhub_tools.utils.</span></span><span class="sig-name descname"><span class="pre">get_hub_data_folder_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/hfhub_tools/utils.html#get_hub_data_folder_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.utils.get_hub_data_folder_files" title="Link to this definition">¶</a></dt>
+<dd><p>Get all files in a HuggingFace dataset repository data/ folder.
+:param repo_id: Hugging Face Hub repository name (format: ‘Exazyme/dataset-name’).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of files in the data/ folder of the repository.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedata.hfhub_tools.utils.repo_get_file_list_split_cleanup">
+<span class="sig-prename descclassname"><span class="pre">pedata.hfhub_tools.utils.</span></span><span class="sig-name descname"><span class="pre">repo_get_file_list_split_cleanup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pedata/hfhub_tools/utils.html#repo_get_file_list_split_cleanup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pedata.hfhub_tools.utils.repo_get_file_list_split_cleanup" title="Link to this definition">¶</a></dt>
+<dd><p>Delete all files in a HuggingFace dataset repository.
+Checks the difference between the list of files in the repo and the list of files in the dataset directory using the load_dataset methods.
+:param repo_id: Hugging Face Hub repository name (format: ‘Exazyme/dataset-name’).</p>
+</dd></dl>
+
+</section>
+<section id="module-pedata.hfhub_tools">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pedata.hfhub_tools" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="pedata.encoding.html"
+       title="previous chapter">← pedata.encoding package</a>
+  </li>
+  <li class="next">
+    <a href="pedata.mutation.html"
+       title="next chapter">pedata.mutation package →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2023, Exazyme.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>
