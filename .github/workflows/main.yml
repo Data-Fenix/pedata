@@ -14,10 +14,7 @@ on:
       - synchronize
   push:  
     branches:
-      - ML_dev
-      - dev
-      - dev_ops
-      - Data-Fenix-patch-1
+      - main
 
       # This workflow automatically triggers under two conditions:
       #  Whenever the developer opens a PR for any branch.
