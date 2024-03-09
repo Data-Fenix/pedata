@@ -6,15 +6,16 @@ permissions:
   pull-requests: write
   actions: read
 
-on: 
-  pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
-  push:  
-    branches:
-      - main
+on:
+  - push
+  # pull_request:
+  #   types:
+  #     - opened
+  #     - reopened
+  #     - synchronize
+  # push:  
+  #   branches:
+  #     - main
 
       # This workflow automatically triggers under two conditions:
       #  Whenever the developer opens a PR for any branch.
@@ -112,21 +113,29 @@ jobs:
       #     branch: ${{ steps.branch-names.outputs.current_branch }}
       #     github_token: ${{ github.token }}
       #     force: true
-      - name: Generate API documentation
-        run: |
-          PACKAGE_PATH=src/pedata 
-          sphinx-apidoc -f -o $PACKAGE_PATH/docs/source $PACKAGE_PATH
+      # - name: Generate API documentation
+      #   run: |
+      #     PACKAGE_PATH=src/pedata 
+      #     sphinx-apidoc -f -o $PACKAGE_PATH/docs/source $PACKAGE_PATH
   
-      - name: Build Docs
-        run: |
-          PACKAGE_PATH=src/pedata 
-          sphinx-build -M html $PACKAGE_PATH/docs/source $PACKAGE_PATH/docs/build
+      # - name: Build Docs
+      #   run: |
+      #     PACKAGE_PATH=src/pedata 
+      #     sphinx-build -M html $PACKAGE_PATH/docs/source $PACKAGE_PATH/docs/build
           
-      - name: Debug
+      # - name: Debug
+      #   run: |
+      #     ls -R src/pedata/docs/build/html
+      # - name: Deploy to GitHub Pages
+      #   uses: peaceiris/actions-gh-pages@v3
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     publish_dir: src/pedata/docs/build/html
+      - name: Get branch names
+        uses: tj-actions/branch-names@v8
+        id: branch-names
+      - name: Build Docs
+        if: !contains(fromJSON('["main", "dev"]'), steps.branch-names.outputs.current_branch)
         run: |
-          ls -R src/pedata/docs/build/html
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: src/pedata/docs/build/html
+          echo "executed"
+          
